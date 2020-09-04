@@ -1,0 +1,35 @@
+{
+  "PipelineName": "USAID-IBTCI-Facebook",
+  "RawDataSources": [
+    {
+      "SourceType": "Facebook",
+      "PageID": "imaqalcampaign",
+      "TokenFileURL": "gs://avf-credentials/imaqalcampaign-facebook-token.txt"
+    }
+  ],
+  "RapidProKeyRemappings": [
+    {"RapidProKey": "avf_facebook_id", "PipelineKey": "uid"},
+
+    {"RapidProKey": "message", "PipelineKey": "facebook_s01e01_raw"},
+    {"RapidProKey": "message_created_time", "PipelineKey": "sent_on"}
+  ],
+  "ProjectStartDate": "2000-01-01T00:00:00+03:00",
+  "ProjectEndDate": "2100-01-01T00:00:00+03:00",
+  "FilterTestMessages": false,
+  "MoveWSMessages": false,
+  "AutomatedAnalysis": {
+    "GenerateRegionThemeDistributionMaps": false,
+    "GenerateDistrictThemeDistributionMaps": false,
+    "GenerateMogadishuThemeDistributionMaps": false
+  },
+  "DriveUpload": {
+    "DriveCredentialsFileURL": "gs://avf-credentials/pipeline-runner-service-acct-avf-data-core-64cc71459fe7.json",
+    "ProductionUploadPath": "usaid_ibtci_analysis_outputs/facebook/usaid_ibtci_facebook_production.csv",
+    "MessagesUploadPath": "usaid_ibtci_analysis_outputs/facebook/usaid_ibtci_facebook_messages.csv",
+    "IndividualsUploadPath": "usaid_ibtci_analysis_outputs/facebook/usaid_ibtci_facebook_individuals.csv",
+    "AutomatedAnalysisDir": "usaid_ibtci_analysis_outputs/facebook/automated_analysis"
+  },
+  "MemoryProfileUploadBucket":"gs://avf-pipeline-logs-performance-nearline",
+  "DataArchiveUploadBucket": "gs://pipeline-execution-backup-archive",
+  "BucketDirPath": "2020/USAID-IBTCI-Facebook/"
+}

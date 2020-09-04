@@ -91,12 +91,16 @@ class PipelineConfiguration(object):
                 raw_data_sources.append(GCloudBucketSource.from_configuration_dict(raw_data_source))
             elif raw_data_source["SourceType"] == "RecoveryCSV":
                 raw_data_sources.append(RecoveryCSVSource.from_configuration_dict(raw_data_source))
+            elif raw_data_source["SourceType"] == "Facebook":
+                raw_data_sources.append(FacebookSource.from_configuration_dict(raw_data_source))
             else:
                 assert False, f"Unknown SourceType '{raw_data_source['SourceType']}'. " \
-                              f"Must be 'RapidPro', 'GCloudBucket', or 'RecoveryCSV'."
+                              f"Must be 'RapidPro', 'GCloudBucket', 'RecoveryCSV', or 'Facebook'."
 
-        phone_number_uuid_table = PhoneNumberUuidTable.from_configuration_dict(
-            configuration_dict["PhoneNumberUuidTable"])
+        phone_number_uuid_table = None
+        if "PhoneNumberUuidTable" in configuration_dict:
+            phone_number_uuid_table = PhoneNumberUuidTable.from_configuration_dict(
+                configuration_dict["PhoneNumberUuidTable"])
 
         timestamp_remappings = []
         for remapping_dict in configuration_dict.get("TimestampRemappings", []):
@@ -118,7 +122,6 @@ class PipelineConfiguration(object):
         if "DriveUpload" in configuration_dict:
             drive_upload_paths = DriveUpload.from_configuration_dict(configuration_dict["DriveUpload"])
 
-
         memory_profile_upload_bucket = configuration_dict["MemoryProfileUploadBucket"]
         data_archive_upload_bucket = configuration_dict["DataArchiveUploadBucket"]
         bucket_dir_path = configuration_dict["BucketDirPath"]
@@ -137,11 +140,16 @@ class PipelineConfiguration(object):
 
         validators.validate_list(self.raw_data_sources, "raw_data_sources")
         for i, raw_data_source in enumerate(self.raw_data_sources):
-            assert isinstance(raw_data_source, RawDataSource), f"raw_data_sources[{i}] is not of type of RawDataSource"
+            assert isinstance(raw_data_source, RawDataSource), f"raw_data_sources[{i}] is not of type RawDataSource"
             raw_data_source.validate()
 
-        assert isinstance(self.phone_number_uuid_table, PhoneNumberUuidTable)
-        self.phone_number_uuid_table.validate()
+        if self.phone_number_uuid_table is None:
+            for i, raw_data_source in enumerate(self.raw_data_sources):
+                assert isinstance(raw_data_source, FacebookSource), \
+                    f"phone_number_uuid_table is None, but raw_data_source[{i}] requires a uuid table"
+        else:
+            assert isinstance(self.phone_number_uuid_table, PhoneNumberUuidTable)
+            self.phone_number_uuid_table.validate()
 
         validators.validate_list(self.rapid_pro_key_remappings, "rapid_pro_key_remappings")
         for i, remapping in enumerate(self.rapid_pro_key_remappings):
@@ -281,6 +289,33 @@ class GCloudBucketSource(AbstractRemoteURLSource):
 class RecoveryCSVSource(AbstractRemoteURLSource):
     def __init__(self, activation_flow_urls, survey_flow_urls):
         super().__init__(activation_flow_urls, survey_flow_urls)
+
+
+class FacebookSource(RawDataSource):
+    def __init__(self, page_id, token_file_url):
+        self.page_id = page_id
+        self.token_file_url = token_file_url
+
+        self.validate()
+        
+    @classmethod
+    def from_configuration_dict(cls, configuration_dict):
+        page_id = configuration_dict["PageID"]
+        token_file_url = configuration_dict["TokenFileURL"]
+
+        return cls(page_id, token_file_url)
+
+    def validate(self):
+        validators.validate_string(self.page_id, "page_id")
+        validators.validate_url(self.token_file_url, "token_file_url", scheme="gs")
+
+    def get_survey_flow_names(self):
+        return []
+
+    def get_activation_flow_names(self):
+        return [
+            "fb-test"
+        ]
 
 
 class PhoneNumberUuidTable(object):
