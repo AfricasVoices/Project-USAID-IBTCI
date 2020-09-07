@@ -79,21 +79,25 @@ class FacebookClient(object):
         log.info(f"Converting {len(raw_comments)} Facebook comments to TracedData...")
 
         traced_comments = []
-        id = 0
+        # Use a placeholder avf facebook id for now, to make the individuals file work until we know if we'll be able
+        # to see Facebook user ids or not.
+        # TODO: If we get ids from FB, de-identify instead of incrementing this placeholder;
+        #       If we don't get ids from FB, re-configure the pipeline to make processing individuals optional
+        avf_facebook_id = 0
         for comment in raw_comments:
             comment["created_time"] = isoparse(comment["created_time"]).isoformat()
             validators.validate_utc_iso_string(comment["created_time"])
 
             traced_comments.append(TracedData(
                 {
-                    "avf_facebook_id": id,  # TODO: De-identify a user's FB id here if possible instead
+                    "avf_facebook_id": avf_facebook_id,  # TODO: De-identify a user's FB id here if possible instead
                     "facebook_message_id": comment["id"],
                     "message": comment["message"],
                     "message_created_time": comment["created_time"],
                 },
                 Metadata(user, Metadata.get_call_location(), TimeUtils.utc_now_as_iso_string())
             ))
-            id += 1
+            avf_facebook_id += 1
 
         log.info(f"Converted {len(traced_comments)} Facebook comments to TracedData")
 
