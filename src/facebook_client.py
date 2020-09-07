@@ -39,13 +39,16 @@ class FacebookClient(object):
         return result
 
     def get_all_posts_from_page(self, page_id, fields=["attachments", "created_time", "message"]):
-        return self._make_paged_get_request(
+        log.debug(f"Fetching all posts from page '{page_id}'...")
+        posts = self._make_paged_get_request(
             f"/{page_id}/published_posts",
             {
                 "fields": ",".join(fields),
                 "limit": _MAX_LIMIT
             }
         )
+        log.info(f"Fetched {len(posts)} posts")
+        return posts
 
     def get_top_level_comments_on_post(self, post_id, fields=["attachments", "created_time", "message"]):
         return self._make_paged_get_request(
@@ -58,7 +61,8 @@ class FacebookClient(object):
         )
 
     def get_all_comments_on_post(self, post_id, fields=["parent", "attachments", "created_time", "message"]):
-        return self._make_paged_get_request(
+        log.info(f"Fetching all comments on post '{post_id}'...")
+        comments = self._make_paged_get_request(
             f"/{post_id}/comments",
             {
                 "fields": ",".join(fields),
@@ -66,12 +70,16 @@ class FacebookClient(object):
                 "filter": "stream"
             }
         )
+        log.info(f"Fetched {len(comments)} comments")
+        return comments
 
     def get_all_comments_on_page(self, page_id, fields=["parent", "attachments", "created_time", "message"]):
+        log.info(f"Fetching all comments on page '{page_id}'...")
         posts = self.get_all_posts_from_page(page_id)
         comments = []
         for post in posts:
             comments.extend(self.get_all_comments_on_post(post["id"], fields))
+        log.info(f"Fetched {len(comments)} on page '{page_id}' (from {len(posts)} posts)")
         return comments
 
     @staticmethod
