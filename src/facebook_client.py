@@ -25,7 +25,14 @@ class FacebookClient(object):
         params["access_token"] = self._access_token
 
         url = f"{_BASE_URL}{endpoint}"
-        return requests.get(url, params)
+        response = requests.get(url, params)
+
+        if "data" not in response.json():
+            log.error(f"Response from Facebook did not contain a 'data' field. "
+                      f"The returned data is probably an error message: {response.json()}")
+            exit(1)
+
+        return response
 
     def _make_paged_get_request(self, endpoint, params=None):
         response = self._make_get_request(endpoint, params)
@@ -39,7 +46,7 @@ class FacebookClient(object):
         return result
 
     def get_all_posts_from_page(self, page_id, fields=["attachments", "created_time", "message"]):
-        log.debug(f"Fetching all posts from page '{page_id}'...")
+        log.debug(f"Fetching all posts published by page '{page_id}'...")
         posts = self._make_paged_get_request(
             f"/{page_id}/published_posts",
             {
@@ -75,7 +82,16 @@ class FacebookClient(object):
 
     def get_all_comments_on_page(self, page_id, fields=["parent", "attachments", "created_time", "message"]):
         log.info(f"Fetching all comments on page '{page_id}'...")
-        posts = self.get_all_posts_from_page(page_id)
+        posts = self.get_all_posts_from_page(page_id, fields=["id", "is_inline_created"])
+
+        # Posts that were used as adverts are returned twice by Facebook, one post representing the page post and
+        # one representing the advert. Both 'posts' have a comments edge pointing to the same dataset, so reading
+        # both would lead to duplicated comments in the returned data.
+        # We solve this by pre-filtering for posts that were not created inline i.e. the original page post only.
+        log.info("Filtering out posts that were created inline")
+        posts = [p for p in posts if p.get("is_inline_created") == False]
+        log.info(f"Filtered out posts that were created inline. {len(posts)} remain")
+
         comments = []
         for post in posts:
             comments.extend(self.get_all_comments_on_post(post["id"], fields))
