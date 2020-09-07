@@ -70,8 +70,7 @@ class FacebookClient(object):
     def get_all_comments_on_page(self, page_id, fields=["parent", "attachments", "created_time", "message"]):
         posts = self.get_all_posts_from_page(page_id)
         comments = []
-        for post in posts:  # [posts[10]]:
-            print(post)
+        for post in posts:
             comments.extend(self.get_all_comments_on_post(post["id"], fields))
         return comments
 
