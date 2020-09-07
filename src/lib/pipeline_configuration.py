@@ -309,13 +309,14 @@ class FacebookSource(RawDataSource):
         validators.validate_string(self.page_id, "page_id")
         validators.validate_url(self.token_file_url, "token_file_url", scheme="gs")
 
-    def get_survey_flow_names(self):
-        return []
-
+    # TODO: Rename to refer to datasets instead of flows, since 'flows' don't really make sense for Facebook
     def get_activation_flow_names(self):
         return [
-            "fb-test"
+            "facebook"
         ]
+
+    def get_survey_flow_names(self):
+        return []
 
 
 class PhoneNumberUuidTable(object):

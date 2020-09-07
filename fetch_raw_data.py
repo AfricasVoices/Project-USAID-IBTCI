@@ -206,8 +206,12 @@ def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, 
 
     traced_comments = facebook.convert_facebook_comments_to_traced_data(user, raw_comments)
 
-    raw_comments_output_path = f"{raw_data_dir}/facebook_raw.json"
-    traced_comments_output_path = f"{raw_data_dir}/fb-test.jsonl"
+    # Note: using [0] for now for compliance with get_activation_flow_names returning a list.
+    # TODO: Rename get_activation_flows to something that makes more sense for Facebook
+    # TODO: Support processing a list of items from Facebook, e.g. requests for data by week, rather than just
+    #       taking the first item from the list.
+    traced_comments_output_path = f"{raw_data_dir}/{facebook_source.get_activation_flow_names()[0]}.jsonl"
+    raw_comments_output_path = f"{raw_data_dir}/{facebook_source.get_activation_flow_names()[0]}_raw.json"
 
     log.info(f"Saving {len(raw_comments)} raw comments to {raw_comments_output_path}...")
     IOUtils.ensure_dirs_exist_for_file(raw_comments_output_path)
