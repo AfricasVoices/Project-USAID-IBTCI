@@ -203,12 +203,18 @@ def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, 
     facebook = FacebookClient(facebook_token)
 
     raw_comments = facebook.get_all_comments_on_page(facebook_source.page_id)
-    print(raw_comments)
 
-    # Convert the comments to TracedData
     traced_comments = facebook.convert_facebook_comments_to_traced_data(user, raw_comments)
 
+    raw_comments_output_path = f"{raw_data_dir}/facebook_raw.json"
     traced_comments_output_path = f"{raw_data_dir}/fb-test.jsonl"
+
+    log.info(f"Saving {len(raw_comments)} raw comments to {raw_comments_output_path}...")
+    IOUtils.ensure_dirs_exist_for_file(raw_comments_output_path)
+    with open(raw_comments_output_path, "w") as raw_comments_output_path:
+        json.dump(raw_comments, raw_comments_output_path)
+    log.info(f"Saved {len(raw_comments)} raw comments")
+
     log.info(f"Saving {len(traced_comments)} traced comments to {traced_comments_output_path}...")
     IOUtils.ensure_dirs_exist_for_file(traced_comments_output_path)
     with open(traced_comments_output_path, "w") as traced_comments_output_file:
