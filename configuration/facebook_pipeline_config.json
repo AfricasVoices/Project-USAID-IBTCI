@@ -31,5 +31,5 @@
   },
   "MemoryProfileUploadBucket":"gs://avf-pipeline-logs-performance-nearline",
   "DataArchiveUploadBucket": "gs://pipeline-execution-backup-archive",
-  "BucketDirPath": "2020/USAID-IBTCI-Facebook/"
+  "BucketDirPath": "2020/USAID-IBTCI/Facebook/"
 }
