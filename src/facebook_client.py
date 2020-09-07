@@ -45,7 +45,7 @@ class FacebookClient(object):
             next_url = response.json()["paging"].get("next")
         return result
 
-    def get_all_posts_from_page(self, page_id, fields=["attachments", "created_time", "message"]):
+    def get_all_posts_published_by_page(self, page_id, fields=["attachments", "created_time", "message"]):
         log.debug(f"Fetching all posts published by page '{page_id}'...")
         posts = self._make_paged_get_request(
             f"/{page_id}/published_posts",
@@ -82,7 +82,7 @@ class FacebookClient(object):
 
     def get_all_comments_on_page(self, page_id, fields=["parent", "attachments", "created_time", "message"]):
         log.info(f"Fetching all comments on page '{page_id}'...")
-        posts = self.get_all_posts_from_page(page_id, fields=["id", "is_inline_created"])
+        posts = self.get_all_posts_published_by_page(page_id, fields=["id", "is_inline_created"])
 
         # Posts that were used as adverts are returned twice by Facebook, one post representing the page post and
         # one representing the advert. Both 'posts' have a comments edge pointing to the same dataset, so reading
