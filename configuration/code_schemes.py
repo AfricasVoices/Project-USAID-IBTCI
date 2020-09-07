@@ -12,4 +12,4 @@ def _open_scheme(filename):
 class CodeSchemes(object):
     FACEBOOK_S01E01 = _open_scheme("facebook_s01e01.json")
 
-    WS_CORRECT_DATASET = _open_scheme("facebook_s01e01.json")
+    WS_CORRECT_DATASET = None  # TODO Add scheme
