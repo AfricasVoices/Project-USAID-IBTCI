@@ -292,9 +292,10 @@ class RecoveryCSVSource(AbstractRemoteURLSource):
 
 
 class FacebookSource(RawDataSource):
-    def __init__(self, page_id, token_file_url):
+    def __init__(self, page_id, token_file_url, datasets):
         self.page_id = page_id
         self.token_file_url = token_file_url
+        self.datasets = datasets
 
         self.validate()
         
@@ -302,21 +303,44 @@ class FacebookSource(RawDataSource):
     def from_configuration_dict(cls, configuration_dict):
         page_id = configuration_dict["PageID"]
         token_file_url = configuration_dict["TokenFileURL"]
+        datasets = [FacebookDataset.from_configuration_dict(d) for d in configuration_dict["Datasets"]]
 
-        return cls(page_id, token_file_url)
+        return cls(page_id, token_file_url, datasets)
 
     def validate(self):
         validators.validate_string(self.page_id, "page_id")
         validators.validate_url(self.token_file_url, "token_file_url", scheme="gs")
 
+        validators.validate_list(self.datasets, "datasets")
+        for i, dataset in enumerate(self.datasets):
+            assert isinstance(dataset, FacebookDataset),f"datasets[{i}] is not of type FacebookDataset"
+            dataset.validate()
+
     # TODO: Rename to refer to datasets instead of flows, since 'flows' don't really make sense for Facebook
     def get_activation_flow_names(self):
-        return [
-            "facebook"
-        ]
+        return [dataset.name for dataset in self.datasets]
 
     def get_survey_flow_names(self):
         return []
+
+
+class FacebookDataset(object):
+    def __init__(self, name, post_ids):
+        self.name = name
+        self.post_ids = post_ids
+
+    @classmethod
+    def from_configuration_dict(cls, configuration_dict):
+        name = configuration_dict["Name"]
+        post_ids = configuration_dict["PostIDs"]
+
+        return cls(name, post_ids)
+
+    def validate(self):
+        validators.validate_string(self.name, "name")
+        validators.validate_list(self.post_ids, "post_ids")
+        for i, post_id in enumerate(self.post_ids):
+            validators.validate_string(post_id, f"post_ids[{i}]")
 
 
 class PhoneNumberUuidTable(object):

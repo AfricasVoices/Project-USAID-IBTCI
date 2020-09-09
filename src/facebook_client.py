@@ -67,7 +67,8 @@ class FacebookClient(object):
             }
         )
 
-    def get_all_comments_on_post(self, post_id, fields=["parent", "attachments", "created_time", "message"]):
+    def get_all_comments_on_post(self, post_id, fields=["parent", "attachments", "created_time", "message"],
+                                 raw_export_log_file=None):
         log.info(f"Fetching all comments on post '{post_id}'...")
         comments = self._make_paged_get_request(
             f"/{post_id}/comments",
@@ -78,6 +79,15 @@ class FacebookClient(object):
             }
         )
         log.info(f"Fetched {len(comments)} comments")
+
+        if raw_export_log_file is not None:
+            log.info(f"Logging {len(comments)} fetched comments...")
+            json.dump(comments, raw_export_log_file)
+            raw_export_log_file.write("\n")
+            log.info(f"Logged fetched comments")
+        else:
+            log.debug("Not logging the raw export (argument 'raw_export_log_file' was None)")
+
         return comments
 
     def get_all_comments_on_page(self, page_id, fields=["parent", "attachments", "created_time", "message"]):
@@ -100,7 +110,7 @@ class FacebookClient(object):
         return comments
 
     @staticmethod
-    def convert_facebook_comments_to_traced_data(user, raw_comments):
+    def convert_facebook_comments_to_traced_data(user, dataset_name, raw_comments):
         log.info(f"Converting {len(raw_comments)} Facebook comments to TracedData...")
 
         traced_comments = []
@@ -115,10 +125,10 @@ class FacebookClient(object):
 
             traced_comments.append(TracedData(
                 {
-                    "avf_facebook_id": avf_facebook_id,  # TODO: De-identify a user's FB id here if possible instead
-                    "facebook_message_id": comment["id"],
-                    "message": comment["message"],
-                    "message_created_time": comment["created_time"],
+                    f"avf_facebook_id": f"{dataset_name}_{avf_facebook_id}",  # TODO: De-identify a user's FB id here if possible instead
+                    f"{dataset_name}.facebook_message_id": comment["id"],
+                    f"{dataset_name}.message": comment["message"],
+                    f"{dataset_name}.message_created_time": comment["created_time"],
                 },
                 Metadata(user, Metadata.get_call_location(), TimeUtils.utc_now_as_iso_string())
             ))
