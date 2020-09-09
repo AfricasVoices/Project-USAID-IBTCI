@@ -10,7 +10,7 @@ from dateutil.parser import isoparse
 log = Logger(__name__)
 
 _BASE_URL = "https://graph.facebook.com/v8.0"
-_MAX_LIMIT = 100
+_MAX_RESULTS_PER_PAGE = 100  # For paged requests, the maximum number of records to request in each page
 
 # TODO: Move to a new repo at AfricasVoices/SocialMediaTools
 # Included in project source for now because it's likely to evolve very rapidly during the initial experiments.
@@ -51,7 +51,7 @@ class FacebookClient(object):
             f"/{page_id}/published_posts",
             {
                 "fields": ",".join(fields),
-                "limit": _MAX_LIMIT
+                "limit": _MAX_RESULTS_PER_PAGE
             }
         )
         log.info(f"Fetched {len(posts)} posts")
@@ -62,7 +62,7 @@ class FacebookClient(object):
             f"/{post_id}/comments",
             {
                 "fields": ",".join(fields),
-                "limit": _MAX_LIMIT,
+                "limit": _MAX_RESULTS_PER_PAGE,
                 "filter": "toplevel"
             }
         )
@@ -73,7 +73,7 @@ class FacebookClient(object):
             f"/{post_id}/comments",
             {
                 "fields": ",".join(fields),
-                "limit": _MAX_LIMIT,
+                "limit": _MAX_RESULTS_PER_PAGE,
                 "filter": "stream"
             }
         )
