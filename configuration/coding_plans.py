@@ -66,7 +66,23 @@ def get_rqa_coding_plans(pipeline_name):
 
 
 def get_demog_coding_plans(pipeline_name):
-    return []
+    if pipeline_name == "USAID-IBTCI-Facebook":
+        return [
+            CodingPlan(raw_field="comment_type_raw",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.FACEBOOK_COMMENT_TYPE,
+                               cleaner=lambda parent: "top level" if parent == {} else "comment reply",
+                               coded_field="comment_type_coded",
+                               analysis_file_key="comment_type",
+                               fold_strategy=None
+                           )
+                       ],
+                       raw_field_fold_strategy=None),
+        ]
+    else:
+        return []
 
 
 def get_follow_up_coding_plans(pipeline_name):

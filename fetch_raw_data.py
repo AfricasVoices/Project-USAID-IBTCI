@@ -216,6 +216,12 @@ def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, 
                     facebook.get_all_comments_on_post(post_id, raw_export_log_file=raw_comments_log_file)
                 )
 
+        # Facebook only returns a parent if the comment is a reply to another comment.
+        # If there is no parent, set one to the empty-dict.
+        for comment in raw_comments:
+            if "parent" not in comment:
+                comment["parent"] = {}
+
         # Convert the comments to TracedData.
         traced_comments = facebook.convert_facebook_comments_to_traced_data(user, dataset.name, raw_comments)
 

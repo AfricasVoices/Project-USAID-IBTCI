@@ -10,9 +10,6 @@ def _open_scheme(filename):
 
 
 class CodeSchemes(object):
-    FACEBOOK_S01E01 = _open_scheme("facebook_s01e01.json")
-    FACEBOOK_S01E02 = _open_scheme("facebook_s01e02.json")
-
     RQA_S08E01 = _open_scheme("rqa_s08e01.json")
     RQA_S08E02 = _open_scheme("rqa_s08e02.json")
     RQA_S08E03 = _open_scheme("rqa_s08e03.json")
@@ -31,3 +28,7 @@ class CodeSchemes(object):
     HOUSEHOLD_LANGUAGE = _open_scheme("household_language.json")
 
     WS_CORRECT_DATASET = _open_scheme("ws_correct_dataset.json")
+
+    FACEBOOK_S01E01 = _open_scheme("facebook_s01e01.json")
+    FACEBOOK_S01E02 = _open_scheme("facebook_s01e02.json")
+    FACEBOOK_COMMENT_TYPE = _open_scheme("facebook_comment_type.json")
