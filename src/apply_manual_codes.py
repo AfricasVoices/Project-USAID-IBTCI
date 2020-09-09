@@ -95,18 +95,19 @@ class ApplyManualCodes(object):
                     if f is not None:
                         f.close()
 
-            f = None
-            try:
-                if path.exists(coda_input_path):
-                    f = open(coda_input_path, "r")
+            if PipelineConfiguration.WS_CORRECT_DATASET_SCHEME is not None:
+                f = None
+                try:
+                    if path.exists(coda_input_path):
+                        f = open(coda_input_path, "r")
 
-                TracedDataCodaV2IO.import_coda_2_to_traced_data_iterable(
-                    user, data, plan.id_field,
-                    {f"{plan.raw_field}_correct_dataset": PipelineConfiguration.WS_CORRECT_DATASET_SCHEME}, f
-                )
-            finally:
-                if f is not None:
-                    f.close()
+                    TracedDataCodaV2IO.import_coda_2_to_traced_data_iterable(
+                        user, data, plan.id_field,
+                        {f"{plan.raw_field}_correct_dataset": PipelineConfiguration.WS_CORRECT_DATASET_SCHEME}, f
+                    )
+                finally:
+                    if f is not None:
+                        f.close()
 
         # Label data for which there is no response as TRUE_MISSING.
         # Label data for which the response is the empty string as NOT_CODED.

@@ -17,8 +17,9 @@ from rapid_pro_tools.rapid_pro_client import RapidProClient
 from storage.google_cloud import google_cloud_utils
 from temba_client.v2 import Contact, Run
 
+from src.facebook_client import FacebookClient
 from src.lib import PipelineConfiguration
-from src.lib.pipeline_configuration import RapidProSource, GCloudBucketSource, RecoveryCSVSource
+from src.lib.pipeline_configuration import RapidProSource, GCloudBucketSource, RecoveryCSVSource, FacebookSource
 from configuration.code_imputation_functions import CodeSchemes
 
 log = Logger(__name__)
@@ -193,6 +194,38 @@ def fetch_from_recovery_csv(user, google_cloud_credentials_file_path, raw_data_d
         log.info(f"Exported TracedData")
 
 
+def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, facebook_source):
+    log.info("Fetching data from Facebook...")
+    log.info("Downloading Facebook access token...")
+    facebook_token = google_cloud_utils.download_blob_to_string(
+        google_cloud_credentials_file_path, facebook_source.token_file_url).strip()
+
+    facebook = FacebookClient(facebook_token)
+
+    raw_comments = facebook.get_all_comments_on_page(facebook_source.page_id)
+
+    traced_comments = facebook.convert_facebook_comments_to_traced_data(user, raw_comments)
+
+    # Note: using [0] for now for compliance with get_activation_flow_names returning a list.
+    # TODO: Rename get_activation_flows to something that makes more sense for Facebook
+    # TODO: Support processing a list of items from Facebook, e.g. requests for data by week, rather than just
+    #       taking the first item from the list.
+    traced_comments_output_path = f"{raw_data_dir}/{facebook_source.get_activation_flow_names()[0]}.jsonl"
+    raw_comments_output_path = f"{raw_data_dir}/{facebook_source.get_activation_flow_names()[0]}_raw.json"
+
+    log.info(f"Saving {len(raw_comments)} raw comments to {raw_comments_output_path}...")
+    IOUtils.ensure_dirs_exist_for_file(raw_comments_output_path)
+    with open(raw_comments_output_path, "w") as raw_comments_output_path:
+        json.dump(raw_comments, raw_comments_output_path)
+    log.info(f"Saved {len(raw_comments)} raw comments")
+
+    log.info(f"Saving {len(traced_comments)} traced comments to {traced_comments_output_path}...")
+    IOUtils.ensure_dirs_exist_for_file(traced_comments_output_path)
+    with open(traced_comments_output_path, "w") as traced_comments_output_file:
+        TracedDataJsonIO.export_traced_data_iterable_to_jsonl(traced_comments, traced_comments_output_file)
+    log.info(f"Saved {len(traced_comments)} traced comments")
+
+
 def main(user, google_cloud_credentials_file_path, pipeline_configuration_file_path, raw_data_dir):
     # Read the settings from the configuration file
     log.info("Loading Pipeline Configuration File...")
@@ -201,18 +234,19 @@ def main(user, google_cloud_credentials_file_path, pipeline_configuration_file_p
     Logger.set_project_name(pipeline_configuration.pipeline_name)
     log.debug(f"Pipeline name is {pipeline_configuration.pipeline_name}")
 
-    log.info("Downloading Firestore UUID Table credentials...")
-    firestore_uuid_table_credentials = json.loads(google_cloud_utils.download_blob_to_string(
-        google_cloud_credentials_file_path,
-        pipeline_configuration.phone_number_uuid_table.firebase_credentials_file_url
-    ))
+    if pipeline_configuration.phone_number_uuid_table is not None:
+        log.info("Downloading Firestore UUID Table credentials...")
+        firestore_uuid_table_credentials = json.loads(google_cloud_utils.download_blob_to_string(
+            google_cloud_credentials_file_path,
+            pipeline_configuration.phone_number_uuid_table.firebase_credentials_file_url
+        ))
 
-    phone_number_uuid_table = FirestoreUuidTable(
-        pipeline_configuration.phone_number_uuid_table.table_name,
-        firestore_uuid_table_credentials,
-        "avf-phone-uuid-"
-    )
-    log.info("Initialised the Firestore UUID table")
+        phone_number_uuid_table = FirestoreUuidTable(
+            pipeline_configuration.phone_number_uuid_table.table_name,
+            firestore_uuid_table_credentials,
+            "avf-phone-uuid-"
+        )
+        log.info("Initialised the Firestore UUID table")
 
     log.info(f"Fetching data from {len(pipeline_configuration.raw_data_sources)} sources...")
     for i, raw_data_source in enumerate(pipeline_configuration.raw_data_sources):
@@ -225,7 +259,8 @@ def main(user, google_cloud_credentials_file_path, pipeline_configuration_file_p
         elif isinstance(raw_data_source, RecoveryCSVSource):
             fetch_from_recovery_csv(user, google_cloud_credentials_file_path, raw_data_dir, phone_number_uuid_table,
                                     raw_data_source)
-
+        elif isinstance(raw_data_source, FacebookSource):
+            fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, raw_data_source)
         else:
             assert False, f"Unknown raw_data_source type {type(raw_data_source)}"
 
