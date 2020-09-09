@@ -7,7 +7,7 @@
       "TokenFileURL": "gs://avf-credentials/imaqalcampaign-facebook-token.txt",
       "Datasets": [
         {"Name": "facebook_s01e01", "PostIDs": ["427662381371142_792818351522208", "427662381371142_783679525769424"]},
-        {"Name": "facebook_s01e02", "PostIDs": ["427662381371142_770099307127446"]}
+        {"Name": "facebook_s01e02", "PostIDs": ["427662381371142_765053444298699"]}
       ]
     }
   ],
@@ -15,10 +15,10 @@
     {"RapidProKey": "avf_facebook_id", "PipelineKey": "uid"},
 
     {"RapidProKey": "facebook_s01e01.message", "PipelineKey": "facebook_s01e01_raw"},
-    {"RapidProKey": "facebook_s01e01.message_created_time", "PipelineKey": "sent_on"},
+    {"RapidProKey": "facebook_s01e01.created_time", "PipelineKey": "sent_on"},
 
     {"RapidProKey": "facebook_s01e02.message", "PipelineKey": "facebook_s01e02_raw"},
-    {"RapidProKey": "facebook_s01e02.message_created_time", "PipelineKey": "sent_on"}
+    {"RapidProKey": "facebook_s01e02.created_time", "PipelineKey": "sent_on"}
   ],
   "ProjectStartDate": "2000-01-01T00:00:00+03:00",
   "ProjectEndDate": "2100-01-01T00:00:00+03:00",

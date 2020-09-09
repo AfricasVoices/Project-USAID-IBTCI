@@ -123,15 +123,14 @@ class FacebookClient(object):
             comment["created_time"] = isoparse(comment["created_time"]).isoformat()
             validators.validate_utc_iso_string(comment["created_time"])
 
-            traced_comments.append(TracedData(
-                {
-                    f"avf_facebook_id": f"{dataset_name}_{avf_facebook_id}",  # TODO: De-identify a user's FB id here if possible instead
-                    f"{dataset_name}.facebook_message_id": comment["id"],
-                    f"{dataset_name}.message": comment["message"],
-                    f"{dataset_name}.message_created_time": comment["created_time"],
-                },
-                Metadata(user, Metadata.get_call_location(), TimeUtils.utc_now_as_iso_string())
-            ))
+            comment_dict = {
+                "avf_facebook_id": f"{dataset_name}_{avf_facebook_id}",  # TODO: De-identify a user's FB id here if possible instead
+            }
+            for k, v in comment.items():
+                comment_dict[f"{dataset_name}.{k}"] = v
+
+            traced_comments.append(
+                TracedData(comment_dict, Metadata(user, Metadata.get_call_location(), TimeUtils.utc_now_as_iso_string())))
             avf_facebook_id += 1
 
         log.info(f"Converted {len(traced_comments)} Facebook comments to TracedData")
