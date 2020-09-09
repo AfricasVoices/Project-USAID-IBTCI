@@ -87,7 +87,8 @@ class FacebookClient(object):
         # Posts that were used as adverts are returned twice by Facebook, one post representing the page post and
         # one representing the advert. Both 'posts' have a comments edge pointing to the same dataset, so reading
         # both would lead to duplicated comments in the returned data.
-        # We solve this by pre-filtering for posts that were not created inline i.e. the original page post only.
+        # We solve this by pre-filtering for posts that were not created inline i.e. we for the original page
+        # posts only.
         log.info("Filtering out posts that were created inline")
         posts = [p for p in posts if p.get("is_inline_created") == False]
         log.info(f"Filtered out posts that were created inline. {len(posts)} remain")
