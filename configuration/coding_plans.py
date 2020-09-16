@@ -44,6 +44,21 @@ def get_rqa_coding_plans(pipeline_name):
                                fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.FACEBOOK_S01E01, x, y)
                            )
                        ],
+                       raw_field_fold_strategy=FoldStrategies.concatenate),
+            CodingPlan(raw_field="facebook_s01e02_raw",
+                       time_field="sent_on",
+                       run_id_field="facebook_s01e02_run_id",
+                       coda_filename="USAID_IBTCI_facebook_s01e02.json",
+                       icr_filename="facebook_s01e02.csv",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.MULTIPLE,
+                               code_scheme=CodeSchemes.FACEBOOK_S01E02,
+                               coded_field="facebook_s01e02_coded",
+                               analysis_file_key="facebook_s01e02",
+                               fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.FACEBOOK_S01E02, x, y)
+                           )
+                       ],
                        raw_field_fold_strategy=FoldStrategies.concatenate)
         ]
     else:

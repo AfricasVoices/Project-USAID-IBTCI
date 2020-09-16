@@ -202,28 +202,33 @@ def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, 
 
     facebook = FacebookClient(facebook_token)
 
-    raw_comments = facebook.get_all_comments_on_page(facebook_source.page_id)
+    for dataset in facebook_source.datasets:
+        log.info(f"Exporting comments for dataset {dataset.name}...")
+        raw_comments_output_path = f"{raw_data_dir}/{dataset.name}_raw.json"
+        traced_comments_output_path = f"{raw_data_dir}/{dataset.name}.jsonl"
 
-    traced_comments = facebook.convert_facebook_comments_to_traced_data(user, raw_comments)
+        # Download all the comments on all the posts in this dataset, logging the raw data returned by Facebook
+        raw_comments = []
+        for post_id in dataset.post_ids:
+            comments_log_path = f"{raw_data_dir}/{post_id}_comments_log.jsonl"
+            with open(comments_log_path, "a") as raw_comments_log_file:
+                raw_comments.extend(facebook.get_all_comments_on_post(post_id, raw_export_log_file=raw_comments_log_file))
 
-    # Note: using [0] for now for compliance with get_activation_flow_names returning a list.
-    # TODO: Rename get_activation_flows to something that makes more sense for Facebook
-    # TODO: Support processing a list of items from Facebook, e.g. requests for data by week, rather than just
-    #       taking the first item from the list.
-    traced_comments_output_path = f"{raw_data_dir}/{facebook_source.get_activation_flow_names()[0]}.jsonl"
-    raw_comments_output_path = f"{raw_data_dir}/{facebook_source.get_activation_flow_names()[0]}_raw.json"
+        # Convert the comments to TracedData.
+        traced_comments = facebook.convert_facebook_comments_to_traced_data(user, dataset.name, raw_comments)
 
-    log.info(f"Saving {len(raw_comments)} raw comments to {raw_comments_output_path}...")
-    IOUtils.ensure_dirs_exist_for_file(raw_comments_output_path)
-    with open(raw_comments_output_path, "w") as raw_comments_output_path:
-        json.dump(raw_comments, raw_comments_output_path)
-    log.info(f"Saved {len(raw_comments)} raw comments")
+        # Export to disk.
+        log.info(f"Saving {len(raw_comments)} raw comments to {raw_comments_output_path}...")
+        IOUtils.ensure_dirs_exist_for_file(raw_comments_output_path)
+        with open(raw_comments_output_path, "w") as raw_comments_output_file:
+            json.dump(raw_comments, raw_comments_output_file)
+        log.info(f"Saved {len(raw_comments)} raw comments")
 
-    log.info(f"Saving {len(traced_comments)} traced comments to {traced_comments_output_path}...")
-    IOUtils.ensure_dirs_exist_for_file(traced_comments_output_path)
-    with open(traced_comments_output_path, "w") as traced_comments_output_file:
-        TracedDataJsonIO.export_traced_data_iterable_to_jsonl(traced_comments, traced_comments_output_file)
-    log.info(f"Saved {len(traced_comments)} traced comments")
+        log.info(f"Saving {len(traced_comments)} traced comments to {traced_comments_output_path}...")
+        IOUtils.ensure_dirs_exist_for_file(traced_comments_output_path)
+        with open(traced_comments_output_path, "w") as traced_comments_output_file:
+            TracedDataJsonIO.export_traced_data_iterable_to_jsonl(traced_comments, traced_comments_output_file)
+        log.info(f"Saved {len(traced_comments)} traced comments")
 
 
 def main(user, google_cloud_credentials_file_path, pipeline_configuration_file_path, raw_data_dir):
