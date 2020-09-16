@@ -6,19 +6,29 @@
       "PageID": "dhaayow655",
       "TokenFileURL": "gs://avf-credentials/dhaayow655-facebook-token.txt",
       "Datasets": [
-        {"Name": "facebook_s01e01", "PostIDs": ["342722832782775_1454515041603543", "342722832782775_1454403774948003"]},
-        {"Name": "facebook_s01e02", "PostIDs": ["342722832782775_1454364051618642"]}
+        {"Name": "facebook_s01e01_dhaayow655", "PostIDs": ["342722832782775_1454515041603543", "342722832782775_1454403774948003"]},
+        {"Name": "facebook_s01e02_dhaayow655", "PostIDs": ["342722832782775_1454364051618642"]}
+      ]
+    },
+    {
+      "SourceType": "Facebook",
+      "PageID": "abdullahiosmanfarah",
+      "TokenFileURL": "gs://avf-credentials/abdullahiosmanfarah-facebook-token.txt",
+      "Datasets": [
+        {"Name": "facebook_s01e01_abdullahiosmanfarah", "PostIDs": ["348455915581168_968057120287708"]}
       ]
     }
   ],
   "RapidProKeyRemappings": [
     {"RapidProKey": "avf_facebook_id", "PipelineKey": "uid"},
 
-    {"RapidProKey": "facebook_s01e01.message", "PipelineKey": "facebook_s01e01_raw"},
-    {"RapidProKey": "facebook_s01e01.message_created_time", "PipelineKey": "sent_on"},
+    {"RapidProKey": "facebook_s01e01_dhaayow655.message", "PipelineKey": "facebook_s01e01_raw"},
+    {"RapidProKey": "facebook_s01e01_dhaayow655.message_created_time", "PipelineKey": "sent_on"},
+    {"RapidProKey": "facebook_s01e01_abdullahiosmanfarah.message", "PipelineKey": "facebook_s01e01_raw"},
+    {"RapidProKey": "facebook_s01e01_abdullahiosmanfarah.message_created_time", "PipelineKey": "sent_on"},
 
-    {"RapidProKey": "facebook_s01e02.message", "PipelineKey": "facebook_s01e02_raw"},
-    {"RapidProKey": "facebook_s01e02.message_created_time", "PipelineKey": "sent_on"}
+    {"RapidProKey": "facebook_s01e02_dhaayow655.message", "PipelineKey": "facebook_s01e02_raw"},
+    {"RapidProKey": "facebook_s01e02_dhaayow655.message_created_time", "PipelineKey": "sent_on"}
   ],
   "ProjectStartDate": "2000-01-01T00:00:00+03:00",
   "ProjectEndDate": "2100-01-01T00:00:00+03:00",
