@@ -17,6 +17,14 @@
       "Datasets": [
         {"Name": "facebook_s01e01_abdullahiosmanfarah", "PostIDs": ["348455915581168_968057120287708"]}
       ]
+    },
+    {
+      "SourceType": "Facebook",
+      "PageID": "AbdirizakHAtosh",
+      "TokenFileURL": "gs://avf-credentials/AbdirizakHAtosh-facebook-token.txt",
+      "Datasets": [
+        {"Name": "facebook_s01e01_AbdirizakHAtosh", "PostIDs": ["1584334095169246_2750136618588982"]}
+      ]
     }
   ],
   "RapidProKeyRemappings": [
@@ -24,8 +32,12 @@
 
     {"RapidProKey": "facebook_s01e01_dhaayow655.message", "PipelineKey": "facebook_s01e01_raw"},
     {"RapidProKey": "facebook_s01e01_dhaayow655.message_created_time", "PipelineKey": "sent_on"},
+
     {"RapidProKey": "facebook_s01e01_abdullahiosmanfarah.message", "PipelineKey": "facebook_s01e01_raw"},
     {"RapidProKey": "facebook_s01e01_abdullahiosmanfarah.message_created_time", "PipelineKey": "sent_on"},
+
+    {"RapidProKey": "facebook_s01e01_AbdirizakHAtosh.message", "PipelineKey": "facebook_s01e01_raw"},
+    {"RapidProKey": "facebook_s01e01_AbdirizakHAtosh.message_created_time", "PipelineKey": "sent_on"},
 
     {"RapidProKey": "facebook_s01e02_dhaayow655.message", "PipelineKey": "facebook_s01e02_raw"},
     {"RapidProKey": "facebook_s01e02_dhaayow655.message_created_time", "PipelineKey": "sent_on"}
