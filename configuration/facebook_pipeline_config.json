@@ -32,19 +32,19 @@
 
     {"RapidProKey": "facebook_s01e01_dhaayow655.message", "PipelineKey": "facebook_s01e01_raw"},
     {"RapidProKey": "facebook_s01e01_dhaayow655.created_time", "PipelineKey": "sent_on"},
-    {"RapidProKey": "facebook_s01e01_dhaayow655.parent", "PipelineKey": "comment_reply_to_raw"},
+    {"RapidProKey": "facebook_s01e01_dhaayow655.parent", "PipelineKey": "facebook_s01e01_comment_reply_to_raw"},
 
     {"RapidProKey": "facebook_s01e01_abdullahiosmanfarah.message", "PipelineKey": "facebook_s01e01_raw"},
     {"RapidProKey": "facebook_s01e01_abdullahiosmanfarah.created_time", "PipelineKey": "sent_on"},
-    {"RapidProKey": "facebook_s01e01_abdullahiosmanfarah.parent", "PipelineKey": "comment_reply_to_raw"},
+    {"RapidProKey": "facebook_s01e01_abdullahiosmanfarah.parent", "PipelineKey": "facebook_s01e01_comment_reply_to_raw"},
 
     {"RapidProKey": "facebook_s01e01_AbdirizakHAtosh.message", "PipelineKey": "facebook_s01e01_raw"},
     {"RapidProKey": "facebook_s01e01_AbdirizakHAtosh.created_time", "PipelineKey": "sent_on"},
-    {"RapidProKey": "facebook_s01e01_AbdirizakHAtosh.parent", "PipelineKey": "comment_reply_to_raw"},
+    {"RapidProKey": "facebook_s01e01_AbdirizakHAtosh.parent", "PipelineKey": "facebook_s01e01_comment_reply_to_raw"},
 
     {"RapidProKey": "facebook_s01e02_dhaayow655.message", "PipelineKey": "facebook_s01e02_raw"},
     {"RapidProKey": "facebook_s01e02_dhaayow655.created_time", "PipelineKey": "sent_on"},
-    {"RapidProKey": "facebook_s01e02_dhaayow655.parent", "PipelineKey": "comment_reply_to_raw"}
+    {"RapidProKey": "facebook_s01e02_dhaayow655.parent", "PipelineKey": "facebook_s01e02_comment_reply_to_raw"}
   ],
   "ProjectStartDate": "2000-01-01T00:00:00+03:00",
   "ProjectEndDate": "2100-01-01T00:00:00+03:00",
