@@ -1,28 +1,28 @@
 {
   "SchemeID": "Scheme-aab247b7",
-  "Name": "Comment Type",
+  "Name": "Comment Reply To",
   "Version": "0.0.0.1",
   "Codes": [
     {
       "CodeID": "code-450ec146",
       "CodeType": "Normal",
-      "DisplayText": "top level",
+      "DisplayText": "post",
       "NumericValue": 1,
-      "StringValue": "top_level",
+      "StringValue": "post",
       "VisibleInCoda": true,
       "MatchValues": [
-        "top level"
+        "post"
       ]
     },
     {
       "CodeID": "code-59abc42a",
       "CodeType": "Normal",
-      "DisplayText": "comment reply",
+      "DisplayText": "comment",
       "NumericValue": 2,
-      "StringValue": "comment_reply",
+      "StringValue": "comment",
       "VisibleInCoda": true,
       "MatchValues": [
-        "comment reply"
+        "comment"
       ]
     },
     {
