@@ -4,13 +4,16 @@ class CodingModes(object):
 
 
 class CodingConfiguration(object):
-    def __init__(self, coding_mode, code_scheme, coded_field, fold_strategy, analysis_file_key=None, cleaner=None,
+    def __init__(self, coding_mode, code_scheme, coded_field, fold_strategy, raw_field=None,
+                 requires_manual_verification=True, analysis_file_key=None, cleaner=None,
                  include_in_theme_distribution=False):
         assert coding_mode in {CodingModes.SINGLE, CodingModes.MULTIPLE}
 
         self.coding_mode = coding_mode
         self.code_scheme = code_scheme
         self.coded_field = coded_field
+        self.raw_field = raw_field
+        self.requires_manual_verification = requires_manual_verification
         self.analysis_file_key = analysis_file_key
         self.fold_strategy = fold_strategy
         self.cleaner = cleaner

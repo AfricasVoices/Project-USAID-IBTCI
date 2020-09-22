@@ -42,6 +42,16 @@ def get_rqa_coding_plans(pipeline_name):
                                coded_field="facebook_s01e01_coded",
                                analysis_file_key="facebook_s01e01",
                                fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.FACEBOOK_S01E01, x, y)
+                           ),
+                           CodingConfiguration(
+                               raw_field="comment_type_raw",
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.FACEBOOK_COMMENT_TYPE,
+                               cleaner=lambda parent: "top level" if parent == {} else "comment reply",
+                               coded_field="facebook_s01e01_comment_type_coded",
+                               requires_manual_verification=False,
+                               analysis_file_key="facebook_s01e01_comment_type",
+                               fold_strategy=None
                            )
                        ],
                        raw_field_fold_strategy=FoldStrategies.concatenate),
@@ -57,6 +67,16 @@ def get_rqa_coding_plans(pipeline_name):
                                coded_field="facebook_s01e02_coded",
                                analysis_file_key="facebook_s01e02",
                                fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.FACEBOOK_S01E02, x, y)
+                           ),
+                           CodingConfiguration(
+                               raw_field="comment_type_raw",
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.FACEBOOK_COMMENT_TYPE,
+                               cleaner=lambda parent: "top level" if parent == {} else "comment reply",
+                               coded_field="facebook_s01e02_comment_type_coded",
+                               requires_manual_verification=False,
+                               analysis_file_key="facebook_s01e02_comment_type",
+                               fold_strategy=None
                            )
                        ],
                        raw_field_fold_strategy=FoldStrategies.concatenate)
@@ -67,20 +87,7 @@ def get_rqa_coding_plans(pipeline_name):
 
 def get_demog_coding_plans(pipeline_name):
     if pipeline_name == "USAID-IBTCI-Facebook":
-        return [
-            CodingPlan(raw_field="comment_type_raw",
-                       coding_configurations=[
-                           CodingConfiguration(
-                               coding_mode=CodingModes.SINGLE,
-                               code_scheme=CodeSchemes.FACEBOOK_COMMENT_TYPE,
-                               cleaner=lambda parent: "top level" if parent == {} else "comment reply",
-                               coded_field="comment_type_coded",
-                               analysis_file_key="comment_type",
-                               fold_strategy=None
-                           )
-                       ],
-                       raw_field_fold_strategy=None),
-        ]
+        return []
     else:
         return []
 
