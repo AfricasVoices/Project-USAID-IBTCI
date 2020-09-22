@@ -31,13 +31,13 @@
     {"RapidProKey": "avf_facebook_id", "PipelineKey": "uid"},
 
     {"RapidProKey": "facebook_s01e01_dhaayow655.message", "PipelineKey": "facebook_s01e01_raw"},
-    {"RapidProKey": "facebook_s01e01_dhaayow655.message_created_time", "PipelineKey": "sent_on"},
+    {"RapidProKey": "facebook_s01e01_dhaayow655.created_time", "PipelineKey": "sent_on"},
 
     {"RapidProKey": "facebook_s01e01_abdullahiosmanfarah.message", "PipelineKey": "facebook_s01e01_raw"},
     {"RapidProKey": "facebook_s01e01_abdullahiosmanfarah.created_time", "PipelineKey": "sent_on"},
 
     {"RapidProKey": "facebook_s01e01_AbdirizakHAtosh.message", "PipelineKey": "facebook_s01e01_raw"},
-    {"RapidProKey": "facebook_s01e01_AbdirizakHAtosh.message_created_time", "PipelineKey": "sent_on"},
+    {"RapidProKey": "facebook_s01e01_AbdirizakHAtosh.created_time", "PipelineKey": "sent_on"},
 
     {"RapidProKey": "facebook_s01e02_dhaayow655.message", "PipelineKey": "facebook_s01e02_raw"},
     {"RapidProKey": "facebook_s01e02_dhaayow655.created_time", "PipelineKey": "sent_on"}
