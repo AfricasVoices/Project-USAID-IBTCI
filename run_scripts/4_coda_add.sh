@@ -15,18 +15,16 @@ DATA_ROOT=$3
 ./checkout_coda_v2.sh "$CODA_V2_ROOT"
 
 DATASETS=(
-    "USAID_IBTCI_facebook_s01e01"
+    "USAID_IBTCI_rqa_s08e01"
+    "USAID_IBTCI_rqa_s08e02"
+    "USAID_IBTCI_rqa_s08e03"
 
-#    "USAID_IBTCI_rqa_s08e01"
-#    "USAID_IBTCI_rqa_s08e02"
-#    "USAID_IBTCI_rqa_s08e03"
-#
-#    "CSAP_age"
-#    "CSAP_gender"
-#    "CSAP_location"
-#    "CSAP_recently_displaced"
-#    "CSAP_livelihood"
-#    "CSAP_household_language"
+    "CSAP_age"
+    "CSAP_gender"
+    "CSAP_location"
+    "CSAP_recently_displaced"
+    "CSAP_livelihood"
+    "CSAP_household_language"
 )
 
 cd "$CODA_V2_ROOT/data_tools"
