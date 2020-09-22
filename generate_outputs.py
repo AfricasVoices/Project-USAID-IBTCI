@@ -4,7 +4,7 @@ from core_data_modules.logging import Logger
 from core_data_modules.traced_data.io import TracedDataJsonIO
 from core_data_modules.util import IOUtils
 
-from src import LoadData, TranslateRapidProKeys, AutoCode, ProductionFile, \
+from src import LoadData, TranslateSourceKeys, AutoCode, ProductionFile, \
     ApplyManualCodes, AnalysisFile, WSCorrection
 from src.lib import PipelineConfiguration, MessageFilters
 
@@ -73,8 +73,8 @@ if __name__ == "__main__":
     log.info("Loading the raw data...")
     data = LoadData.load_raw_data(user, raw_data_dir, pipeline_configuration)
 
-    log.info("Translating Rapid Pro Keys...")
-    data = TranslateRapidProKeys.translate_rapid_pro_keys(user, data, pipeline_configuration)
+    log.info("Translating source Keys...")
+    data = TranslateSourceKeys.translate_source_keys(user, data, pipeline_configuration)
 
     if pipeline_configuration.move_ws_messages:
         log.info("Pre-filtering empty message objects...")
