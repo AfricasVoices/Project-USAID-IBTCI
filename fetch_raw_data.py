@@ -212,7 +212,9 @@ def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, 
         for post_id in dataset.post_ids:
             comments_log_path = f"{raw_data_dir}/{post_id}_comments_log.jsonl"
             with open(comments_log_path, "a") as raw_comments_log_file:
-                raw_comments.extend(facebook.get_all_comments_on_post(post_id, raw_export_log_file=raw_comments_log_file))
+                raw_comments.extend(
+                    facebook.get_all_comments_on_post(post_id, raw_export_log_file=raw_comments_log_file)
+                )
 
         # Convert the comments to TracedData.
         traced_comments = facebook.convert_facebook_comments_to_traced_data(user, dataset.name, raw_comments)
