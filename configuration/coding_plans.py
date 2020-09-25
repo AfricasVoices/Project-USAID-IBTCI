@@ -62,11 +62,212 @@ def get_rqa_coding_plans(pipeline_name):
                        raw_field_fold_strategy=FoldStrategies.concatenate)
         ]
     else:
-        return []
+        assert pipeline_name == "USAID-IBTCI-SMS"
+        return [
+            CodingPlan(raw_field="rqa_s08e01_raw",
+                       time_field="sent_on",
+                       run_id_field="rqa_s08e01_run_id",
+                       coda_filename="USAID_IBTCI_rqa_s08e01.json",
+                       icr_filename="rqa_s08e01.csv",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.MULTIPLE,
+                               code_scheme=CodeSchemes.RQA_S08E01,
+                               coded_field="rqa_s08e01_coded",
+                               analysis_file_key="rqa_s08e01",
+                               fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.RQA_S08E01, x, y)
+                           )
+                       ],
+                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("s08e01"),
+                       raw_field_fold_strategy=FoldStrategies.concatenate),
+
+            CodingPlan(raw_field="rqa_s08e02_raw",
+                       time_field="sent_on",
+                       run_id_field="rqa_s08e02_run_id",
+                       coda_filename="USAID_IBTCI_rqa_s08e02.json",
+                       icr_filename="rqa_s08e02.csv",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.MULTIPLE,
+                               code_scheme=CodeSchemes.RQA_S08E02,
+                               coded_field="rqa_s08e02_coded",
+                               analysis_file_key="rqa_s08e02",
+                               fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.RQA_S08E02, x, y)
+                           )
+                       ],
+                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("s08e02"),
+                       raw_field_fold_strategy=FoldStrategies.concatenate),
+
+            CodingPlan(raw_field="rqa_s08e03_raw",
+                       time_field="sent_on",
+                       run_id_field="rqa_s08e03_run_id",
+                       coda_filename="USAID_IBTCI_rqa_s08e03.json",
+                       icr_filename="rqa_s08e03.csv",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.MULTIPLE,
+                               code_scheme=CodeSchemes.RQA_S08E03,
+                               coded_field="rqa_s08e03_coded",
+                               analysis_file_key="rqa_s08e03",
+                               fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.RQA_S08E03, x, y)
+                           )
+                       ],
+                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("s08e03"),
+                       raw_field_fold_strategy=FoldStrategies.concatenate)
+        ]
 
 
 def get_demog_coding_plans(pipeline_name):
-    return []
+    if pipeline_name == "USAID-IBTCI-Facebook":
+        return []
+    else:
+        assert pipeline_name == "USAID-IBTCI-SMS"
+        return [
+            CodingPlan(raw_field="operator_raw",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.SOMALIA_OPERATOR,
+                               coded_field="operator_coded",
+                               analysis_file_key="operator",
+                               fold_strategy=FoldStrategies.assert_label_ids_equal
+                           )
+                       ],
+                       raw_field_fold_strategy=FoldStrategies.assert_equal),
+
+            CodingPlan(raw_field="location_raw",
+                       time_field="location_time",
+                       coda_filename="CSAP_location.json",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.MOGADISHU_SUB_DISTRICT,
+                               cleaner=somali.DemographicCleaner.clean_mogadishu_sub_district,
+                               coded_field="mogadishu_sub_district_coded",
+                               analysis_file_key="mogadishu_sub_district",
+                               fold_strategy=FoldStrategies.assert_label_ids_equal
+                           ),
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.SOMALIA_DISTRICT,
+                               cleaner=clean_district_if_no_mogadishu_sub_district,
+                               coded_field="district_coded",
+                               analysis_file_key="district",
+                               fold_strategy=FoldStrategies.assert_label_ids_equal
+                           ),
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.SOMALIA_REGION,
+                               coded_field="region_coded",
+                               analysis_file_key="region",
+                               fold_strategy=FoldStrategies.assert_label_ids_equal
+                           ),
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.SOMALIA_STATE,
+                               coded_field="state_coded",
+                               analysis_file_key="state",
+                               fold_strategy=FoldStrategies.assert_label_ids_equal
+                           ),
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.SOMALIA_ZONE,
+                               coded_field="zone_coded",
+                               analysis_file_key="zone",
+                               fold_strategy=FoldStrategies.assert_label_ids_equal
+                           )
+                       ],
+                       code_imputation_function=code_imputation_functions.impute_somalia_location_codes,
+                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("location"),
+                       raw_field_fold_strategy=FoldStrategies.assert_equal),
+
+            CodingPlan(raw_field="gender_raw",
+                       time_field="gender_time",
+                       coda_filename="CSAP_gender.json",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.GENDER,
+                               cleaner=somali.DemographicCleaner.clean_gender,
+                               coded_field="gender_coded",
+                               analysis_file_key="gender",
+                               fold_strategy=FoldStrategies.assert_label_ids_equal
+                           )
+                       ],
+                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("gender"),
+                       raw_field_fold_strategy=FoldStrategies.assert_equal),
+
+            CodingPlan(raw_field="age_raw",
+                       time_field="age_time",
+                       coda_filename="CSAP_age.json",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.AGE,
+                               cleaner=clean_age_with_range_filter,
+                               coded_field="age_coded",
+                               analysis_file_key="age",
+                               fold_strategy=FoldStrategies.assert_label_ids_equal
+                           )
+                           # CodingConfiguration(
+                           #     coding_mode=CodingModes.SINGLE,
+                           #     code_scheme=CodeSchemes.AGE_CATEGORY,
+                           #     coded_field="age_category_coded",
+                           #     analysis_file_key="age_category",
+                           #     fold_strategy=FoldStrategies.assert_label_ids_equal
+                           # )
+                       ],
+                       # code_imputation_function=code_imputation_functions.impute_age_category,
+                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("age"),
+                       raw_field_fold_strategy=FoldStrategies.assert_equal),
+
+            CodingPlan(raw_field="recently_displaced_raw",
+                       time_field="recently_displaced_time",
+                       coda_filename="CSAP_recently_displaced.json",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.RECENTLY_DISPLACED,
+                               cleaner=somali.DemographicCleaner.clean_yes_no,
+                               coded_field="recently_displaced_coded",
+                               analysis_file_key="recently_displaced",
+                               fold_strategy=FoldStrategies.assert_label_ids_equal
+                           )
+                       ],
+                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("recently displaced"),
+                       raw_field_fold_strategy=FoldStrategies.assert_equal),
+
+            CodingPlan(raw_field="livelihood_raw",
+                       time_field="livelihood_time",
+                       coda_filename="CSAP_livelihood.json",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.LIVELIHOOD,
+                               coded_field="livelihood_coded",
+                               analysis_file_key="livelihood",
+                               fold_strategy=FoldStrategies.assert_label_ids_equal
+                           )
+                       ],
+                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("livelihood"),
+                       raw_field_fold_strategy=FoldStrategies.assert_equal),
+
+            CodingPlan(raw_field="household_language_raw",
+                       time_field="household_language_time",
+                       coda_filename="CSAP_household_language.json",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.HOUSEHOLD_LANGUAGE,
+                               cleaner=None,
+                               coded_field="household_language_coded",
+                               analysis_file_key="household_language",
+                               fold_strategy=FoldStrategies.assert_label_ids_equal
+                           )
+                       ],
+                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("household language"),
+                       raw_field_fold_strategy=FoldStrategies.assert_equal)
+        ]
 
 
 def get_follow_up_coding_plans(pipeline_name):
