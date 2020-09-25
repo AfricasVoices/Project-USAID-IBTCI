@@ -76,7 +76,8 @@ class AutoCode(object):
         for plan in PipelineConfiguration.RQA_CODING_PLANS + PipelineConfiguration.SURVEY_CODING_PLANS:
             for cc in plan.coding_configurations:
                 if cc.cleaner is not None:
-                    CleaningUtils.apply_cleaner_to_traced_data_iterable(user, data, plan.raw_field, cc.coded_field,
+                    raw_field = cc.raw_field if cc.raw_field is not None else plan.raw_field
+                    CleaningUtils.apply_cleaner_to_traced_data_iterable(user, data, raw_field, cc.coded_field,
                                                                         cc.cleaner, cc.code_scheme)
 
     @classmethod

@@ -42,6 +42,16 @@ def get_rqa_coding_plans(pipeline_name):
                                coded_field="facebook_s01e01_coded",
                                analysis_file_key="facebook_s01e01",
                                fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.FACEBOOK_S01E01, x, y)
+                           ),
+                           CodingConfiguration(
+                               raw_field="facebook_s01e01_comment_reply_to_raw",
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.FACEBOOK_COMMENT_REPLY_TO,
+                               cleaner=lambda parent: "post" if parent == {} else "comment",
+                               coded_field="facebook_s01e01_comment_reply_to_coded",
+                               requires_manual_verification=False,
+                               analysis_file_key="facebook_s01e01_comment_reply_to",
+                               fold_strategy=None
                            )
                        ],
                        raw_field_fold_strategy=FoldStrategies.concatenate),
@@ -57,6 +67,16 @@ def get_rqa_coding_plans(pipeline_name):
                                coded_field="facebook_s01e02_coded",
                                analysis_file_key="facebook_s01e02",
                                fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.FACEBOOK_S01E02, x, y)
+                           ),
+                           CodingConfiguration(
+                               raw_field="facebook_s01e02_comment_reply_to_raw",
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.FACEBOOK_COMMENT_REPLY_TO,
+                               cleaner=lambda parent: "post" if parent == {} else "comment",
+                               coded_field="facebook_s01e02_comment_reply_to_coded",
+                               requires_manual_verification=False,
+                               analysis_file_key="facebook_s01e02_comment_reply_to",
+                               fold_strategy=None
                            )
                        ],
                        raw_field_fold_strategy=FoldStrategies.concatenate)
