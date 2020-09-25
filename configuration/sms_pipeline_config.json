@@ -1,0 +1,177 @@
+{
+  "PipelineName": "USAID-IBTCI-SMS",
+  "RawDataSources": [
+    {
+      "SourceType": "RapidPro",
+      "Domain": "textit.in",
+      "TokenFileURL": "gs://avf-credentials/csap-text-it-token.txt",
+      "ContactsFileName": "csap_contacts",
+      "ActivationFlowNames": [
+
+      ],
+      "SurveyFlowNames": [
+        "csap_demog",
+        "csap_s02_demog",
+        "csap_s03_demog"
+      ],
+      "TestContactUUIDs": [
+        "6f251195-5889-437a-a8b5-ad74b8e4eb62",
+        "ed65f87f-4805-42ad-9b66-27f34c81c4ff",
+        "e5b3d475-4e73-41a0-80a2-b39b28aad89c",
+        "856a55d8-9159-4970-bd22-ede3ae5f94e0"
+      ]
+    },
+    {
+      "SourceType": "RapidPro",
+      "Domain": "textit.in",
+      "TokenFileURL": "gs://avf-credentials/csap-secondary-text-it-token.txt",
+      "ContactsFileName": "csap_secondary_contacts",
+      "ActivationFlowNames": [
+        "csap_s08e01_activation"
+      ],
+      "SurveyFlowNames": [
+        "csap_s04_demog",
+        "csap_s05_demog",
+        "csap_s06_demog",
+        "csap_s07_demog",
+        "csap_s08_demog"
+      ],
+      "TestContactUUIDs": [
+        "61e74e0b-1b4a-41fe-9e78-712f2a048f4e",
+        "d4a80e64-c46a-492d-9b71-bae5fa54a741",
+        "84b4d75d-4c8e-4403-994c-05c1377700f8",
+        "83ce764b-5c80-4d56-9d0f-84435570141d"
+      ]
+    }
+  ],
+  "PhoneNumberUuidTable": {
+    "FirebaseCredentialsFileURL": "gs://avf-credentials/avf-id-infrastructure-firebase-adminsdk-6xps8-b9173f2bfd.json",
+    "TableName": "ADSS"
+  },
+  "SourceKeyRemappings": [
+    {"SourceKey": "avf_phone_id", "PipelineKey": "uid"},
+
+    {"SourceKey": "Rqa_S08E01 (Text) - csap_s08e01_activation", "PipelineKey": "rqa_s08e01_raw", "IsActivationMessage": true},
+    {"SourceKey": "Rqa_S08E01 (Run ID) - csap_s08e01_activation", "PipelineKey": "rqa_s08e01_run_id"},
+    {"SourceKey": "Rqa_S08E01 (Time) - csap_s08e01_activation", "PipelineKey": "sent_on"},
+    {"SourceKey": "Rqa_S08E02 (Text) - csap_s08e02_activation", "PipelineKey": "rqa_s08e02_raw", "IsActivationMessage": true},
+    {"SourceKey": "Rqa_S08E02 (Run ID) - csap_s08e02_activation", "PipelineKey": "rqa_s08e02_run_id"},
+    {"SourceKey": "Rqa_S08E02 (Time) - csap_s08e02_activation", "PipelineKey": "sent_on"},
+    {"SourceKey": "Rqa_S08E03 (Text) - csap_s08e03_activation", "PipelineKey": "rqa_s08e03_raw", "IsActivationMessage": true},
+    {"SourceKey": "Rqa_S08E03 (Run ID) - csap_s08e03_activation", "PipelineKey": "rqa_s08e03_run_id"},
+    {"SourceKey": "Rqa_S08E03 (Time) - csap_s08e03_activation", "PipelineKey": "sent_on"},
+
+    {"SourceKey": "Mog_Sub_District (Text) - csap_demog", "PipelineKey": "location_raw"},
+    {"SourceKey": "Mog_Sub_District (Time) - csap_demog", "PipelineKey": "location_time"},
+    {"SourceKey": "Gender (Text) - csap_demog", "PipelineKey": "gender_raw"},
+    {"SourceKey": "Gender (Time) - csap_demog", "PipelineKey": "gender_time"},
+    {"SourceKey": "Age (Text) - csap_demog", "PipelineKey": "age_raw"},
+    {"SourceKey": "Age (Time) - csap_demog", "PipelineKey": "age_time"},
+    {"SourceKey": "Recently_Displaced (Text) - csap_demog", "PipelineKey": "recently_displaced_raw"},
+    {"SourceKey": "Recently_Displaced (Time) - csap_demog", "PipelineKey": "recently_displaced_time"},
+    {"SourceKey": "Idp_Camp (Text) - csap_demog", "PipelineKey": "in_idp_camp_raw"},
+    {"SourceKey": "Idp_Camp (Time) - csap_demog", "PipelineKey": "in_idp_camp_time"},
+    {"SourceKey": "Hh_Language (Text) - csap_demog", "PipelineKey": "household_language_raw"},
+    {"SourceKey": "Hh_Language (Time) - csap_demog", "PipelineKey": "household_language_time"},
+
+    {"SourceKey": "District (Text) - csap_s02_demog", "PipelineKey": "location_raw"},
+    {"SourceKey": "District (Time) - csap_s02_demog", "PipelineKey": "location_time"},
+    {"SourceKey": "Gender (Text) - csap_s02_demog", "PipelineKey": "gender_raw"},
+    {"SourceKey": "Gender (Time) - csap_s02_demog", "PipelineKey": "gender_time"},
+    {"SourceKey": "Age (Text) - csap_s02_demog", "PipelineKey": "age_raw"},
+    {"SourceKey": "Age (Time) - csap_s02_demog", "PipelineKey": "age_time"},
+    {"SourceKey": "Recently_Displaced (Text) - csap_s02_demog", "PipelineKey": "recently_displaced_raw"},
+    {"SourceKey": "Recently_Displaced (Time) - csap_s02_demog", "PipelineKey": "recently_displaced_time"},
+    {"SourceKey": "Idp_Camp (Text) - csap_s02_demog", "PipelineKey": "in_idp_camp_raw"},
+    {"SourceKey": "Idp_Camp (Time) - csap_s02_demog", "PipelineKey": "in_idp_camp_time"},
+
+    {"SourceKey": "District (Text) - csap_s03_demog", "PipelineKey": "location_raw"},
+    {"SourceKey": "District (Time) - csap_s03_demog", "PipelineKey": "location_time"},
+    {"SourceKey": "Gender (Text) - csap_s03_demog", "PipelineKey": "gender_raw"},
+    {"SourceKey": "Gender (Time) - csap_s03_demog", "PipelineKey": "gender_time"},
+    {"SourceKey": "Age (Text) - csap_s03_demog", "PipelineKey": "age_raw"},
+    {"SourceKey": "Age (Time) - csap_s03_demog", "PipelineKey": "age_time"},
+    {"SourceKey": "Recently_Displaced (Text) - csap_s03_demog", "PipelineKey": "recently_displaced_raw"},
+    {"SourceKey": "Recently_Displaced (Time) - csap_s03_demog", "PipelineKey": "recently_displaced_time"},
+    {"SourceKey": "Idp_Camp (Text) - csap_s03_demog", "PipelineKey": "in_idp_camp_raw"},
+    {"SourceKey": "Idp_Camp (Time) - csap_s03_demog", "PipelineKey": "in_idp_camp_time"},
+
+    {"SourceKey": "District (Text) - csap_s04_demog", "PipelineKey": "location_raw"},
+    {"SourceKey": "District (Time) - csap_s04_demog", "PipelineKey": "location_time"},
+    {"SourceKey": "Gender (Text) - csap_s04_demog", "PipelineKey": "gender_raw"},
+    {"SourceKey": "Gender (Time) - csap_s04_demog", "PipelineKey": "gender_time"},
+    {"SourceKey": "Age (Text) - csap_s04_demog", "PipelineKey": "age_raw"},
+    {"SourceKey": "Age (Time) - csap_s04_demog", "PipelineKey": "age_time"},
+    {"SourceKey": "Recently_Displaced (Text) - csap_s04_demog", "PipelineKey": "recently_displaced_raw"},
+    {"SourceKey": "Recently_Displaced (Time) - csap_s04_demog", "PipelineKey": "recently_displaced_time"},
+    {"SourceKey": "Idp_Camp (Text) - csap_s04_demog", "PipelineKey": "in_idp_camp_raw"},
+    {"SourceKey": "Idp_Camp (Time) - csap_s04_demog", "PipelineKey": "in_idp_camp_time"},
+
+    {"SourceKey": "District (Text) - csap_s05_demog", "PipelineKey": "location_raw"},
+    {"SourceKey": "District (Time) - csap_s05_demog", "PipelineKey": "location_time"},
+    {"SourceKey": "Gender (Text) - csap_s05_demog", "PipelineKey": "gender_raw"},
+    {"SourceKey": "Gender (Time) - csap_s05_demog", "PipelineKey": "gender_time"},
+    {"SourceKey": "Age (Text) - csap_s05_demog", "PipelineKey": "age_raw"},
+    {"SourceKey": "Age (Time) - csap_s05_demog", "PipelineKey": "age_time"},
+    {"SourceKey": "Recently_Displaced (Text) - csap_s05_demog", "PipelineKey": "recently_displaced_raw"},
+    {"SourceKey": "Recently_Displaced (Time) - csap_s05_demog", "PipelineKey": "recently_displaced_time"},
+    {"SourceKey": "Idp_Camp (Text) - csap_s05_demog", "PipelineKey": "in_idp_camp_raw"},
+    {"SourceKey": "Idp_Camp (Time) - csap_s05_demog", "PipelineKey": "in_idp_camp_time"},
+
+    {"SourceKey": "District (Text) - csap_s06_demog", "PipelineKey": "location_raw"},
+    {"SourceKey": "District (Time) - csap_s06_demog", "PipelineKey": "location_time"},
+    {"SourceKey": "Gender (Text) - csap_s06_demog", "PipelineKey": "gender_raw"},
+    {"SourceKey": "Gender (Time) - csap_s06_demog", "PipelineKey": "gender_time"},
+    {"SourceKey": "Age (Text) - csap_s06_demog", "PipelineKey": "age_raw"},
+    {"SourceKey": "Age (Time) - csap_s06_demog", "PipelineKey": "age_time"},
+    {"SourceKey": "Recently_Displaced (Text) - csap_s06_demog", "PipelineKey": "recently_displaced_raw"},
+    {"SourceKey": "Recently_Displaced (Time) - csap_s06_demog", "PipelineKey": "recently_displaced_time"},
+    {"SourceKey": "Idp_Camp (Text) - csap_s06_demog", "PipelineKey": "in_idp_camp_raw"},
+    {"SourceKey": "Idp_Camp (Time) - csap_s06_demog", "PipelineKey": "in_idp_camp_time"},
+
+    {"SourceKey": "Location (Text) - csap_s07_demog", "PipelineKey": "location_raw"},
+    {"SourceKey": "Location (Time) - csap_s07_demog", "PipelineKey": "location_time"},
+    {"SourceKey": "Gender (Text) - csap_s07_demog", "PipelineKey": "gender_raw"},
+    {"SourceKey": "Gender (Time) - csap_s07_demog", "PipelineKey": "gender_time"},
+    {"SourceKey": "Age (Text) - csap_s07_demog", "PipelineKey": "age_raw"},
+    {"SourceKey": "Age (Time) - csap_s07_demog", "PipelineKey": "age_time"},
+    {"SourceKey": "Recently_Displaced (Text) - csap_s07_demog", "PipelineKey": "recently_displaced_raw"},
+    {"SourceKey": "Recently_Displaced (Time) - csap_s07_demog", "PipelineKey": "recently_displaced_time"},
+    {"SourceKey": "Idp_Camp (Text) - csap_s07_demog", "PipelineKey": "in_idp_camp_raw"},
+    {"SourceKey": "Idp_Camp (Time) - csap_s07_demog", "PipelineKey": "in_idp_camp_time"},
+    {"SourceKey": "Hh_Language (Text) - csap_s07_demog", "PipelineKey": "household_language_raw"},
+    {"SourceKey": "Hh_Language (Time) - csap_s07_demog", "PipelineKey": "household_language_time"},
+
+    {"SourceKey": "Location (Text) - csap_s08_demog", "PipelineKey": "location_raw"},
+    {"SourceKey": "Location (Time) - csap_s08_demog", "PipelineKey": "location_time"},
+    {"SourceKey": "Gender (Text) - csap_s08_demog", "PipelineKey": "gender_raw"},
+    {"SourceKey": "Gender (Time) - csap_s08_demog", "PipelineKey": "gender_time"},
+    {"SourceKey": "Age (Text) - csap_s08_demog", "PipelineKey": "age_raw"},
+    {"SourceKey": "Age (Time) - csap_s08_demog", "PipelineKey": "age_time"},
+    {"SourceKey": "Recently_Displaced (Text) - csap_s08_demog", "PipelineKey": "recently_displaced_raw"},
+    {"SourceKey": "Recently_Displaced (Time) - csap_s08_demog", "PipelineKey": "recently_displaced_time"},
+    {"SourceKey": "Livelihood (Text) - csap_s08_demog", "PipelineKey": "livelihood_raw"},
+    {"SourceKey": "Livelihood (Time) - csap_s08_demog", "PipelineKey": "livelihood_time"},
+    {"SourceKey": "Hh_Language (Text) - csap_s08_demog", "PipelineKey": "household_language_raw"},
+    {"SourceKey": "Hh_Language (Time) - csap_s08_demog", "PipelineKey": "household_language_time"}
+  ],
+  "ProjectStartDate": "2000-01-01T00:00:00+03:00",
+  "ProjectEndDate": "2100-01-01T00:00+03:00",
+  "FilterTestMessages": false,
+  "MoveWSMessages": true,
+  "AutomatedAnalysis": {
+    "GenerateRegionThemeDistributionMaps": true,
+    "GenerateDistrictThemeDistributionMaps": true,
+    "GenerateMogadishuThemeDistributionMaps": true
+  },
+  "DriveUpload": {
+     "DriveCredentialsFileURL": "gs://avf-credentials/pipeline-runner-service-acct-avf-data-core-64cc71459fe7.json",
+     "ProductionUploadPath": "usaid_ibtci_analysis_outputs/sms/usaid_ibtci_sms_production.csv",
+     "MessagesUploadPath": "usaid_ibtci_analysis_outputs/sms/usaid_ibtci_sms_messages.csv",
+     "IndividualsUploadPath": "usaid_ibtci_analysis_outputs/sms/usaid_ibtci_sms_individuals.csv",
+     "AutomatedAnalysisDir": "usaid_ibtci_analysis_outputs/sms/automated_analysis"
+   },
+   "MemoryProfileUploadBucket":"gs://avf-pipeline-logs-performance-nearline",
+   "DataArchiveUploadBucket": "gs://pipeline-execution-backup-archive",
+   "BucketDirPath": "2020/USAID-IBTCI/SMS/"
+}

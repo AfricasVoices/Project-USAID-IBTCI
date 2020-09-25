@@ -80,6 +80,9 @@ class ApplyManualCodes(object):
             coda_input_path = path.join(coda_input_dir, plan.coda_filename)
 
             for cc in plan.coding_configurations:
+                if not cc.requires_manual_verification:
+                    continue
+
                 f = None
                 try:
                     if path.exists(coda_input_path):
@@ -114,15 +117,17 @@ class ApplyManualCodes(object):
         for td in data:
             missing_dict = dict()
             for plan in PipelineConfiguration.RQA_CODING_PLANS + PipelineConfiguration.SURVEY_CODING_PLANS:
-                if plan.raw_field not in td:
-                    for cc in plan.coding_configurations:
+                for cc in plan.coding_configurations:
+                    raw_field = cc.raw_field if cc.raw_field is not None else plan.raw_field
+                    if raw_field not in td:
                         na_label = CleaningUtils.make_label_from_cleaner_code(
                             cc.code_scheme, cc.code_scheme.get_code_with_control_code(Codes.TRUE_MISSING),
                             Metadata.get_call_location()
                         ).to_dict()
                         missing_dict[cc.coded_field] = na_label if cc.coding_mode == CodingModes.SINGLE else [na_label]
-                elif td[plan.raw_field] == "":
-                    for cc in plan.coding_configurations:
+                for cc in plan.coding_configurations:
+                    raw_field = cc.raw_field if cc.raw_field is not None else plan.raw_field
+                    if td.get(raw_field) == "":
                         nc_label = CleaningUtils.make_label_from_cleaner_code(
                             cc.code_scheme, cc.code_scheme.get_code_with_control_code(Codes.NOT_CODED),
                             Metadata.get_call_location()
@@ -143,6 +148,14 @@ class ApplyManualCodes(object):
                             ).to_dict()
                             nc_dict[cc.coded_field] = nc_label if cc.coding_mode == CodingModes.SINGLE else [nc_label]
                 td.append_data(nc_dict, Metadata(user, Metadata.get_call_location(), time.time()))
+
+        # Run the cleaners that don't require manual verification again, this time setting "checked" to True
+        for plan in PipelineConfiguration.RQA_CODING_PLANS + PipelineConfiguration.SURVEY_CODING_PLANS:
+            for cc in plan.coding_configurations:
+                if cc.cleaner is not None and not cc.requires_manual_verification:
+                    raw_field = cc.raw_field if cc.raw_field is not None else plan.raw_field
+                    CleaningUtils.apply_cleaner_to_traced_data_iterable(user, data, raw_field, cc.coded_field,
+                                                                        cc.cleaner, cc.code_scheme)
 
         # Run code imputation functions
         for plan in PipelineConfiguration.RQA_CODING_PLANS + PipelineConfiguration.SURVEY_CODING_PLANS:
