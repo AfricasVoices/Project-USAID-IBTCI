@@ -18,7 +18,7 @@ class PipelineConfiguration(object):
     WS_CORRECT_DATASET_SCHEME = None
 
     def __init__(self, pipeline_name, raw_data_sources, phone_number_uuid_table, timestamp_remappings,
-                 rapid_pro_key_remappings, project_start_date, project_end_date, filter_test_messages, move_ws_messages,
+                 source_key_remappings, project_start_date, project_end_date, filter_test_messages, move_ws_messages,
                  memory_profile_upload_bucket, data_archive_upload_bucket, bucket_dir_path,
                  automated_analysis, drive_upload=None):
         """
@@ -28,8 +28,8 @@ class PipelineConfiguration(object):
         :type raw_data_sources: list of RawDataSource
         :param phone_number_uuid_table: Configuration for the Firestore phone number <-> uuid table.
         :type phone_number_uuid_table: PhoneNumberUuidTable
-        :param rapid_pro_key_remappings: List of rapid_pro_key -> pipeline_key remappings.
-        :type rapid_pro_key_remappings: list of RapidProKeyRemapping
+        :param source_key_remappings: List of source_key -> pipeline_key remappings.
+        :type source_key_remappings: list of SourceKeyRemapping
         :param project_start_date: When data collection started - all activation messages received before this date
                                    time will be dropped.
         :type project_start_date: datetime.datetime
@@ -59,7 +59,7 @@ class PipelineConfiguration(object):
         self.raw_data_sources = raw_data_sources
         self.phone_number_uuid_table = phone_number_uuid_table
         self.timestamp_remappings = timestamp_remappings
-        self.rapid_pro_key_remappings = rapid_pro_key_remappings
+        self.source_key_remappings = source_key_remappings
         self.project_start_date = project_start_date
         self.project_end_date = project_end_date
         self.filter_test_messages = filter_test_messages
@@ -106,9 +106,9 @@ class PipelineConfiguration(object):
         for remapping_dict in configuration_dict.get("TimestampRemappings", []):
             timestamp_remappings.append(TimestampRemapping.from_configuration_dict(remapping_dict))
 
-        rapid_pro_key_remappings = []
-        for remapping_dict in configuration_dict["RapidProKeyRemappings"]:
-            rapid_pro_key_remappings.append(RapidProKeyRemapping.from_configuration_dict(remapping_dict))
+        source_key_remappings = []
+        for remapping_dict in configuration_dict["SourceKeyRemappings"]:
+            source_key_remappings.append(SourceKeyRemapping.from_configuration_dict(remapping_dict))
 
         project_start_date = isoparse(configuration_dict["ProjectStartDate"])
         project_end_date = isoparse(configuration_dict["ProjectEndDate"])
@@ -127,7 +127,7 @@ class PipelineConfiguration(object):
         bucket_dir_path = configuration_dict["BucketDirPath"]
 
         return cls(pipeline_name, raw_data_sources, phone_number_uuid_table, timestamp_remappings,
-                   rapid_pro_key_remappings, project_start_date, project_end_date, filter_test_messages,
+                   source_key_remappings, project_start_date, project_end_date, filter_test_messages,
                    move_ws_messages, memory_profile_upload_bucket, data_archive_upload_bucket, bucket_dir_path,
                    automated_analysis, drive_upload_paths)
 
@@ -151,10 +151,10 @@ class PipelineConfiguration(object):
             assert isinstance(self.phone_number_uuid_table, PhoneNumberUuidTable)
             self.phone_number_uuid_table.validate()
 
-        validators.validate_list(self.rapid_pro_key_remappings, "rapid_pro_key_remappings")
-        for i, remapping in enumerate(self.rapid_pro_key_remappings):
-            assert isinstance(remapping, RapidProKeyRemapping), \
-                f"rapid_pro_key_mappings[{i}] is not of type RapidProKeyRemapping"
+        validators.validate_list(self.source_key_remappings, "source_key_remappings")
+        for i, remapping in enumerate(self.source_key_remappings):
+            assert isinstance(remapping, SourceKeyRemapping), \
+                f"source_key_mappings[{i}] is not of type SourceKeyRemapping"
             remapping.validate()
 
         validators.validate_datetime(self.project_start_date, "project_start_date")
@@ -313,7 +313,7 @@ class FacebookSource(RawDataSource):
 
         validators.validate_list(self.datasets, "datasets")
         for i, dataset in enumerate(self.datasets):
-            assert isinstance(dataset, FacebookDataset),f"datasets[{i}] is not of type FacebookDataset"
+            assert isinstance(dataset, FacebookDataset), f"datasets[{i}] is not of type FacebookDataset"
             dataset.validate()
 
     # TODO: Rename to refer to datasets instead of flows, since 'flows' don't really make sense for Facebook
@@ -432,19 +432,19 @@ class TimestampRemapping(object):
             validators.validate_datetime(self.time_to_adjust_to, "time_to_adjust_to")
 
 
-class RapidProKeyRemapping(object):
-    def __init__(self, is_activation_message, rapid_pro_key, pipeline_key):
+class SourceKeyRemapping(object):
+    def __init__(self, is_activation_message, source_key, pipeline_key):
         """
         :param is_activation_message: Whether this re-mapping contains an activation message (activation messages need
-                                   to be handled differently because they are not always in the correct flow)
+                                   to be handled differently because they are not always in the correct dataset)
         :type is_activation_message: bool
-        :param rapid_pro_key: Name of key in the dataset exported via RapidProTools.
-        :type rapid_pro_key: str
+        :param source_key: Name of key in the dataset exported by fetch_raw_data.py.
+        :type source_key: str
         :param pipeline_key: Name to use for that key in the rest of the pipeline.
         :type pipeline_key: str
         """
         self.is_activation_message = is_activation_message
-        self.rapid_pro_key = rapid_pro_key
+        self.source_key = source_key
         self.pipeline_key = pipeline_key
 
         self.validate()
@@ -452,14 +452,14 @@ class RapidProKeyRemapping(object):
     @classmethod
     def from_configuration_dict(cls, configuration_dict):
         is_activation_message = configuration_dict.get("IsActivationMessage", False)
-        rapid_pro_key = configuration_dict["RapidProKey"]
+        source_key = configuration_dict["SourceKey"]
         pipeline_key = configuration_dict["PipelineKey"]
 
-        return cls(is_activation_message, rapid_pro_key, pipeline_key)
+        return cls(is_activation_message, source_key, pipeline_key)
 
     def validate(self):
         validators.validate_bool(self.is_activation_message, "is_activation_message")
-        validators.validate_string(self.rapid_pro_key, "rapid_pro_key")
+        validators.validate_string(self.source_key, "source_key")
         validators.validate_string(self.pipeline_key, "pipeline_key")
 
 

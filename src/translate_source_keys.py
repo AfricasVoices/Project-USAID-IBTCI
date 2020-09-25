@@ -11,12 +11,12 @@ from src.lib import PipelineConfiguration
 log = Logger(__name__)
 
 
-class TranslateRapidProKeys(object):
+class TranslateSourceKeys(object):
     @classmethod
     def set_show_ids(cls, user, data, pipeline_configuration):
         """
-        Sets a show pipeline key for each message, using the presence of Rapid Pro value keys to determine which
-        show each message belongs to.
+        Sets a show pipeline key for each message, using the presence of source keys to determine which show each
+        message belongs to.
 
         :param user: Identifier of the user running this program, for TracedData Metadata.
         :type user: str
@@ -28,13 +28,13 @@ class TranslateRapidProKeys(object):
         for td in data:
             show_dict = dict()
 
-            for remapping in pipeline_configuration.rapid_pro_key_remappings:
+            for remapping in pipeline_configuration.source_key_remappings:
                 if not remapping.is_activation_message:
                     continue
 
-                if td.get(remapping.rapid_pro_key) is not None:
+                if td.get(remapping.source_key) is not None:
                     assert "rqa_message" not in show_dict
-                    show_dict["rqa_message"] = td[remapping.rapid_pro_key]
+                    show_dict["rqa_message"] = td[remapping.source_key]
                     show_dict["show_pipeline_key"] = remapping.pipeline_key
 
             td.append_data(show_dict, Metadata(user, Metadata.get_call_location(), TimeUtils.utc_now_as_iso_string()))
@@ -125,26 +125,26 @@ class TranslateRapidProKeys(object):
             old_keys = set()
             remapped = dict()
 
-            for remapping in pipeline_configuration.rapid_pro_key_remappings:
+            for remapping in pipeline_configuration.source_key_remappings:
                 if remapping.is_activation_message:
                     continue
 
-                old_key = remapping.rapid_pro_key
-                new_key = remapping.pipeline_key
+                source_key = remapping.source_key
+                pipeline_key = remapping.pipeline_key
                 
-                if old_key in td and new_key not in td:
-                    old_keys.add(old_key)
+                if source_key in td and pipeline_key not in td:
+                    old_keys.add(source_key)
 
                     # Some "old keys" translate to the same new key. This is sometimes desirable, for example if we ask
                     # the same demog question to the same person in multiple places, we should take take their
-                    # newest response. However, if their newest response is "null" in the flow exported from Rapid Pro,
+                    # newest response. However, if their newest response is "null" in the more recent data source,
                     # taking the newest response would cause loss of some valuable responses. This check ensures we
                     # are taking the most recent response, unless the most response is "null" and there was a more
                     # substantive response in the past.
-                    if td[old_key] is None and remapped.get(new_key) is not None:
+                    if td[source_key] is None and remapped.get(pipeline_key) is not None:
                         continue
 
-                    remapped[new_key] = td[old_key]
+                    remapped[pipeline_key] = td[source_key]
 
             td.hide_keys(old_keys, Metadata(user, Metadata.get_call_location(), TimeUtils.utc_now_as_iso_string()))
             td.append_data(remapped, Metadata(user, Metadata.get_call_location(), TimeUtils.utc_now_as_iso_string()))
@@ -172,7 +172,7 @@ class TranslateRapidProKeys(object):
     @classmethod
     def hide_null_messages(cls, user, data):
         """
-        Hides messages which were null in Rapid Pro.
+        Hides messages which were null.
 
         :param user: Identifier of the user running this program, for TracedData Metadata.
         :type user: str
@@ -187,15 +187,15 @@ class TranslateRapidProKeys(object):
             td.hide_keys(null_keys, Metadata(user, Metadata.get_call_location(), TimeUtils.utc_now_as_iso_string()))
 
     @classmethod
-    def translate_rapid_pro_keys(cls, user, data, pipeline_configuration):
+    def translate_source_keys(cls, user, data, pipeline_configuration):
         """
-        Remaps the keys of rqa messages in the wrong flow into the correct one, and remaps all Rapid Pro keys to
+        Remaps the keys of rqa messages in the wrong dataset into the correct one, and remaps all source keys to
         more usable keys that can be used by the rest of the pipeline.
         
-        TODO: Break this function such that the show remapping phase happens in one class, and the Rapid Pro remapping
+        TODO: Break this function such that the show remapping phase happens in one class, and the source remapping
               in another?
         """
-        # Set the show pipeline key for each message, using the presence of Rapid Pro value keys in the TracedData.
+        # Set the show pipeline key for each message, using the presence of source keys in the TracedData.
         # These are necessary in order to be able to remap radio shows and key names separately (because data
         # can't be 'deleted' from TracedData).
         cls.set_show_ids(user, data, pipeline_configuration)
@@ -203,14 +203,14 @@ class TranslateRapidProKeys(object):
         # Move rqa messages which ended up in the wrong flow to the correct one.
         cls.remap_radio_shows(user, data, pipeline_configuration)
 
-        # Remap the keys used by Rapid Pro to more usable key names that will be used by the rest of the pipeline.
+        # Remap the keys used by the data sources to more usable names that will be used by the rest of the pipeline.
         cls.remap_key_names(user, data, pipeline_configuration)
 
         # Convert from the new show key format to the raw field format still used by the rest of the pipeline.
         cls.set_rqa_raw_keys_from_show_ids(user, data)
 
-        # Some Text inputs in Rapid Pro can be null. We don't know why, but there's no useful messages in those
-        # cases so hide them (which means the rest of the pipeline will treat those as NA).
+        # Some Text inputs from Rapid Pro sources can be null. We don't know why, but there's no useful messages in
+        # those cases so hide them (which means the rest of the pipeline will treat those as NA).
         cls.hide_null_messages(user, data)
 
         return data
