@@ -155,7 +155,7 @@ class ApplyManualCodes(object):
                 if cc.cleaner is not None and not cc.requires_manual_verification:
                     raw_field = cc.raw_field if cc.raw_field is not None else plan.raw_field
                     CleaningUtils.apply_cleaner_to_traced_data_iterable(user, data, raw_field, cc.coded_field,
-                                                                        cc.cleaner, cc.code_scheme)
+                                                                        cc.cleaner, cc.code_scheme, set_checked=True)
 
         # Run code imputation functions
         for plan in PipelineConfiguration.RQA_CODING_PLANS + PipelineConfiguration.SURVEY_CODING_PLANS:
