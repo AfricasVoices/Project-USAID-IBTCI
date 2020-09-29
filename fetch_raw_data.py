@@ -216,6 +216,11 @@ def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, 
                     facebook.get_all_comments_on_post(post_id, raw_export_log_file=raw_comments_log_file)
                 )
 
+            # Download the post and add it as context to all the comments
+            post = facebook.get_post(post_id, fields=["attachments"])
+            for comment in raw_comments:
+                comment["post"] = post
+
         # Facebook only returns a parent if the comment is a reply to another comment.
         # If there is no parent, set one to the empty-dict.
         for comment in raw_comments:

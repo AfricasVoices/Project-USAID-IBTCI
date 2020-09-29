@@ -1,0 +1,47 @@
+{
+  "SchemeID": "Scheme-3cd48f7c",
+  "Name": "Post Type",
+  "Version": "0.0.0.1",
+  "Codes": [
+    {
+      "CodeID": "code-d5b87090",
+      "CodeType": "Normal",
+      "DisplayText": "picture",
+      "NumericValue": 1,
+      "StringValue": "picture",
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "picture"
+      ]
+    },
+    {
+      "CodeID": "code-2c6a6da3",
+      "CodeType": "Normal",
+      "DisplayText": "video",
+      "NumericValue": 2,
+      "StringValue": "video",
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "video"
+      ]
+    },
+    {
+      "CodeID": "code-NA-f93d3eb7",
+      "CodeType": "Control",
+      "ControlCode": "NA",
+      "DisplayText": "NA (missing)",
+      "NumericValue": -10,
+      "StringValue": "NA",
+      "VisibleInCoda": false
+    },
+    {
+      "CodeID": "code-STOP-08b832a8",
+      "CodeType": "Control",
+      "ControlCode": "STOP",
+      "DisplayText": "STOP",
+      "NumericValue": -90,
+      "StringValue": "STOP",
+      "VisibleInCoda": false
+    }
+  ]
+}
