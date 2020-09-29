@@ -29,6 +29,9 @@ def clean_district_if_no_mogadishu_sub_district(text):
 
 def clean_post(post):
     post_type = None
+    # Assume that there is only one attachment type, which is either a photo or inline_video, as this is the plan for
+    # this project. If that assumption doesn't hold, this will fail and we can adapt to what the data actually looks
+    # in that case when we see it.
     for attachment in post["attachments"]["data"]:
         assert attachment["type"] in {"video_inline", "photo"}, post
 
