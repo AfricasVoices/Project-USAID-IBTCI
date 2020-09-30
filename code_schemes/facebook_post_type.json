@@ -6,12 +6,12 @@
     {
       "CodeID": "code-d5b87090",
       "CodeType": "Normal",
-      "DisplayText": "picture",
+      "DisplayText": "photo",
       "NumericValue": 1,
-      "StringValue": "picture",
+      "StringValue": "photo",
       "VisibleInCoda": true,
       "MatchValues": [
-        "picture"
+        "photo"
       ]
     },
     {

@@ -39,8 +39,8 @@ def clean_facebook_post_type(post):
             assert post_type in {"video", None}, post
             post_type = "video"
         elif attachment["type"] == "photo":
-            assert post_type in {"picture", None}, post
-            post_type = "picture"
+            assert post_type in {"photo", None}, post
+            post_type = "photo"
 
     return post_type
 
