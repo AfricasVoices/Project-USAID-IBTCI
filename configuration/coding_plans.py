@@ -27,7 +27,7 @@ def clean_district_if_no_mogadishu_sub_district(text):
         return Codes.NOT_CODED
 
 
-def clean_post(post):
+def clean_facebook_post_type(post):
     post_type = None
     # Assume that there is only one attachment type, which is either a photo or inline_video, as this is the plan for
     # this project. If that assumption doesn't hold, this will fail and we can adapt to what the data actually looks
@@ -75,7 +75,7 @@ def get_rqa_coding_plans(pipeline_name):
                                raw_field="facebook_s01e01_post_raw",
                                coding_mode=CodingModes.SINGLE,
                                code_scheme=CodeSchemes.FACEBOOK_POST_TYPE,
-                               cleaner=lambda post: clean_post(post),
+                               cleaner=clean_facebook_post_type,
                                coded_field="facebook_s01e01_post_type_coded",
                                requires_manual_verification=False,
                                analysis_file_key="facebook_s01e01_post_type",
@@ -110,7 +110,7 @@ def get_rqa_coding_plans(pipeline_name):
                                raw_field="facebook_s01e02_post_raw",
                                coding_mode=CodingModes.SINGLE,
                                code_scheme=CodeSchemes.FACEBOOK_POST_TYPE,
-                               cleaner=lambda post: clean_post(post),
+                               cleaner=clean_facebook_post_type,
                                coded_field="facebook_s01e02_post_type_coded",
                                requires_manual_verification=False,
                                analysis_file_key="facebook_s01e02_post_type",
