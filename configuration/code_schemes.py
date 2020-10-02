@@ -32,3 +32,4 @@ class CodeSchemes(object):
     FACEBOOK_S01E01 = _open_scheme("facebook_s01e01.json")
     FACEBOOK_S01E02 = _open_scheme("facebook_s01e02.json")
     FACEBOOK_COMMENT_REPLY_TO = _open_scheme("facebook_comment_reply_to.json")
+    FACEBOOK_POST_TYPE = _open_scheme("facebook_post_type.json")

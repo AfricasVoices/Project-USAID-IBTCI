@@ -12,6 +12,7 @@ log = Logger(__name__)
 _BASE_URL = "https://graph.facebook.com/v8.0"
 _MAX_RESULTS_PER_PAGE = 100  # For paged requests, the maximum number of records to request in each page
 
+
 # TODO: Move to a new repo at AfricasVoices/SocialMediaTools
 # Included in project source for now because it's likely to evolve very rapidly during the initial experiments.
 class FacebookClient(object):
@@ -27,23 +28,38 @@ class FacebookClient(object):
         url = f"{_BASE_URL}{endpoint}"
         response = requests.get(url, params)
 
+        return response.json()
+
+    def _make_paged_get_request(self, endpoint, params=None):
+        if params is None:
+            params = {}
+        params = params.copy()
+        params["access_token"] = self._access_token
+
+        url = f"{_BASE_URL}{endpoint}"
+        response = requests.get(url, params)
+
         if "data" not in response.json():
             log.error(f"Response from Facebook did not contain a 'data' field. "
                       f"The returned data is probably an error message: {response.json()}")
             exit(1)
 
-        return response
-
-    def _make_paged_get_request(self, endpoint, params=None):
-        response = self._make_get_request(endpoint, params)
         result = response.json()["data"]
-
         next_url = response.json().get("paging", {}).get("next")
         while next_url is not None:
             response = requests.get(next_url)
             result.extend(response.json()["data"])
             next_url = response.json()["paging"].get("next")
         return result
+
+    def get_post(self, post_id, fields=["created_time", "message", "id"]):
+        log.debug(f"Fetching post '{post_id}'...")
+        return self._make_get_request(
+            f"/{post_id}",
+            {
+                "fields": ",".join(fields)
+            }
+        )
 
     def get_all_posts_published_by_page(self, page_id, fields=["attachments", "created_time", "message"]):
         log.debug(f"Fetching all posts published by page '{page_id}'...")

@@ -207,7 +207,7 @@ def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, 
         raw_comments_output_path = f"{raw_data_dir}/{dataset.name}_raw.json"
         traced_comments_output_path = f"{raw_data_dir}/{dataset.name}.jsonl"
 
-        # Download all the comments on all the posts in this dataset, logging the raw data returned by Facebook
+        # Download all the comments on all the posts in this dataset, logging the raw data returned by Facebook.
         raw_comments = []
         for post_id in dataset.post_ids:
             comments_log_path = f"{raw_data_dir}/{post_id}_comments_log.jsonl"
@@ -215,6 +215,13 @@ def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, 
                 raw_comments.extend(
                     facebook.get_all_comments_on_post(post_id, raw_export_log_file=raw_comments_log_file)
                 )
+
+            # Download the post and add it as context to all the comments. Adding a reference to the post under
+            # which a comment was made enables downstream features such as post-type labelling and comment context
+            # in Coda, as well as allowing us to track how many comments were made on each post.
+            post = facebook.get_post(post_id, fields=["attachments"])
+            for comment in raw_comments:
+                comment["post"] = post
 
         # Facebook only returns a parent if the comment is a reply to another comment.
         # If there is no parent, set one to the empty-dict.

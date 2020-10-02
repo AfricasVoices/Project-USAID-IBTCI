@@ -27,6 +27,24 @@ def clean_district_if_no_mogadishu_sub_district(text):
         return Codes.NOT_CODED
 
 
+def clean_facebook_post_type(post):
+    post_type = None
+    # Assume that there is only one attachment type, which is either a photo or inline_video, as this is the plan for
+    # this project. If that assumption doesn't hold, this will fail and we can adapt to what the data actually looks
+    # in that case when we see it.
+    for attachment in post["attachments"]["data"]:
+        assert attachment["type"] in {"video_inline", "photo"}, post
+
+        if attachment["type"] == "video_inline":
+            assert post_type in {"video", None}, post
+            post_type = "video"
+        elif attachment["type"] == "photo":
+            assert post_type in {"photo", None}, post
+            post_type = "photo"
+
+    return post_type
+
+
 def get_rqa_coding_plans(pipeline_name):
     if pipeline_name == "USAID-IBTCI-Facebook":
         return [
@@ -52,6 +70,16 @@ def get_rqa_coding_plans(pipeline_name):
                                requires_manual_verification=False,
                                analysis_file_key="facebook_s01e01_comment_reply_to",
                                fold_strategy=None
+                           ),
+                           CodingConfiguration(
+                               raw_field="facebook_s01e01_post_raw",
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.FACEBOOK_POST_TYPE,
+                               cleaner=clean_facebook_post_type,
+                               coded_field="facebook_s01e01_post_type_coded",
+                               requires_manual_verification=False,
+                               analysis_file_key="facebook_s01e01_post_type",
+                               fold_strategy=None
                            )
                        ],
                        raw_field_fold_strategy=FoldStrategies.concatenate),
@@ -76,6 +104,16 @@ def get_rqa_coding_plans(pipeline_name):
                                coded_field="facebook_s01e02_comment_reply_to_coded",
                                requires_manual_verification=False,
                                analysis_file_key="facebook_s01e02_comment_reply_to",
+                               fold_strategy=None
+                           ),
+                           CodingConfiguration(
+                               raw_field="facebook_s01e02_post_raw",
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.FACEBOOK_POST_TYPE,
+                               cleaner=clean_facebook_post_type,
+                               coded_field="facebook_s01e02_post_type_coded",
+                               requires_manual_verification=False,
+                               analysis_file_key="facebook_s01e02_post_type",
                                fold_strategy=None
                            )
                        ],
