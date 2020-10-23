@@ -32,7 +32,10 @@ git checkout "e895887b3abceb63bab672a262d5c1dd73dcad92"  # (master which support
 
 for DATASET in ${DATASETS[@]}
 do
-    echo "Pushing messages data to ${DATASET}..."
+    FILE="$DATA_ROOT/Outputs/Coda Files/$DATASET.json"
 
-    pipenv run python add.py "$AUTH" "${DATASET}" messages "$DATA_ROOT/Outputs/Coda Files/$DATASET.json"
+    if [ -e "$FILE" ]; then  # Stop-gap workaround for supporting multiple pipelines until we have a Coda library
+        echo "Pushing messages data to ${DATASET}..."
+        pipenv run python add.py "$AUTH" "${DATASET}" messages "$FILE"
+    fi
 done

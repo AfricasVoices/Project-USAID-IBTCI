@@ -144,6 +144,9 @@ class AnalysisUtils(object):
         """
         if cls.withdrew_consent(td, consent_withdrawn_key):
             return False
+
+        if not cls.labelled(td, consent_withdrawn_key, coding_plan):
+            return False
         
         for cc in coding_plan.coding_configurations:
             codes = cls._get_td_codes_for_coding_configuration(td, cc)

@@ -78,12 +78,15 @@ if __name__ == "__main__":
                                                   target_folder_is_shared_with_me=True, recursive=True,
                                                   fix_duplicates=True)
 
-            individuals_csv_drive_dir = os.path.dirname(pipeline_configuration.drive_upload.individuals_upload_path)
-            individuals_csv_drive_file_name = os.path.basename(pipeline_configuration.drive_upload.individuals_upload_path)
-            drive_client_wrapper.update_or_create(individuals_csv_input_path, individuals_csv_drive_dir,
-                                                  target_file_name=individuals_csv_drive_file_name,
-                                                  target_folder_is_shared_with_me=True, recursive=True,
-                                                  fix_duplicates=True)
+            if pipeline_configuration.pipeline_name != "TIS-Plus-Facebook":
+                # Don't upload the individuals file until we have access to user ids from Facebook, so as not to
+                # confuse the RAs
+                individuals_csv_drive_dir = os.path.dirname(pipeline_configuration.drive_upload.individuals_upload_path)
+                individuals_csv_drive_file_name = os.path.basename(pipeline_configuration.drive_upload.individuals_upload_path)
+                drive_client_wrapper.update_or_create(individuals_csv_input_path, individuals_csv_drive_dir,
+                                                      target_file_name=individuals_csv_drive_file_name,
+                                                      target_folder_is_shared_with_me=True, recursive=True,
+                                                      fix_duplicates=True)
 
             paths_to_upload = glob(f"{automated_analysis_input_dir}/*.csv")
             log.info(f"Uploading {len(paths_to_upload)} CSVs to Drive...")

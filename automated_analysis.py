@@ -117,6 +117,11 @@ if __name__ == "__main__":
         for row in engagement_counts.values():
             writer.writerow(row)
 
+    if pipeline_configuration.pipeline_name == "TIS-Plus-Facebook":
+        # Only the total engagement counts make sense for now, so don't attempt to apply any of the other standard
+        # analysis to the Facebook data.
+        exit(0)
+
     log.info("Computing the participation frequencies...")
     repeat_participations = OrderedDict()
     for i in range(1, len(PipelineConfiguration.RQA_CODING_PLANS) + 1):
