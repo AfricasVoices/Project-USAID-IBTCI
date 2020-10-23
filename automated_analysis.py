@@ -117,7 +117,7 @@ if __name__ == "__main__":
         for row in engagement_counts.values():
             writer.writerow(row)
 
-    if pipeline_configuration.pipeline_name == "TIS-Plus-Facebook":
+    if pipeline_configuration.pipeline_name == "USAID-IBTCI-Facebook":
         # Only the total engagement counts make sense for now, so don't attempt to apply any of the other standard
         # analysis to the Facebook data.
         exit(0)
