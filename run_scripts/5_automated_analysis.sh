@@ -22,7 +22,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ $# -ne 3 ]]; then
-    echo "Usage: ./5_automated_analysis [--profile-cpu <cpu-profile-output-path>] <user> <google-cloud-credentials-file-path> <pipeline-configuration-file-path> <data-root>"
+    echo "Usage: ./5_automated_analysis [--profile-cpu <cpu-profile-output-path>] <user> <pipeline-configuration-file-path> <data-root>"
     echo "Generates the analysis graphs using the traced data produced by 3_generate_outputs.sh"
     exit
 fi
