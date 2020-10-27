@@ -12,7 +12,8 @@
       "SurveyFlowNames": [
         "csap_demog",
         "csap_s02_demog",
-        "csap_s03_demog"
+        "csap_s03_demog",
+        "csap_s09_demog"
       ],
       "TestContactUUIDs": [
         "6f251195-5889-437a-a8b5-ad74b8e4eb62",
@@ -34,8 +35,7 @@
         "csap_s05_demog",
         "csap_s06_demog",
         "csap_s07_demog",
-        "csap_s08_demog",
-        "csap_s09_demog"
+        "csap_s08_demog"
       ],
       "TestContactUUIDs": [
         "61e74e0b-1b4a-41fe-9e78-712f2a048f4e",
