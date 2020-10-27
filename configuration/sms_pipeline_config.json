@@ -12,7 +12,8 @@
       "SurveyFlowNames": [
         "csap_demog",
         "csap_s02_demog",
-        "csap_s03_demog"
+        "csap_s03_demog",
+        "csap_s09_demog"
       ],
       "TestContactUUIDs": [
         "6f251195-5889-437a-a8b5-ad74b8e4eb62",
@@ -141,6 +142,17 @@
     {"SourceKey": "Idp_Camp (Time) - csap_s07_demog", "PipelineKey": "in_idp_camp_time"},
     {"SourceKey": "Hh_Language (Text) - csap_s07_demog", "PipelineKey": "household_language_raw"},
     {"SourceKey": "Hh_Language (Time) - csap_s07_demog", "PipelineKey": "household_language_time"},
+
+    {"SourceKey": "Location (Text) - csap_s09_demog", "PipelineKey": "location_raw"},
+    {"SourceKey": "Location (Time) - csap_s09_demog", "PipelineKey": "location_time"},
+    {"SourceKey": "Gender (Text) - csap_s09_demog", "PipelineKey": "gender_raw"},
+    {"SourceKey": "Gender (Time) - csap_s09_demog", "PipelineKey": "gender_time"},
+    {"SourceKey": "Age (Text) - csap_s09_demog", "PipelineKey": "age_raw"},
+    {"SourceKey": "Age (Time) - csap_s09_demog", "PipelineKey": "age_time"},
+    {"SourceKey": "Recently_Displaced (Text) - csap_s09_demog", "PipelineKey": "recently_displaced_raw"},
+    {"SourceKey": "Recently_Displaced (Time) - csap_s09_demog", "PipelineKey": "recently_displaced_time"},
+    {"SourceKey": "Idp_Camp (Text) - csap_s09_demog", "PipelineKey": "in_idp_camp_raw"},
+    {"SourceKey": "Idp_Camp (Time) - csap_s09_demog", "PipelineKey": "in_idp_camp_time"},
 
     {"SourceKey": "Location (Text) - csap_s08_demog", "PipelineKey": "location_raw"},
     {"SourceKey": "Location (Time) - csap_s08_demog", "PipelineKey": "location_time"},
