@@ -29,7 +29,6 @@ class CodeSchemes(object):
 
     WS_CORRECT_DATASET = _open_scheme("ws_correct_dataset.json")
 
-    FACEBOOK_S01E01 = _open_scheme("facebook_s01e01.json")
-    FACEBOOK_S01E02 = _open_scheme("facebook_s01e02.json")
+    FACEBOOK_S08E01 = _open_scheme("facebook_s08e01.json")
     FACEBOOK_COMMENT_REPLY_TO = _open_scheme("facebook_comment_reply_to.json")
     FACEBOOK_POST_TYPE = _open_scheme("facebook_post_type.json")
