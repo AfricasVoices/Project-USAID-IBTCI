@@ -75,6 +75,42 @@
       "NumericValue": -110,
       "StringValue": "CE",
       "VisibleInCoda": false
+    },
+    {
+      "CodeID": "code-Q-a5d3700d",
+      "CodeType": "Meta",
+      "MetaCode": "question",
+      "DisplayText": "meta: question",
+      "NumericValue": -100010,
+      "StringValue": "question",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-G-97cb3199",
+      "CodeType": "Meta",
+      "MetaCode": "greeting",
+      "DisplayText": "meta: greeting",
+      "NumericValue": -100020,
+      "StringValue": "greeting",
+      "VisibleInCoda": true
+    },
+    {
+      "DisplayText": "meta: gratitude",
+      "VisibleInCoda": true,
+      "NumericValue": -100100,
+      "CodeID": "code-GR-e6de1b7e",
+      "CodeType": "Meta",
+      "MetaCode": "gratitude",
+      "StringValue": "gratitude"
+    },
+    {
+      "NumericValue": -100140,
+      "CodeID": "code-I-b13a41f6",
+      "CodeType": "Meta",
+      "MetaCode": "impact",
+      "StringValue": "impact",
+      "DisplayText": "meta: impact",
+      "VisibleInCoda": true
     }
   ]
 }
