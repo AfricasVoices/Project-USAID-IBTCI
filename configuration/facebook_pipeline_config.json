@@ -22,11 +22,13 @@
     {"SourceKey": "avf_facebook_id", "PipelineKey": "uid"},
 
     {"SourceKey": "facebook_s08e01_dhaayow655.message", "PipelineKey": "facebook_s08e01_raw"},
+    {"SourceKey": "facebook_s08e01_dhaayow655.id", "PipelineKey": "facebook_s08e01_comment_id"},
     {"SourceKey": "facebook_s08e01_dhaayow655.created_time", "PipelineKey": "sent_on"},
     {"SourceKey": "facebook_s08e01_dhaayow655.parent", "PipelineKey": "facebook_s08e01_comment_reply_to_raw"},
     {"SourceKey": "facebook_s08e01_dhaayow655.post", "PipelineKey": "facebook_s08e01_post_raw"},
 
     {"SourceKey": "facebook_s08e01_AbdirizakHAtosh.message", "PipelineKey": "facebook_s08e01_raw"},
+    {"SourceKey": "facebook_s08e01_AbdirizakHAtosh.id", "PipelineKey": "facebook_s08e01_comment_id"},
     {"SourceKey": "facebook_s08e01_AbdirizakHAtosh.created_time", "PipelineKey": "sent_on"},
     {"SourceKey": "facebook_s08e01_AbdirizakHAtosh.parent", "PipelineKey": "facebook_s08e01_comment_reply_to_raw"},
     {"SourceKey": "facebook_s08e01_AbdirizakHAtosh.post", "PipelineKey": "facebook_s08e01_post_raw"}

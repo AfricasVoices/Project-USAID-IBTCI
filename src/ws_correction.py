@@ -5,6 +5,7 @@ from core_data_modules.cleaners.cleaning_utils import CleaningUtils
 from core_data_modules.logging import Logger
 from core_data_modules.traced_data import Metadata
 from core_data_modules.traced_data.io import TracedDataCodaV2IO
+from core_data_modules.util import TimeUtils
 
 from src.lib import PipelineConfiguration
 from src.lib.configuration_objects import CodingModes
@@ -28,7 +29,13 @@ class WSCorrection(object):
             if plan.coda_filename is None:
                 continue
 
-            TracedDataCodaV2IO.compute_message_ids(user, data, plan.raw_field, f"{plan.id_field}_WS")
+            for td in data:
+                if plan.raw_field in td:
+                    td.append_data(
+                        {f"{plan.id_field}_WS": plan.message_id_fn(td)},
+                        Metadata(user, Metadata.get_call_location(), TimeUtils.utc_now_as_iso_string())
+                    )
+
             with open(f"{coda_input_dir}/{plan.coda_filename}") as f:
                 TracedDataCodaV2IO.import_coda_2_to_traced_data_iterable(
                     user, data, f"{plan.id_field}_WS",

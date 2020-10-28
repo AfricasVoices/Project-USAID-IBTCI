@@ -3,8 +3,9 @@ from os import path
 
 from core_data_modules.cleaners.cleaning_utils import CleaningUtils
 from core_data_modules.logging import Logger
+from core_data_modules.traced_data import Metadata
 from core_data_modules.traced_data.io import TracedDataCSVIO, TracedDataCodaV2IO
-from core_data_modules.util import IOUtils
+from core_data_modules.util import IOUtils, TimeUtils
 
 from src.lib import PipelineConfiguration, MessageFilters, ICRTools
 
@@ -87,7 +88,12 @@ class AutoCode(object):
             if plan.coda_filename is None:
                 continue
 
-            TracedDataCodaV2IO.compute_message_ids(user, data, plan.raw_field, plan.id_field)
+            for td in data:
+                if plan.raw_field in td:
+                    td.append_data(
+                        {plan.id_field: plan.message_id_fn(td)},
+                        Metadata(user, Metadata.get_call_location(), TimeUtils.utc_now_as_iso_string())
+                    )
 
             coda_output_path = path.join(coda_output_dir, plan.coda_filename)
             with open(coda_output_path, "w") as f:

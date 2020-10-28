@@ -1,5 +1,6 @@
 from core_data_modules.cleaners import somali, swahili, Codes
 from core_data_modules.traced_data.util.fold_traced_data import FoldStrategies
+from core_data_modules.util import SHAUtils
 
 from configuration import code_imputation_functions
 from configuration.code_schemes import CodeSchemes
@@ -52,6 +53,7 @@ def get_rqa_coding_plans(pipeline_name):
                        time_field="sent_on",
                        run_id_field="facebook_s08e01_run_id",
                        coda_filename="USAID_IBTCI_facebook_s08e01.json",
+                       message_id_fn=lambda td: SHAUtils.sha_string(td["facebook_s08e01_comment_id"]),
                        icr_filename="facebook_s08e01.csv",
                        coding_configurations=[
                            CodingConfiguration(
