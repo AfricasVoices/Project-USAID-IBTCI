@@ -167,9 +167,9 @@
     {"SourceKey": "Hh_Language (Text) - csap_s08_demog", "PipelineKey": "household_language_raw"},
     {"SourceKey": "Hh_Language (Time) - csap_s08_demog", "PipelineKey": "household_language_time"}
   ],
-  "ProjectStartDate": "2000-01-01T00:00:00+03:00",
+  "ProjectStartDate": "2020-11-01T00:00:00+03:00",
   "ProjectEndDate": "2100-01-01T00:00+03:00",
-  "FilterTestMessages": false,
+  "FilterTestMessages": true,
   "MoveWSMessages": true,
   "AutomatedAnalysis": {
     "GenerateRegionThemeDistributionMaps": true,
