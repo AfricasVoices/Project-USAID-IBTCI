@@ -6,7 +6,7 @@
       "PageID": "dhaayow655",
       "TokenFileURL": "gs://avf-credentials/dhaayow655-facebook-token.txt",
       "Datasets": [
-        {"Name": "facebook_s08e01_dhaayow655", "PostIDs": ["342722832782775_1454515041603543", "342722832782775_1454403774948003"]}
+        {"Name": "facebook_s08e01_dhaayow655", "PostIDs": ["342722832782775_1496920597362987"]}
       ]
     },
     {
@@ -14,7 +14,15 @@
       "PageID": "AbdirizakHAtosh",
       "TokenFileURL": "gs://avf-credentials/AbdirizakHAtosh-facebook-token.txt",
       "Datasets": [
-        {"Name": "facebook_s08e01_AbdirizakHAtosh", "PostIDs": ["1584334095169246_2750136618588982"]}
+        {"Name": "facebook_s08e01_AbdirizakHAtosh", "PostIDs": ["1584334095169246_2794844634118180"]}
+      ]
+    },
+    {
+      "SourceType": "Facebook",
+      "PageID": "BarnaamijkaHage",
+      "TokenFileURL": "gs://avf-credentials/BarnaamijkaHage-facebook-token.txt",
+      "Datasets": [
+        {"Name": "facebook_s08e01_BarnaamijkaHage", "PostIDs": ["325301151525528_697701827618790"]}
       ]
     }
   ],
