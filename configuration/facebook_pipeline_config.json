@@ -24,6 +24,14 @@
       "Datasets": [
         {"Name": "facebook_s08e01_BarnaamijkaHage", "PostIDs": ["325301151525528_697701827618790"]}
       ]
+    },
+    {
+      "SourceType": "Facebook",
+      "PageID": "M2A-Media-Communication-Consultancy-548414038603623",
+      "TokenFileURL": "gs://avf-credentials/M2A-Media-Communication-Consultancy-548414038603623-facebook-token.txt",
+      "Datasets": [
+        {"Name": "facebook_s08e01_M2A-Media-Communication-Consultancy-548414038603623", "PostIDs": ["548414038603623_3190238431087824"]}
+      ]
     }
   ],
   "SourceKeyRemappings": [
@@ -39,7 +47,19 @@
     {"SourceKey": "facebook_s08e01_AbdirizakHAtosh.id", "PipelineKey": "facebook_s08e01_comment_id"},
     {"SourceKey": "facebook_s08e01_AbdirizakHAtosh.created_time", "PipelineKey": "sent_on"},
     {"SourceKey": "facebook_s08e01_AbdirizakHAtosh.parent", "PipelineKey": "facebook_s08e01_comment_reply_to_raw"},
-    {"SourceKey": "facebook_s08e01_AbdirizakHAtosh.post", "PipelineKey": "facebook_s08e01_post_raw"}
+    {"SourceKey": "facebook_s08e01_AbdirizakHAtosh.post", "PipelineKey": "facebook_s08e01_post_raw"},
+    
+    {"SourceKey": "facebook_s08e01_BarnaamijkaHage.message", "PipelineKey": "facebook_s08e01_raw"},
+    {"SourceKey": "facebook_s08e01_BarnaamijkaHage.id", "PipelineKey": "facebook_s08e01_comment_id"},
+    {"SourceKey": "facebook_s08e01_BarnaamijkaHage.created_time", "PipelineKey": "sent_on"},
+    {"SourceKey": "facebook_s08e01_BarnaamijkaHage.parent", "PipelineKey": "facebook_s08e01_comment_reply_to_raw"},
+    {"SourceKey": "facebook_s08e01_BarnaamijkaHage.post", "PipelineKey": "facebook_s08e01_post_raw"},
+    
+    {"SourceKey": "facebook_s08e01_M2A-Media-Communication-Consultancy-548414038603623.message", "PipelineKey": "facebook_s08e01_raw"},
+    {"SourceKey": "facebook_s08e01_M2A-Media-Communication-Consultancy-548414038603623.id", "PipelineKey": "facebook_s08e01_comment_id"},
+    {"SourceKey": "facebook_s08e01_M2A-Media-Communication-Consultancy-548414038603623.created_time", "PipelineKey": "sent_on"},
+    {"SourceKey": "facebook_s08e01_M2A-Media-Communication-Consultancy-548414038603623.parent", "PipelineKey": "facebook_s08e01_comment_reply_to_raw"},
+    {"SourceKey": "facebook_s08e01_M2A-Media-Communication-Consultancy-548414038603623.post", "PipelineKey": "facebook_s08e01_post_raw"}
   ],
   "ProjectStartDate": "2000-01-01T00:00:00+03:00",
   "ProjectEndDate": "2100-01-01T00:00:00+03:00",
