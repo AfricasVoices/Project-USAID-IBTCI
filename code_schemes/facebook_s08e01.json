@@ -1,9 +1,80 @@
 {
-  "SchemeID": "Scheme-13b84f44",
+  "SchemeID": "Scheme-b3b84f44",
   "Name": "Facebook S08E01",
   "Version": "0.0.0.1",
   "Codes": [
-
+    {
+      "CodeID": "code-c1879d99",
+      "CodeType": "Normal",
+      "DisplayText": "elders are experienced/knowledgeable",
+      "NumericValue": 1,
+      "StringValue": "elders_are_experienced_or_knowledgeable",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-62b65a0c",
+      "CodeType": "Normal",
+      "DisplayText": "it is the culture/tradition",
+      "NumericValue": 2,
+      "StringValue": "it_is_the_culture_or_tradition",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-7d841edc",
+      "CodeType": "Normal",
+      "DisplayText": "elders are unjust",
+      "NumericValue": 3,
+      "StringValue": "elders_are_unjust",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-417ea652",
+      "CodeType": "Normal",
+      "DisplayText": "other theme",
+      "NumericValue": 4,
+      "StringValue": "other_theme",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-ed617d7c",
+      "CodeType": "Normal",
+      "DisplayText": "agreeing with others",
+      "NumericValue": 10,
+      "StringValue": "agreeing_with_others",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-b7eb9bc9",
+      "CodeType": "Normal",
+      "DisplayText": "disagreeing with others",
+      "NumericValue": 11,
+      "StringValue": "disagreeing_with_others",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-e9ad4bac",
+      "CodeType": "Normal",
+      "DisplayText": "comment to page owner",
+      "NumericValue": 12,
+      "StringValue": "comment_to_page_owner",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-0bc2370f",
+      "CodeType": "Normal",
+      "DisplayText": "other side discussions",
+      "NumericValue": 13,
+      "StringValue": "other_side_discussions",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-2ac075f1",
+      "CodeType": "Normal",
+      "DisplayText": "only emoji",
+      "NumericValue": 14,
+      "StringValue": "only_emoji",
+      "VisibleInCoda": true
+    },
     {
       "CodeID": "code-NA-f93d3eb7",
       "CodeType": "Control",

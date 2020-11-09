@@ -3,7 +3,70 @@
   "Name": "RQA S08E01",
   "Version": "0.0.0.1",
   "Codes": [
-
+    {
+      "CodeID": "code-ec7f3f0e",
+      "CodeType": "Normal",
+      "DisplayText": "elders are experienced",
+      "NumericValue": 1,
+      "StringValue": "elders_are_experienced",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-e1f4de66",
+      "CodeType": "Normal",
+      "DisplayText": "elders are the community leaders/role models",
+      "NumericValue": 2,
+      "StringValue": "elders_are_the_community_leaders_or_role_models",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-ae3a4842",
+      "CodeType": "Normal",
+      "DisplayText": "it is traditional/cultural",
+      "NumericValue": 3,
+      "StringValue": "it_is_traditional_or_cultural",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-4ca7b767",
+      "CodeType": "Normal",
+      "DisplayText": "govt is responsible for decision making",
+      "NumericValue": 4,
+      "StringValue": "govt_is_responsible_for_decision_making",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-149fb81d",
+      "CodeType": "Normal",
+      "DisplayText": "elders are not just",
+      "NumericValue": 5,
+      "StringValue": "elders_are_not_just",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-3652bd39",
+      "CodeType": "Normal",
+      "DisplayText": "decision making is for youth",
+      "NumericValue": 6,
+      "StringValue": "decision_making_is_for_youth",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-a256c4b3",
+      "CodeType": "Normal",
+      "DisplayText": "decision making is for everyone",
+      "NumericValue": 7,
+      "StringValue": "decision_making_is_for_everyone",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-08f9e940",
+      "CodeType": "Normal",
+      "DisplayText": "other theme",
+      "NumericValue": 8,
+      "StringValue": "other_theme",
+      "VisibleInCoda": true
+    },
     {
       "CodeID": "code-NA-f93d3eb7",
       "CodeType": "Control",
