@@ -3,7 +3,86 @@
   "Name": "Livelihood",
   "Version": "0.0.0.1",
   "Codes": [
-
+    {
+      "CodeID": "code-4f3656ff",
+      "CodeType": "Normal",
+      "DisplayText": "teacher",
+      "NumericValue": 1,
+      "StringValue": "teacher",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-d0f6a12c",
+      "CodeType": "Normal",
+      "DisplayText": "farmer",
+      "NumericValue": 2,
+      "StringValue": "farmer",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-a463aab4",
+      "CodeType": "Normal",
+      "DisplayText": "business person",
+      "NumericValue": 3,
+      "StringValue": "business_person",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-602f0ae1",
+      "CodeType": "Normal",
+      "DisplayText": "casual workers",
+      "NumericValue": 4,
+      "StringValue": "casual_workers",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-7abf66dd",
+      "CodeType": "Normal",
+      "DisplayText": "soldier",
+      "NumericValue": 5,
+      "StringValue": "soldier",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-6c0a9f70",
+      "CodeType": "Normal",
+      "DisplayText": "student",
+      "NumericValue": 6,
+      "StringValue": "student",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-6beff7b0",
+      "CodeType": "Normal",
+      "DisplayText": "stay at home",
+      "NumericValue": 7,
+      "StringValue": "stay_at_home",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-b912dc03",
+      "CodeType": "Normal",
+      "DisplayText": "health worker",
+      "NumericValue": 8,
+      "StringValue": "health_worker",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-7e94e73b",
+      "CodeType": "Normal",
+      "DisplayText": "jobless",
+      "NumericValue": 9,
+      "StringValue": "jobless",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-bdb17ff3",
+      "CodeType": "Normal",
+      "DisplayText": "other",
+      "NumericValue": 10,
+      "StringValue": "other",
+      "VisibleInCoda": true
+    },
     {
       "CodeID": "code-NA-f93d3eb7",
       "CodeType": "Control",
