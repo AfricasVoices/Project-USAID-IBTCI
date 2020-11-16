@@ -3,7 +3,46 @@
   "Name": "Facebook S08E02",
   "Version": "0.0.0.1",
   "Codes": [
-
+    {
+      "CodeID": "code-7291488b",
+      "CodeType": "Normal",
+      "DisplayText": "creating youth committees/groups",
+      "NumericValue": 1,
+      "StringValue": "creating_youth_committees_or_groups",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-80a406f9",
+      "CodeType": "Normal",
+      "DisplayText": "give youth a chance",
+      "NumericValue": 2,
+      "StringValue": "give_youth_a_chance",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-dfd09f0c",
+      "CodeType": "Normal",
+      "DisplayText": "remove elders from decision making roles",
+      "NumericValue": 3,
+      "StringValue": "remove_elders_from_decision_making_roles",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-62783a27",
+      "CodeType": "Normal",
+      "DisplayText": "stop clannism",
+      "NumericValue": 4,
+      "StringValue": "stop_clannism",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-75757c80",
+      "CodeType": "Normal",
+      "DisplayText": "other theme",
+      "NumericValue": 5,
+      "StringValue": "other_theme",
+      "VisibleInCoda": true
+    },
     {
       "CodeID": "code-ed617d7c",
       "CodeType": "Normal",
