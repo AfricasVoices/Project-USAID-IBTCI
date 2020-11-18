@@ -3,7 +3,54 @@
   "Name": "RQA S08E02",
   "Version": "0.0.0.1",
   "Codes": [
-
+    {
+      "CodeID": "code-d1e21bdd",
+      "CodeType": "Normal",
+      "DisplayText": "give youths' voices a chance",
+      "NumericValue": 1,
+      "StringValue": "give_youths_voices_a_chance",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-049e40fd",
+      "CodeType": "Normal",
+      "DisplayText": "youth should work together",
+      "NumericValue": 2,
+      "StringValue": "youth_should_work_together",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-8c928895",
+      "CodeType": "Normal",
+      "DisplayText": "youth participation in politics",
+      "NumericValue": 3,
+      "StringValue": "youth_participation_in_politics",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-3e1ec507",
+      "CodeType": "Normal",
+      "DisplayText": "awareness creation for youth",
+      "NumericValue": 4,
+      "StringValue": "awareness_creation_for_youth",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-3487c23e",
+      "CodeType": "Normal",
+      "DisplayText": "youth to have confidence in themselves",
+      "NumericValue": 5,
+      "StringValue": "youth_to_have_confidence_in_themselves",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-1cf4c190",
+      "CodeType": "Normal",
+      "DisplayText": "other theme",
+      "NumericValue": 6,
+      "StringValue": "other_theme",
+      "VisibleInCoda": true
+    },
     {
       "CodeID": "code-NA-f93d3eb7",
       "CodeType": "Control",
