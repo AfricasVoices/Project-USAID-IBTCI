@@ -75,14 +75,9 @@ if __name__ == "__main__":
 
             all_uuids.add(row["uid"])
     log.info(f"Loaded {len(all_uuids)} uuids ({len(banadir_uuids)} banadir, {len(sws_uuids)} sws)")
+    banadir_uuids_pre_exclusion_list = banadir_uuids.copy()
+    sws_uuids_pre_exclusion_list = sws_uuids.copy()
 
-    # Take a random sample of 15% of participants from each location
-    sampled_banadir = random.sample(banadir_uuids, int(0.15 * len(banadir_uuids)))
-    sampled_sws = random.sample(sws_uuids, int(0.15 * len(sws_uuids)))
-    log.info(f"Sampled {len(sampled_banadir)}/{len(banadir_uuids)} banadir contacts")
-    log.info(f"Sampled {len(sampled_sws)}/{len(sws_uuids)} sws contacts")
-
-    uuids = sampled_banadir + sampled_sws
     if exclusion_list_file_path is not None:
         # Load the exclusion list
         log.info(f"Loading the exclusion list from {exclusion_list_file_path}...")
@@ -94,10 +89,24 @@ if __name__ == "__main__":
         log.info(f"Removing exclusion list uuids from the contacts group")
         removed = 0
         for uuid in exclusion_list:
-            if uuid in uuids:
+            if uuid in all_uuids:
                 removed += 1
-                uuids.remove(uuid)
-        log.info(f"Removed {removed} uuids; {len(uuids)} remain")
+                all_uuids.remove(uuid)
+
+            if uuid in banadir_uuids:
+                banadir_uuids.remove(uuid)
+
+            if uuid in sws_uuids:
+                sws_uuids.remove(uuid)
+
+        log.info(f"Removed {removed} uuids; {len(all_uuids)} remain ({len(banadir_uuids)} banadir, {len(sws_uuids)} sws)")
+
+    # Take a random sample of 15% of participants from each location
+    sampled_banadir = random.sample(banadir_uuids, int(0.15 * len(banadir_uuids_pre_exclusion_list)))
+    sampled_sws = random.sample(sws_uuids, int(0.15 * len(sws_uuids_pre_exclusion_list)))
+    log.info(f"Sampled {len(sampled_banadir)}/{len(banadir_uuids)} banadir contacts")
+    log.info(f"Sampled {len(sampled_sws)}/{len(sws_uuids)} sws contacts")
+    uuids = sampled_banadir + sampled_sws
 
     # Convert the uuids to phone numbers
     log.info(f"Converting {len(uuids)} uuids to phone numbers...")
