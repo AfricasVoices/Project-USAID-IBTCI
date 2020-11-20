@@ -3,7 +3,70 @@
   "Name": "RQA S08E03",
   "Version": "0.0.0.1",
   "Codes": [
-
+    {
+      "CodeID": "code-b2c15061",
+      "CodeType": "Normal",
+      "DisplayText": "sports groups",
+      "NumericValue": 1,
+      "StringValue": "sports_groups",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-8a053559",
+      "CodeType": "Normal",
+      "DisplayText": "charity groups",
+      "NumericValue": 2,
+      "StringValue": "charity_groups",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-009c5aa9",
+      "CodeType": "Normal",
+      "DisplayText": "community development groups",
+      "NumericValue": 3,
+      "StringValue": "community_development_groups",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-bdc014ce",
+      "CodeType": "Normal",
+      "DisplayText": "youth groups",
+      "NumericValue": 4,
+      "StringValue": "youth_groups",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-e6515ee9",
+      "CodeType": "Normal",
+      "DisplayText": "education groups",
+      "NumericValue": 5,
+      "StringValue": "education_groups",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-ab2cc1e5",
+      "CodeType": "Normal",
+      "DisplayText": "human rights groups",
+      "NumericValue": 6,
+      "StringValue": "human_rights_groups",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-863df254",
+      "CodeType": "Normal",
+      "DisplayText": "awareness creation groups",
+      "NumericValue": 7,
+      "StringValue": "awareness_creation_groups",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-078e3f7f",
+      "CodeType": "Normal",
+      "DisplayText": "other theme",
+      "NumericValue": 8,
+      "StringValue": "other_theme",
+      "VisibleInCoda": true
+    },
     {
       "CodeID": "code-NA-f93d3eb7",
       "CodeType": "Control",
