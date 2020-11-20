@@ -76,6 +76,46 @@
       "VisibleInCoda": true
     },
     {
+      "CodeID": "code-4a520a30",
+      "CodeType": "Normal",
+      "DisplayText": "livestock keeper",
+      "NumericValue": 11,
+      "StringValue": "livestock_keeper",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-09ba3368",
+      "CodeType": "Normal",
+      "DisplayText": "god is my provider",
+      "NumericValue": 12,
+      "StringValue": "god_is_my_provider",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-7717070e",
+      "CodeType": "Normal",
+      "DisplayText": "office worker",
+      "NumericValue": 13,
+      "StringValue": "office_worker",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-0b04d708",
+      "CodeType": "Normal",
+      "DisplayText": "my parents",
+      "NumericValue": 14,
+      "StringValue": "my_parents",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-0489ffde",
+      "CodeType": "Normal",
+      "DisplayText": "my husband",
+      "NumericValue": 15,
+      "StringValue": "my_husband",
+      "VisibleInCoda": true
+    },
+    {
       "CodeID": "code-bdb17ff3",
       "CodeType": "Normal",
       "DisplayText": "other",
