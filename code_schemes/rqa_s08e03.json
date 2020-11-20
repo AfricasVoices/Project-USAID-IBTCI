@@ -46,9 +46,9 @@
     {
       "CodeID": "code-ab2cc1e5",
       "CodeType": "Normal",
-      "DisplayText": "human rights groups/health orgs",
+      "DisplayText": "human rights groups",
       "NumericValue": 6,
-      "StringValue": "human_rights_groups_health_orgs",
+      "StringValue": "human_rights_groups",
       "VisibleInCoda": true
     },
     {
