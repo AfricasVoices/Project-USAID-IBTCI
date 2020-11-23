@@ -194,7 +194,7 @@ def fetch_from_recovery_csv(user, google_cloud_credentials_file_path, raw_data_d
         log.info(f"Exported TracedData")
 
 
-def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, facebook_source):
+def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, facebook_uuid_table, facebook_source):
     log.info("Fetching data from Facebook...")
     log.info("Downloading Facebook access token...")
     facebook_token = google_cloud_utils.download_blob_to_string(
@@ -212,7 +212,10 @@ def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, 
         for post_id in dataset.post_ids:
             comments_log_path = f"{raw_data_dir}/{post_id}_comments_log.jsonl"
             with open(comments_log_path, "a") as raw_comments_log_file:
-                post_comments = facebook.get_all_comments_on_post(post_id, raw_export_log_file=raw_comments_log_file)
+                post_comments = facebook.get_all_comments_on_post(
+                    post_id, raw_export_log_file=raw_comments_log_file,
+                    fields=["from{id}", "parent", "attachments", "created_time", "message"]
+                )
 
             # Download the post and add it as context to all the comments. Adding a reference to the post under
             # which a comment was made enables downstream features such as post-type labelling and comment context
@@ -230,7 +233,8 @@ def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, 
                 comment["parent"] = {}
 
         # Convert the comments to TracedData.
-        traced_comments = facebook.convert_facebook_comments_to_traced_data(user, dataset.name, raw_comments)
+        traced_comments = facebook.convert_facebook_comments_to_traced_data(
+            user, dataset.name, raw_comments, facebook_uuid_table)
 
         # Export to disk.
         log.info(f"Saving {len(raw_comments)} raw comments to {raw_comments_output_path}...")
@@ -254,33 +258,32 @@ def main(user, google_cloud_credentials_file_path, pipeline_configuration_file_p
     Logger.set_project_name(pipeline_configuration.pipeline_name)
     log.debug(f"Pipeline name is {pipeline_configuration.pipeline_name}")
 
-    if pipeline_configuration.phone_number_uuid_table is not None:
-        log.info("Downloading Firestore UUID Table credentials...")
-        firestore_uuid_table_credentials = json.loads(google_cloud_utils.download_blob_to_string(
-            google_cloud_credentials_file_path,
-            pipeline_configuration.phone_number_uuid_table.firebase_credentials_file_url
-        ))
+    log.info("Downloading Firestore UUID Table credentials...")
+    firestore_uuid_table_credentials = json.loads(google_cloud_utils.download_blob_to_string(
+        google_cloud_credentials_file_path,
+        pipeline_configuration.uuid_table.firebase_credentials_file_url
+    ))
 
-        phone_number_uuid_table = FirestoreUuidTable(
-            pipeline_configuration.phone_number_uuid_table.table_name,
-            firestore_uuid_table_credentials,
-            "avf-phone-uuid-"
-        )
-        log.info("Initialised the Firestore UUID table")
+    uuid_table = FirestoreUuidTable(
+        pipeline_configuration.uuid_table.table_name,
+        firestore_uuid_table_credentials,
+        pipeline_configuration.uuid_table.uuid_prefix
+    )
+    log.info("Initialised the Firestore UUID table")
 
     log.info(f"Fetching data from {len(pipeline_configuration.raw_data_sources)} sources...")
     for i, raw_data_source in enumerate(pipeline_configuration.raw_data_sources):
         log.info(f"Fetching from source {i + 1}/{len(pipeline_configuration.raw_data_sources)}...")
         if isinstance(raw_data_source, RapidProSource):
-            fetch_from_rapid_pro(user, google_cloud_credentials_file_path, raw_data_dir, phone_number_uuid_table,
+            fetch_from_rapid_pro(user, google_cloud_credentials_file_path, raw_data_dir, uuid_table,
                                  raw_data_source)
         elif isinstance(raw_data_source, GCloudBucketSource):
             fetch_from_gcloud_bucket(google_cloud_credentials_file_path, raw_data_dir, raw_data_source)
         elif isinstance(raw_data_source, RecoveryCSVSource):
-            fetch_from_recovery_csv(user, google_cloud_credentials_file_path, raw_data_dir, phone_number_uuid_table,
+            fetch_from_recovery_csv(user, google_cloud_credentials_file_path, raw_data_dir, uuid_table,
                                     raw_data_source)
         elif isinstance(raw_data_source, FacebookSource):
-            fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, raw_data_source)
+            fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, uuid_table, raw_data_source)
         else:
             assert False, f"Unknown raw_data_source type {type(raw_data_source)}"
 

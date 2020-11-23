@@ -12,10 +12,13 @@ from core_data_modules.util import TimeUtils
 from src.lib import PipelineConfiguration, ConsentUtils
 from src.lib.configuration_objects import CodingModes
 
+MESSAGES_FILE = "messages_file"
+INDIVIDUALS_FILE = "individuals_file"
+
 
 class AnalysisFile(object):
     @staticmethod
-    def export_to_csv(user, data, csv_path, export_keys, consent_withdrawn_key):
+    def export_to_csv(analysis_file_type, data, csv_path, export_keys, consent_withdrawn_key):
         with open(csv_path, "w") as f:
             writer = csv.DictWriter(f, fieldnames=export_keys, lineterminator="\n")
             writer.writeheader()
@@ -36,6 +39,9 @@ class AnalysisFile(object):
                 for plan in PipelineConfiguration.RQA_CODING_PLANS + PipelineConfiguration.SURVEY_CODING_PLANS:
                     for cc in plan.coding_configurations:
                         if cc.analysis_file_key is None:
+                            continue
+
+                        if analysis_file_type == INDIVIDUALS_FILE and not cc.include_in_individuals_file:
                             continue
 
                         if cc.coding_mode == CodingModes.SINGLE:
@@ -94,7 +100,8 @@ class AnalysisFile(object):
                     for code in cc.code_scheme.codes:
                         export_keys.append(f"{cc.analysis_file_key}_{code.string_value}")
 
-                fold_strategies[cc.coded_field] = cc.fold_strategy
+                if cc.include_in_individuals_file:
+                    fold_strategies[cc.coded_field] = cc.fold_strategy
 
             export_keys.append(plan.raw_field)
             fold_strategies[plan.raw_field] = plan.raw_field_fold_strategy
@@ -111,7 +118,7 @@ class AnalysisFile(object):
         ConsentUtils.set_stopped(user, data, consent_withdrawn_key)
         ConsentUtils.set_stopped(user, folded_data, consent_withdrawn_key)
 
-        cls.export_to_csv(user, data, csv_by_message_output_path, export_keys, consent_withdrawn_key)
-        cls.export_to_csv(user, folded_data, csv_by_individual_output_path, export_keys, consent_withdrawn_key)
+        cls.export_to_csv(MESSAGES_FILE, data, csv_by_message_output_path, export_keys, consent_withdrawn_key)
+        cls.export_to_csv(INDIVIDUALS_FILE, folded_data, csv_by_individual_output_path, export_keys, consent_withdrawn_key)
 
         return data, folded_data
