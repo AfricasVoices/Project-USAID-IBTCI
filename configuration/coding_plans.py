@@ -230,16 +230,45 @@ def get_demog_coding_plans(pipeline_name):
     else:
         assert pipeline_name == "USAID-IBTCI-SMS"
         return [
-            CodingPlan(raw_field="operator_raw",
+            CodingPlan(raw_field="gender_raw",
+                       time_field="gender_time",
+                       coda_filename="CSAP_gender.json",
                        coding_configurations=[
                            CodingConfiguration(
                                coding_mode=CodingModes.SINGLE,
-                               code_scheme=CodeSchemes.SOMALIA_OPERATOR,
-                               coded_field="operator_coded",
-                               analysis_file_key="operator",
+                               code_scheme=CodeSchemes.GENDER,
+                               cleaner=somali.DemographicCleaner.clean_gender,
+                               coded_field="gender_coded",
+                               analysis_file_key="gender",
                                fold_strategy=FoldStrategies.assert_label_ids_equal
                            )
                        ],
+                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("gender"),
+                       raw_field_fold_strategy=FoldStrategies.assert_equal),
+
+            CodingPlan(raw_field="age_raw",
+                       time_field="age_time",
+                       coda_filename="CSAP_age.json",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.AGE,
+                               cleaner=clean_age_with_range_filter,
+                               coded_field="age_coded",
+                               analysis_file_key="age",
+                               fold_strategy=FoldStrategies.assert_label_ids_equal,
+                               include_in_theme_distribution=False
+                           ),
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.AGE_CATEGORY,
+                               coded_field="age_category_coded",
+                               analysis_file_key="age_category",
+                               fold_strategy=FoldStrategies.assert_label_ids_equal
+                           )
+                       ],
+                       code_imputation_function=code_imputation_functions.impute_age_category,
+                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("age"),
                        raw_field_fold_strategy=FoldStrategies.assert_equal),
 
             CodingPlan(raw_field="location_raw",
@@ -288,47 +317,6 @@ def get_demog_coding_plans(pipeline_name):
                        ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("location"),
                        raw_field_fold_strategy=FoldStrategies.assert_equal),
 
-            CodingPlan(raw_field="gender_raw",
-                       time_field="gender_time",
-                       coda_filename="CSAP_gender.json",
-                       coding_configurations=[
-                           CodingConfiguration(
-                               coding_mode=CodingModes.SINGLE,
-                               code_scheme=CodeSchemes.GENDER,
-                               cleaner=somali.DemographicCleaner.clean_gender,
-                               coded_field="gender_coded",
-                               analysis_file_key="gender",
-                               fold_strategy=FoldStrategies.assert_label_ids_equal
-                           )
-                       ],
-                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("gender"),
-                       raw_field_fold_strategy=FoldStrategies.assert_equal),
-
-            CodingPlan(raw_field="age_raw",
-                       time_field="age_time",
-                       coda_filename="CSAP_age.json",
-                       coding_configurations=[
-                           CodingConfiguration(
-                               coding_mode=CodingModes.SINGLE,
-                               code_scheme=CodeSchemes.AGE,
-                               cleaner=clean_age_with_range_filter,
-                               coded_field="age_coded",
-                               analysis_file_key="age",
-                               fold_strategy=FoldStrategies.assert_label_ids_equal,
-                               include_in_theme_distribution=False
-                           ),
-                           CodingConfiguration(
-                               coding_mode=CodingModes.SINGLE,
-                               code_scheme=CodeSchemes.AGE_CATEGORY,
-                               coded_field="age_category_coded",
-                               analysis_file_key="age_category",
-                               fold_strategy=FoldStrategies.assert_label_ids_equal
-                           )
-                       ],
-                       code_imputation_function=code_imputation_functions.impute_age_category,
-                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("age"),
-                       raw_field_fold_strategy=FoldStrategies.assert_equal),
-
             CodingPlan(raw_field="recently_displaced_raw",
                        time_field="recently_displaced_time",
                        coda_filename="CSAP_recently_displaced.json",
@@ -374,6 +362,18 @@ def get_demog_coding_plans(pipeline_name):
                            )
                        ],
                        ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("household language"),
+                       raw_field_fold_strategy=FoldStrategies.assert_equal),
+
+            CodingPlan(raw_field="operator_raw",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.SOMALIA_OPERATOR,
+                               coded_field="operator_coded",
+                               analysis_file_key="operator",
+                               fold_strategy=FoldStrategies.assert_label_ids_equal
+                           )
+                       ],
                        raw_field_fold_strategy=FoldStrategies.assert_equal)
         ]
 
