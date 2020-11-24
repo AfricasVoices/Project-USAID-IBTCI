@@ -17,6 +17,7 @@ class CodeSchemes(object):
     SOMALIA_OPERATOR = _open_scheme("somalia_operator.json")
 
     AGE = _open_scheme("age.json")
+    AGE_CATEGORY = _open_scheme("age_category.json")
     GENDER = _open_scheme("gender.json")
     MOGADISHU_SUB_DISTRICT = _open_scheme("mogadishu_sub_district.json")
     SOMALIA_DISTRICT = _open_scheme("somalia_district.json")

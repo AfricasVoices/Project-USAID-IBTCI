@@ -184,7 +184,7 @@ if __name__ == "__main__":
 
             for plan in PipelineConfiguration.SURVEY_CODING_PLANS:
                 for cc in plan.coding_configurations:
-                    if cc.include_in_theme_distribution == Codes.FALSE:
+                    if not cc.include_in_theme_distribution:
                         continue
 
                     code = cc.code_scheme.get_code_with_code_id(ind[cc.coded_field]["CodeID"])
@@ -216,7 +216,7 @@ if __name__ == "__main__":
         survey_counts["Total Participants %"] = None
         for plan in PipelineConfiguration.SURVEY_CODING_PLANS:
             for cc in plan.coding_configurations:
-                if cc.include_in_theme_distribution == Codes.FALSE:
+                if not cc.include_in_theme_distribution:
                     continue
 
                 for code in cc.code_scheme.codes:
@@ -230,7 +230,7 @@ if __name__ == "__main__":
     def update_survey_counts(survey_counts, td):
         for plan in PipelineConfiguration.SURVEY_CODING_PLANS:
             for cc in plan.coding_configurations:
-                if cc.include_in_theme_distribution == Codes.FALSE:
+                if not cc.include_in_theme_distribution:
                     continue
 
                 if cc.coding_mode == CodingModes.SINGLE:
@@ -253,7 +253,7 @@ if __name__ == "__main__":
 
         for plan in PipelineConfiguration.SURVEY_CODING_PLANS:
             for cc in plan.coding_configurations:
-                if cc.include_in_theme_distribution == Codes.FALSE:
+                if not cc.include_in_theme_distribution:
                     continue
 
                 for code in cc.code_scheme.codes:
