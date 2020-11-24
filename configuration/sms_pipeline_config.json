@@ -47,9 +47,10 @@
       ]
     }
   ],
-  "PhoneNumberUuidTable": {
+  "UuidTable": {
     "FirebaseCredentialsFileURL": "gs://avf-credentials/avf-id-infrastructure-firebase-adminsdk-6xps8-b9173f2bfd.json",
-    "TableName": "ADSS"
+    "TableName": "ADSS",
+    "UuidPrefix": "avf-phone-uuid-"
   },
   "SourceKeyRemappings": [
     {"SourceKey": "avf_phone_id", "PipelineKey": "uid"},

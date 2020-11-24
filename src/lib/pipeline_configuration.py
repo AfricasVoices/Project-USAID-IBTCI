@@ -17,7 +17,7 @@ class PipelineConfiguration(object):
     SURVEY_CODING_PLANS = []
     WS_CORRECT_DATASET_SCHEME = None
 
-    def __init__(self, pipeline_name, raw_data_sources, phone_number_uuid_table, timestamp_remappings,
+    def __init__(self, pipeline_name, raw_data_sources, uuid_table, timestamp_remappings,
                  source_key_remappings, project_start_date, project_end_date, filter_test_messages, move_ws_messages,
                  memory_profile_upload_bucket, data_archive_upload_bucket, bucket_dir_path,
                  automated_analysis, drive_upload=None):
@@ -26,8 +26,8 @@ class PipelineConfiguration(object):
         :type pipeline_name: str
         :param raw_data_sources: List of sources to pull the various raw run files from.
         :type raw_data_sources: list of RawDataSource
-        :param phone_number_uuid_table: Configuration for the Firestore phone number <-> uuid table.
-        :type phone_number_uuid_table: PhoneNumberUuidTable
+        :param uuid_table: Configuration for the Firestore source id <-> avf uuid table.
+        :type uuid_table: UuidTable
         :param source_key_remappings: List of source_key -> pipeline_key remappings.
         :type source_key_remappings: list of SourceKeyRemapping
         :param project_start_date: When data collection started - all activation messages received before this date
@@ -57,7 +57,7 @@ class PipelineConfiguration(object):
         """
         self.pipeline_name = pipeline_name
         self.raw_data_sources = raw_data_sources
-        self.phone_number_uuid_table = phone_number_uuid_table
+        self.uuid_table = uuid_table
         self.timestamp_remappings = timestamp_remappings
         self.source_key_remappings = source_key_remappings
         self.project_start_date = project_start_date
@@ -97,10 +97,8 @@ class PipelineConfiguration(object):
                 assert False, f"Unknown SourceType '{raw_data_source['SourceType']}'. " \
                               f"Must be 'RapidPro', 'GCloudBucket', 'RecoveryCSV', or 'Facebook'."
 
-        phone_number_uuid_table = None
-        if "PhoneNumberUuidTable" in configuration_dict:
-            phone_number_uuid_table = PhoneNumberUuidTable.from_configuration_dict(
-                configuration_dict["PhoneNumberUuidTable"])
+        uuid_table = UuidTable.from_configuration_dict(
+            configuration_dict["UuidTable"])
 
         timestamp_remappings = []
         for remapping_dict in configuration_dict.get("TimestampRemappings", []):
@@ -126,7 +124,7 @@ class PipelineConfiguration(object):
         data_archive_upload_bucket = configuration_dict["DataArchiveUploadBucket"]
         bucket_dir_path = configuration_dict["BucketDirPath"]
 
-        return cls(pipeline_name, raw_data_sources, phone_number_uuid_table, timestamp_remappings,
+        return cls(pipeline_name, raw_data_sources, uuid_table, timestamp_remappings,
                    source_key_remappings, project_start_date, project_end_date, filter_test_messages,
                    move_ws_messages, memory_profile_upload_bucket, data_archive_upload_bucket, bucket_dir_path,
                    automated_analysis, drive_upload_paths)
@@ -143,13 +141,8 @@ class PipelineConfiguration(object):
             assert isinstance(raw_data_source, RawDataSource), f"raw_data_sources[{i}] is not of type RawDataSource"
             raw_data_source.validate()
 
-        if self.phone_number_uuid_table is None:
-            for i, raw_data_source in enumerate(self.raw_data_sources):
-                assert isinstance(raw_data_source, FacebookSource), \
-                    f"phone_number_uuid_table is None, but raw_data_source[{i}] requires a uuid table"
-        else:
-            assert isinstance(self.phone_number_uuid_table, PhoneNumberUuidTable)
-            self.phone_number_uuid_table.validate()
+        assert isinstance(self.uuid_table, UuidTable)
+        self.uuid_table.validate()
 
         validators.validate_list(self.source_key_remappings, "source_key_remappings")
         for i, remapping in enumerate(self.source_key_remappings):
@@ -298,7 +291,7 @@ class FacebookSource(RawDataSource):
         self.datasets = datasets
 
         self.validate()
-        
+
     @classmethod
     def from_configuration_dict(cls, configuration_dict):
         page_id = configuration_dict["PageID"]
@@ -343,17 +336,18 @@ class FacebookDataset(object):
             validators.validate_string(post_id, f"post_ids[{i}]")
 
 
-class PhoneNumberUuidTable(object):
-    def __init__(self, firebase_credentials_file_url, table_name):
+class UuidTable(object):
+    def __init__(self, firebase_credentials_file_url, table_name, uuid_prefix):
         """
         :param firebase_credentials_file_url: GS URL to the private credentials file for the Firebase account where
-                                                 the phone number <-> uuid table is stored.
+                                              the source id <-> avf uuid table is stored.
         :type firebase_credentials_file_url: str
         :param table_name: Name of the data <-> uuid table in Firebase to use.
         :type table_name: str
         """
         self.firebase_credentials_file_url = firebase_credentials_file_url
         self.table_name = table_name
+        self.uuid_prefix = uuid_prefix
 
         self.validate()
 
@@ -361,12 +355,14 @@ class PhoneNumberUuidTable(object):
     def from_configuration_dict(cls, configuration_dict):
         firebase_credentials_file_url = configuration_dict["FirebaseCredentialsFileURL"]
         table_name = configuration_dict["TableName"]
+        uuid_prefix = configuration_dict["UuidPrefix"]
 
-        return cls(firebase_credentials_file_url, table_name)
+        return cls(firebase_credentials_file_url, table_name, uuid_prefix)
 
     def validate(self):
         validators.validate_url(self.firebase_credentials_file_url, "firebase_credentials_file_url", scheme="gs")
         validators.validate_string(self.table_name, "table_name")
+        validators.validate_string(self.uuid_prefix, "uuid_prefix")
 
 
 class TimestampRemapping(object):
@@ -512,6 +508,7 @@ class DriveUpload(object):
         validators.validate_string(self.individuals_upload_path, "individuals_upload_path")
         validators.validate_string(self.automated_analysis_dir, "automated_analysis_dir")
 
+
 class AutomatedAnalysis(object):
     def __init__(self, generate_region_theme_distribution_maps, generate_district_theme_distribution_maps,
                  generate_mogadishu_theme_distribution_maps):
@@ -535,7 +532,7 @@ class AutomatedAnalysis(object):
         generate_district_theme_distribution_maps = configuration_dict["GenerateDistrictThemeDistributionMaps"]
         generate_mogadishu_theme_distribution_maps = configuration_dict["GenerateMogadishuThemeDistributionMaps"]
 
-        return cls (generate_region_theme_distribution_maps, generate_district_theme_distribution_maps,
+        return cls(generate_region_theme_distribution_maps, generate_district_theme_distribution_maps,
                    generate_mogadishu_theme_distribution_maps)
 
     def validate(self):

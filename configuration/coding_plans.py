@@ -71,7 +71,8 @@ def get_rqa_coding_plans(pipeline_name):
                                coded_field="facebook_s08e01_comment_reply_to_coded",
                                requires_manual_verification=False,
                                analysis_file_key="facebook_s08e01_comment_reply_to",
-                               fold_strategy=None
+                               fold_strategy=None,
+                               include_in_individuals_file=False
                            ),
                            CodingConfiguration(
                                raw_field="facebook_s08e01_post_raw",
@@ -81,7 +82,8 @@ def get_rqa_coding_plans(pipeline_name):
                                coded_field="facebook_s08e01_post_type_coded",
                                requires_manual_verification=False,
                                analysis_file_key="facebook_s08e01_post_type",
-                               fold_strategy=None
+                               fold_strategy=None,
+                               include_in_individuals_file=False
                            )
                        ],
                        raw_field_fold_strategy=FoldStrategies.concatenate),
@@ -109,7 +111,8 @@ def get_rqa_coding_plans(pipeline_name):
                                coded_field="facebook_s08e02_comment_reply_to_coded",
                                requires_manual_verification=False,
                                analysis_file_key="facebook_s08e02_comment_reply_to",
-                               fold_strategy=None
+                               fold_strategy=None,
+                               include_in_individuals_file=False
                            ),
                            CodingConfiguration(
                                raw_field="facebook_s08e02_post_raw",
@@ -119,7 +122,8 @@ def get_rqa_coding_plans(pipeline_name):
                                coded_field="facebook_s08e02_post_type_coded",
                                requires_manual_verification=False,
                                analysis_file_key="facebook_s08e02_post_type",
-                               fold_strategy=None
+                               fold_strategy=None,
+                               include_in_individuals_file=False
                            )
                        ],
                        raw_field_fold_strategy=FoldStrategies.concatenate),
@@ -147,7 +151,8 @@ def get_rqa_coding_plans(pipeline_name):
                                coded_field="facebook_s08e03_comment_reply_to_coded",
                                requires_manual_verification=False,
                                analysis_file_key="facebook_s08e03_comment_reply_to",
-                               fold_strategy=None
+                               fold_strategy=None,
+                               include_in_individuals_file=False
                            ),
                            CodingConfiguration(
                                raw_field="facebook_s08e03_post_raw",
@@ -157,7 +162,8 @@ def get_rqa_coding_plans(pipeline_name):
                                coded_field="facebook_s08e03_post_type_coded",
                                requires_manual_verification=False,
                                analysis_file_key="facebook_s08e03_post_type",
-                               fold_strategy=None
+                               fold_strategy=None,
+                               include_in_individuals_file=False
                            )
                        ],
                        raw_field_fold_strategy=FoldStrategies.concatenate)

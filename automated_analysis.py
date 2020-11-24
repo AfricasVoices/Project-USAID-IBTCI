@@ -117,11 +117,6 @@ if __name__ == "__main__":
         for row in engagement_counts.values():
             writer.writerow(row)
 
-    if pipeline_configuration.pipeline_name == "USAID-IBTCI-Facebook":
-        # Only the total engagement counts make sense for now, so don't attempt to apply any of the other standard
-        # analysis to the Facebook data.
-        exit(0)
-
     log.info("Computing the participation frequencies...")
     repeat_participations = OrderedDict()
     for i in range(1, len(PipelineConfiguration.RQA_CODING_PLANS) + 1):
@@ -170,45 +165,47 @@ if __name__ == "__main__":
     # TODO: Report percentages?
     # TODO: Handle distributions for other variables too or just demographics?
     demographic_distributions = OrderedDict()  # of analysis_file_key -> code string_value -> number of individuals
-    for plan in PipelineConfiguration.SURVEY_CODING_PLANS:
-        for cc in plan.coding_configurations:
-            if cc.analysis_file_key is None:
-                continue
-
-            demographic_distributions[cc.analysis_file_key] = OrderedDict()
-            for code in cc.code_scheme.codes:
-                if code.control_code == Codes.STOP:
-                    continue
-                demographic_distributions[cc.analysis_file_key][code.string_value] = 0
-
-    for ind in individuals:
-        if ind["consent_withdrawn"] == Codes.TRUE:
-            continue
-
+    if pipeline_configuration.pipeline_name != "TIS-Plus-Facebook":
+         # Don't export any demographic distributions for Facebook, as we don't ask any demogs
         for plan in PipelineConfiguration.SURVEY_CODING_PLANS:
             for cc in plan.coding_configurations:
-                if cc.include_in_theme_distribution == Codes.FALSE:
+                if cc.analysis_file_key is None:
                     continue
 
-                code = cc.code_scheme.get_code_with_code_id(ind[cc.coded_field]["CodeID"])
-                if code.control_code == Codes.STOP:
-                    continue
-                demographic_distributions[cc.analysis_file_key][code.string_value] += 1
+                demographic_distributions[cc.analysis_file_key] = OrderedDict()
+                for code in cc.code_scheme.codes:
+                    if code.control_code == Codes.STOP:
+                        continue
+                    demographic_distributions[cc.analysis_file_key][code.string_value] = 0
 
-    with open(f"{automated_analysis_output_dir}/demographic_distributions.csv", "w") as f:
-        headers = ["Demographic", "Code", "Number of Participants"]
-        writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
-        writer.writeheader()
+        for ind in individuals:
+            if ind["consent_withdrawn"] == Codes.TRUE:
+                continue
 
-        last_demographic = None
-        for demographic, counts in demographic_distributions.items():
-            for code_string_value, number_of_participants in counts.items():
-                writer.writerow({
-                    "Demographic": demographic if demographic != last_demographic else "",
-                    "Code": code_string_value,
-                    "Number of Participants": number_of_participants
-                })
-                last_demographic = demographic
+            for plan in PipelineConfiguration.SURVEY_CODING_PLANS:
+                for cc in plan.coding_configurations:
+                    if cc.include_in_theme_distribution == Codes.FALSE:
+                        continue
+
+                    code = cc.code_scheme.get_code_with_code_id(ind[cc.coded_field]["CodeID"])
+                    if code.control_code == Codes.STOP:
+                        continue
+                    demographic_distributions[cc.analysis_file_key][code.string_value] += 1
+
+        with open(f"{automated_analysis_output_dir}/demographic_distributions.csv", "w") as f:
+            headers = ["Demographic", "Code", "Number of Participants"]
+            writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
+            writer.writeheader()
+
+            last_demographic = None
+            for demographic, counts in demographic_distributions.items():
+                for code_string_value, number_of_participants in counts.items():
+                    writer.writerow({
+                        "Demographic": demographic if demographic != last_demographic else "",
+                        "Code": code_string_value,
+                        "Number of Participants": number_of_participants
+                    })
+                    last_demographic = demographic
 
     # Compute the theme distributions
     log.info("Computing the theme distributions...")
@@ -278,6 +275,9 @@ if __name__ == "__main__":
         themes = OrderedDict()
         episodes[episode_plan.raw_field] = themes
         for cc in episode_plan.coding_configurations:
+            if not cc.include_in_individuals_file:
+                continue
+
             # TODO: Add support for CodingModes.SINGLE if we need it e.g. for IMAQAL?
             assert cc.coding_mode == CodingModes.MULTIPLE, "Other CodingModes not (yet) supported"
             themes["Total Relevant Participants"] = make_survey_counts_dict()
@@ -293,6 +293,9 @@ if __name__ == "__main__":
 
             relevant_participant = False
             for cc in episode_plan.coding_configurations:
+                if not cc.include_in_individuals_file:
+                    continue
+
                 assert cc.coding_mode == CodingModes.MULTIPLE, "Other CodingModes not (yet) supported"
                 for label in td[cc.coded_field]:
                     code = cc.code_scheme.get_code_with_code_id(label["CodeID"])
@@ -310,6 +313,9 @@ if __name__ == "__main__":
         set_survey_percentages(themes["Total Relevant Participants"], themes["Total Relevant Participants"])
 
         for cc in episode_plan.coding_configurations:
+            if not cc.include_in_individuals_file:
+                continue
+
             assert cc.coding_mode == CodingModes.MULTIPLE, "Other CodingModes not (yet) supported"
 
             for code in cc.code_scheme.codes:
@@ -334,6 +340,11 @@ if __name__ == "__main__":
                 row.update(survey_counts)
                 writer.writerow(row)
                 last_row_episode = episode
+
+    if pipeline_configuration.pipeline_name == "USAID-IBTCI-Facebook":
+        # Only the total engagement counts make sense for now, so don't attempt to apply any of the other standard
+        # analysis to the Facebook data.
+        exit(0)
 
     # Export a random sample of 100 messages for each normal code
     log.info("Exporting samples of up to 100 messages for each normal code...")
@@ -372,7 +383,7 @@ if __name__ == "__main__":
 
         for sample in samples:
             writer.writerow(sample)
-    
+
     log.info("Loading the Somali regions geojson...")
     regions_map = geopandas.read_file("geojson/somalia_regions.geojson")
 

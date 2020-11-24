@@ -19,6 +19,9 @@ class AnalysisUtils(object):
         :return: All the codes for the labels in the TracedData specified by the coding configuration `cc`.
         :rtype: list of Code
         """
+        if cc.coded_field not in td:
+            return []
+
         if cc.coding_mode == CodingModes.SINGLE:
             labels = [td[cc.coded_field]]
         else:
@@ -116,6 +119,9 @@ class AnalysisUtils(object):
             return False
 
         for cc in coding_plan.coding_configurations:
+            if not cc.include_in_individuals_file:
+                continue
+
             codes = cls._get_td_codes_for_coding_configuration(td, cc)
             if len(codes) == 0:
                 return False
@@ -149,6 +155,9 @@ class AnalysisUtils(object):
             return False
         
         for cc in coding_plan.coding_configurations:
+            if not cc.include_in_individuals_file:
+                continue
+
             codes = cls._get_td_codes_for_coding_configuration(td, cc)
             for code in codes:
                 if code.code_type == CodeTypes.NORMAL:
