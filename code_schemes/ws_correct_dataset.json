@@ -36,6 +36,17 @@
         "s08e03"
       ]
     },
+     {
+      "CodeID": "code-236eaee0",
+      "CodeType": "Normal",
+      "DisplayText": "s08e03 break",
+      "StringValue": "s08e03_break",
+      "NumericValue": 410,
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "s08e03_break"
+      ]
+    },
     {
       "CodeID": "code-70ac05ab",
       "CodeType": "Normal",
