@@ -30,7 +30,8 @@
       "ActivationFlowNames": [
         "csap_s08e01_activation",
         "csap_s08e02_activation",
-        "csap_s08e03_activation"
+        "csap_s08e03_activation",
+        "csap_s08e03_break_activation"
       ],
       "SurveyFlowNames": [
         "csap_s04_demog",
@@ -64,6 +65,10 @@
     {"SourceKey": "Rqa_S08E03 (Text) - csap_s08e03_activation", "PipelineKey": "rqa_s08e03_raw", "IsActivationMessage": true},
     {"SourceKey": "Rqa_S08E03 (Run ID) - csap_s08e03_activation", "PipelineKey": "rqa_s08e03_run_id"},
     {"SourceKey": "Rqa_S08E03 (Time) - csap_s08e03_activation", "PipelineKey": "sent_on"},
+
+    {"SourceKey": "Rqa_S08E03_Break (Text) - csap_s08e03_break_activation", "PipelineKey": "rqa_s08e03_break_raw", "IsActivationMessage": true},
+    {"SourceKey": "Rqa_S08E03_Break (Run ID) - csap_s08e03_break_activation", "PipelineKey": "rqa_s08e03_break_run_id"},
+    {"SourceKey": "Rqa_S08E03_Break (Time) - csap_s08e03_break_activation", "PipelineKey": "sent_on"},
 
     {"SourceKey": "Mog_Sub_District (Text) - csap_demog", "PipelineKey": "location_raw"},
     {"SourceKey": "Mog_Sub_District (Time) - csap_demog", "PipelineKey": "location_time"},
