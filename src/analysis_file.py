@@ -118,7 +118,11 @@ class AnalysisFile(object):
         ConsentUtils.set_stopped(user, data, consent_withdrawn_key)
         ConsentUtils.set_stopped(user, folded_data, consent_withdrawn_key)
 
-        cls.export_to_csv(MESSAGES_FILE, data, csv_by_message_output_path, export_keys, consent_withdrawn_key)
+        # Add 'sent_on' as the second column in the messages file
+        messages_export_keys = export_keys.copy()
+        messages_export_keys.insert(1, "sent_on")
+
+        cls.export_to_csv(MESSAGES_FILE, data, csv_by_message_output_path, messages_export_keys, consent_withdrawn_key)
         cls.export_to_csv(INDIVIDUALS_FILE, folded_data, csv_by_individual_output_path, export_keys, consent_withdrawn_key)
 
         return data, folded_data
