@@ -19,6 +19,13 @@ INDIVIDUALS_FILE = "individuals_file"
 class AnalysisFile(object):
     @staticmethod
     def export_to_csv(analysis_file_type, data, csv_path, export_keys, consent_withdrawn_key):
+        # De-duplicate export keys
+        _export_keys = export_keys
+        export_keys = []
+        for key in _export_keys:
+            if key not in export_keys:
+                export_keys.append(key)
+
         with open(csv_path, "w") as f:
             writer = csv.DictWriter(f, fieldnames=export_keys, lineterminator="\n")
             writer.writeheader()

@@ -51,7 +51,6 @@ if __name__ == "__main__":
     IOUtils.ensure_dirs_exist(f"{automated_analysis_output_dir}/maps/regions")
     IOUtils.ensure_dirs_exist(f"{automated_analysis_output_dir}/maps/districts")
     IOUtils.ensure_dirs_exist(f"{automated_analysis_output_dir}/maps/mogadishu")
-    IOUtils.ensure_dirs_exist(f"{automated_analysis_output_dir}/graphs")
 
     log.info("Loading Pipeline Configuration File...")
     with open(pipeline_configuration_file_path) as f:
@@ -75,6 +74,34 @@ if __name__ == "__main__":
         for i in range (len(individuals)):
             individuals[i] = dict(individuals[i].items())
     log.info(f"Loaded {len(individuals)} individuals")
+
+    log.info(f"Computing the estimated engagement types")
+    stats = []
+    for (plan, rqa_plan) in zip(PipelineConfiguration.ENGAGEMENT_CODING_PLANS, PipelineConfiguration.RQA_CODING_PLANS):
+        opt_ins = AnalysisUtils.filter_opt_ins(messages, CONSENT_WITHDRAWN_KEY, [rqa_plan])
+        relevant = AnalysisUtils.filter_relevant(messages, CONSENT_WITHDRAWN_KEY, [rqa_plan])
+
+        for cc in plan.coding_configurations:
+            assert cc.coding_mode == CodingModes.SINGLE
+
+            for code in cc.code_scheme.codes:
+                if code.control_code == Codes.STOP:
+                    continue
+
+                stats.append({
+                    "Episode": plan.dataset_name,
+                    "Estimated Engagement Type": code.string_value,
+                    "Messages with Opt-Ins": len([msg for msg in opt_ins if msg[cc.coded_field]["CodeID"] == code.code_id]),
+                    "Relevant Messages": len([msg for msg in relevant if msg[cc.coded_field]["CodeID"] == code.code_id])
+                })
+
+    with open(f"{automated_analysis_output_dir}/estimated_engagement_types.csv", "w") as f:
+        headers = ["Episode", "Estimated Engagement Type", "Messages with Opt-Ins", "Relevant Messages"]
+        writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
+        writer.writeheader()
+
+        for row in stats:
+            writer.writerow(row)
 
     # Compute the number of messages, individuals, and relevant messages per episode and overall.
     log.info("Computing the per-episode and per-season engagement counts...")
@@ -182,7 +209,7 @@ if __name__ == "__main__":
             if ind["consent_withdrawn"] == Codes.TRUE:
                 continue
 
-            for plan in PipelineConfiguration.SURVEY_CODING_PLANS:
+            for plan in PipelineConfiguration.DEMOG_CODING_PLANS:
                 for cc in plan.coding_configurations:
                     if not cc.include_in_theme_distribution:
                         continue
