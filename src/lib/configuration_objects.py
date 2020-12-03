@@ -26,12 +26,16 @@ class CodingConfiguration(object):
 
 # TODO: Rename CodingPlan to something like DatasetConfiguration?
 class CodingPlan(object):
-    def __init__(self, raw_field, coding_configurations, raw_field_fold_strategy, coda_filename=None, ws_code=None,
-                 time_field=None, run_id_field=None, icr_filename=None, id_field=None, code_imputation_function=None,
-                 message_id_fn=None):
+    def __init__(self, raw_field, coding_configurations, raw_field_fold_strategy, dataset_name=None, coda_filename=None,
+                 ws_code=None, time_field=None, run_id_field=None, icr_filename=None, id_field=None,
+                 code_imputation_function=None, message_id_fn=None):
         if message_id_fn is None:
             message_id_fn = lambda td: SHAUtils.sha_string(td[self.raw_field])
 
+        if dataset_name is None:
+            dataset_name = raw_field
+
+        self.dataset_name = dataset_name
         self.raw_field = raw_field
         self.time_field = time_field
         self.run_id_field = run_id_field
@@ -41,7 +45,6 @@ class CodingPlan(object):
         self.code_imputation_function = code_imputation_function
         self.ws_code = ws_code
         self.raw_field_fold_strategy = raw_field_fold_strategy
-        self.dataset_name = raw_field
         self.message_id_fn = message_id_fn
 
         if id_field is None:

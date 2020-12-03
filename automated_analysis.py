@@ -1,5 +1,6 @@
 import argparse
 import csv
+import itertools
 import random
 from collections import OrderedDict
 import sys
@@ -157,6 +158,35 @@ if __name__ == "__main__":
 
         for row in repeat_participations.values():
             writer.writerow(row)
+
+    log.info("Computing loyalty...")
+    loyalty = OrderedDict()
+    dataset_names = [plan.dataset_name for plan in PipelineConfiguration.RQA_CODING_PLANS]
+    normalise_episodes = lambda episodes: tuple(sorted(list(set(episodes))))
+    for r in range(1, len(dataset_names) + 1):
+        for episodes in itertools.combinations(dataset_names, r):
+            loyalty[normalise_episodes(episodes)] = 0
+
+    for ind in individuals:
+        if AnalysisUtils.withdrew_consent(ind, CONSENT_WITHDRAWN_KEY):
+            continue
+
+        participated_episodes = set()
+        for plan in PipelineConfiguration.RQA_CODING_PLANS:
+            if AnalysisUtils.responded(ind, plan):
+                participated_episodes.add(plan.dataset_name)
+        loyalty[normalise_episodes(participated_episodes)] += 1
+
+    with open(f"{automated_analysis_output_dir}/loyalty.csv", "w") as f:
+        headers = ["Episode Combination", "Participants"]
+        writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
+        writer.writeheader()
+
+        for episode_combination, participants in loyalty.items():
+            writer.writerow({
+                "Episode Combination": ", ".join(episode_combination),
+                "Participants": participants
+            })
 
     log.info("Computing the demographic distributions...")
     # Compute the number of individuals with each demographic code.

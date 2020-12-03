@@ -49,7 +49,8 @@ def clean_facebook_post_type(post):
 def get_rqa_coding_plans(pipeline_name):
     if pipeline_name == "USAID-IBTCI-Facebook":
         return [
-            CodingPlan(raw_field="facebook_s08e01_raw",
+            CodingPlan(dataset_name="facebook_s08e01",
+                       raw_field="facebook_s08e01_raw",
                        time_field="sent_on",
                        run_id_field="facebook_s08e01_run_id",
                        coda_filename="USAID_IBTCI_facebook_s08e01.json",
@@ -171,7 +172,8 @@ def get_rqa_coding_plans(pipeline_name):
     else:
         assert pipeline_name == "USAID-IBTCI-SMS"
         return [
-            CodingPlan(raw_field="rqa_s08e01_raw",
+            CodingPlan(dataset_name="rqa_s08e01",
+                       raw_field="rqa_s08e01_raw",
                        time_field="sent_on",
                        run_id_field="rqa_s08e01_run_id",
                        coda_filename="USAID_IBTCI_rqa_s08e01.json",
@@ -188,7 +190,8 @@ def get_rqa_coding_plans(pipeline_name):
                        ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("s08e01"),
                        raw_field_fold_strategy=FoldStrategies.concatenate),
 
-            CodingPlan(raw_field="rqa_s08e02_raw",
+            CodingPlan(dataset_name="rqa_s08e02",
+                       raw_field="rqa_s08e02_raw",
                        time_field="sent_on",
                        run_id_field="rqa_s08e02_run_id",
                        coda_filename="USAID_IBTCI_rqa_s08e02.json",
@@ -205,7 +208,8 @@ def get_rqa_coding_plans(pipeline_name):
                        ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("s08e02"),
                        raw_field_fold_strategy=FoldStrategies.concatenate),
 
-            CodingPlan(raw_field="rqa_s08e03_raw",
+            CodingPlan(dataset_name="rqa_s08e03",
+                       raw_field="rqa_s08e03_raw",
                        time_field="sent_on",
                        run_id_field="rqa_s08e03_run_id",
                        coda_filename="USAID_IBTCI_rqa_s08e03.json",
@@ -222,7 +226,8 @@ def get_rqa_coding_plans(pipeline_name):
                        ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("s08e03"),
                        raw_field_fold_strategy=FoldStrategies.concatenate),
 
-            CodingPlan(raw_field="rqa_s08e03_break_raw",
+            CodingPlan(dataset_name="rqa_s08e03_break",
+                       raw_field="rqa_s08e03_break_raw",
                        time_field="sent_on",
                        run_id_field="rqa_s08e03_break_run_id",
                        coda_filename="USAID_IBTCI_rqa_s08e03_break.json",
