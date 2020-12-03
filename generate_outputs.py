@@ -3,6 +3,7 @@ import argparse
 from core_data_modules.logging import Logger
 from core_data_modules.traced_data.io import TracedDataJsonIO
 from core_data_modules.util import IOUtils
+from dateutil.parser import isoparse
 
 from src import LoadData, TranslateSourceKeys, AutoCode, ProductionFile, \
     ApplyManualCodes, AnalysisFile, WSCorrection
@@ -93,6 +94,9 @@ if __name__ == "__main__":
 
     log.info("Auto Coding...")
     data = AutoCode.auto_code(user, data, pipeline_configuration, icr_output_dir, coded_dir_path)
+
+    log.info("Sorting messages by date received...")
+    data.sort(key=lambda td: isoparse(td["sent_on"]))
 
     log.info("Exporting production CSV...")
     data = ProductionFile.generate(data, production_csv_output_path)

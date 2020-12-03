@@ -6,7 +6,7 @@ from src.lib import PipelineConfiguration, MessageFilters
 class ProductionFile(object):
     @staticmethod
     def generate(data, production_csv_output_path):
-        production_keys = ["uid"]
+        production_keys = ["uid", "sent_on"]
         for plan in PipelineConfiguration.RQA_CODING_PLANS:
             if plan.raw_field not in production_keys:
                 production_keys.append(plan.raw_field)
