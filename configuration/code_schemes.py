@@ -29,6 +29,8 @@ class CodeSchemes(object):
     LIVELIHOOD = _open_scheme("livelihood.json")
     HOUSEHOLD_LANGUAGE = _open_scheme("household_language.json")
 
+    ENGAGEMENT_TYPE = _open_scheme("engagement_type.json")
+
     WS_CORRECT_DATASET = _open_scheme("ws_correct_dataset.json")
 
     FACEBOOK_S08E01 = _open_scheme("facebook_s08e01.json")

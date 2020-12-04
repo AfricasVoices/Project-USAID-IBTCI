@@ -1,0 +1,72 @@
+{
+  "SchemeID": "Scheme-8200076f",
+  "Name": "Engagement Type",
+  "Version": "0.0.0.1",
+  "Codes": [
+    {
+      "CodeID": "code-5db30728",
+      "CodeType": "Normal",
+      "DisplayText": "sms ad",
+      "NumericValue": 1,
+      "StringValue": "sms_ad",
+      "VisibleInCoda": true,
+      "MatchValues" : [
+        "sms_ad"
+      ]
+    },
+    {
+      "CodeID": "code-2e8d96ca",
+      "CodeType": "Normal",
+      "DisplayText": "radio promo",
+      "NumericValue": 2,
+      "StringValue" : "radio_promo",
+      "VisibleInCoda": true,
+      "MatchValues" : [
+        "radio_promo"
+      ]
+    },
+    {
+      "CodeID": "code-6be5ea3b",
+      "CodeType": "Normal",
+      "DisplayText": "radio show",
+      "NumericValue": 3,
+      "StringValue" : "radio_show",
+      "VisibleInCoda": true,
+      "MatchValues" : [
+        "radio_show"
+      ]
+    },
+    {
+      "CodeID": "code-94be32ba",
+      "CodeType": "Normal",
+      "DisplayText": "other",
+      "NumericValue": 4,
+      "StringValue" : "other",
+      "VisibleInCoda": true,
+      "MatchValues" : [
+        "other"
+      ]
+    },
+    {
+      "CodeID": "code-NA-f93d3eb7",
+      "CodeType": "Control",
+      "ControlCode": "NA",
+      "DisplayText": "NA (missing)",
+      "NumericValue": -10,
+      "StringValue": "NA",
+      "VisibleInCoda": false,
+      "MatchValues": [
+        "NA"
+      ]
+    },
+    {
+      "CodeID": "code-STOP-08b832a8",
+      "CodeType": "Control",
+      "ControlCode": "STOP",
+      "DisplayText": "STOP",
+      "NumericValue": -90,
+      "StringValue": "STOP",
+      "VisibleInCoda": false
+    }
+  ]
+}
