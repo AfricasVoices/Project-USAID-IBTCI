@@ -17,6 +17,7 @@ from rapid_pro_tools.rapid_pro_client import RapidProClient
 from storage.google_cloud import google_cloud_utils
 from temba_client.v2 import Contact, Run
 
+from src.facebook_utils import FacebookUtils
 from src.facebook_client import FacebookClient
 from src.lib import PipelineConfiguration
 from src.lib.pipeline_configuration import RapidProSource, GCloudBucketSource, RecoveryCSVSource, FacebookSource
@@ -194,6 +195,52 @@ def fetch_from_recovery_csv(user, google_cloud_credentials_file_path, raw_data_d
         log.info(f"Exported TracedData")
 
 
+def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, data_sources):
+    headers = ["Page ID", "Dataset", "Post ID", "Post Type", "Post Impressions", "Unique Post Impressions",
+               "Post Engaged Users", "Comments", "Reactions"]
+    engagement_metrics = []  # of dict with keys in `headers`
+    for source in data_sources:
+        if not isinstance(source, FacebookSource):
+            continue
+
+        log.info("Downloading Facebook access token...")
+        facebook_token = google_cloud_utils.download_blob_to_string(
+            google_cloud_credentials_file_path, source.token_file_url).strip()
+
+        facebook = FacebookClient(facebook_token)
+
+        for dataset in source.datasets:
+            for post_id in dataset.post_ids:
+                post = facebook.get_post(post_id, fields=["attachments", "comments.limit(0).summary(true)"])
+
+                post_metrics = facebook.get_metrics_for_post(
+                    post_id,
+                    ["post_impressions", "post_impressions_unique", "post_engaged_users",
+                     "post_reactions_by_type_total"]
+                )
+
+                engagement_metrics.append({
+                    "Page ID": source.page_id,
+                    "Dataset": dataset.name,
+                    "Post ID": post_id,
+                    "Post Type": FacebookUtils.clean_post_type(post),
+                    "Post Impressions": post_metrics["post_impressions"],
+                    "Unique Post Impressions": post_metrics["post_impressions_unique"],
+                    "Post Engaged Users": post_metrics["post_engaged_users"],
+                    "Comments": post["comments"]["summary"]["total_count"],
+                    # post_reactions_by_type_total is a dict of reaction_type -> total, but we're only interested in
+                    # the total across all types, so sum all the values.
+                    "Reactions": sum([type_total for type_total in post_metrics["post_reactions_by_type_total"].values()])
+                })
+
+    with open("test.csv", "w") as f:
+        writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
+        writer.writeheader()
+
+        for metric in engagement_metrics:
+            writer.writerow(metric)
+
+
 def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, facebook_uuid_table, facebook_source):
     log.info("Fetching data from Facebook...")
     log.info("Downloading Facebook access token...")
@@ -270,6 +317,9 @@ def main(user, google_cloud_credentials_file_path, pipeline_configuration_file_p
         pipeline_configuration.uuid_table.uuid_prefix
     )
     log.info("Initialised the Firestore UUID table")
+
+    # TODO: Move
+    fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, pipeline_configuration.raw_data_sources)
 
     log.info(f"Fetching data from {len(pipeline_configuration.raw_data_sources)} sources...")
     for i, raw_data_source in enumerate(pipeline_configuration.raw_data_sources):
