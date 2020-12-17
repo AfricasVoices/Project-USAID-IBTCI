@@ -25,11 +25,11 @@ done
 
 
 # Check that the correct number of arguments were provided.
-if [[ $# -ne 5 ]]; then
+if [[ $# -ne 6 ]]; then
     echo "Usage: ./docker-run-automated-analysis.sh
     [--profile-cpu <profile-output-path>]
     <user> <pipeline-configuration-file-path> <messages-traced-data>
-    <individuals-traced-data> <automated-analysis-output-dir>"
+    <individuals-traced-data> <metrics-dir> <automated-analysis-output-dir>"
     exit
 fi
 
@@ -38,7 +38,8 @@ USER=$1
 INPUT_PIPELINE_CONFIGURATION=$2
 INPUT_MESSAGES_TRACED_DATA=$3
 INPUT_INDIVIDUALS_TRACED_DATA=$4
-AUTOMATED_ANALYSIS_OUTPUT_DIR=$5
+INPUT_ENGAGEMENT_METRICS_DIR=$5
+AUTOMATED_ANALYSIS_OUTPUT_DIR=$6
 
 # Build an image for this pipeline stage.
 docker build --build-arg INSTALL_MEMORY_PROFILER="$PROFILE_MEMORY" -t "$IMAGE_NAME" .
@@ -53,7 +54,7 @@ if [[ "$PROFILE_MEMORY" = true ]]; then
 fi
 CMD="pipenv run $PROFILE_MEMORY_CMD python -u $PROFILE_CPU_CMD automated_analysis.py \
     \"$USER\" /data/pipeline_configuration.json \
-    /data/messages-traced-data.jsonl /data/individuals-traced-data.jsonl /data/automated-analysis-outputs
+    /data/messages-traced-data.jsonl /data/individuals-traced-data.jsonl /data/engagement-metrics /data/automated-analysis-outputs
 "
 container="$(docker container create ${SYS_PTRACE_CAPABILITY} -w /app "$IMAGE_NAME" /bin/bash -c "$CMD")"
 echo "Created container $container"
@@ -69,6 +70,9 @@ docker cp "$INPUT_MESSAGES_TRACED_DATA" "$container:/data/messages-traced-data.j
 
 echo "Copying $INPUT_INDIVIDUALS_TRACED_DATA -> $container_short_id:/data/individuals-traced-data.jsonl"
 docker cp "$INPUT_INDIVIDUALS_TRACED_DATA" "$container:/data/individuals-traced-data.jsonl"
+
+echo "Copying $INPUT_ENGAGEMENT_METRICS_DIR/. -> $container_short_id:/data/engagement-metrics"
+docker cp "$INPUT_ENGAGEMENT_METRICS_DIR/." "$container:/data/engagement-metrics"
 
 # Run the container
 echo "Starting container $container_short_id"

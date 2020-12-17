@@ -195,14 +195,15 @@ def fetch_from_recovery_csv(user, google_cloud_credentials_file_path, raw_data_d
         log.info(f"Exported TracedData")
 
 
-def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, data_sources):
+def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, metrics_dir, data_sources):
     headers = ["Page ID", "Dataset", "Post ID", "Post Type", "Post Impressions", "Unique Post Impressions",
                "Post Engaged Users", "Comments", "Reactions"]
-    engagement_metrics = []  # of dict with keys in `headers`
+    facebook_metrics = []  # of dict with keys in `headers`
     for source in data_sources:
         if not isinstance(source, FacebookSource):
             continue
 
+        log.info("Downloading metrics for a Facebook source...")
         log.info("Downloading Facebook access token...")
         facebook_token = google_cloud_utils.download_blob_to_string(
             google_cloud_credentials_file_path, source.token_file_url).strip()
@@ -219,7 +220,7 @@ def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, data_s
                      "post_reactions_by_type_total"]
                 )
 
-                engagement_metrics.append({
+                facebook_metrics.append({
                     "Page ID": source.page_id,
                     "Dataset": dataset.name,
                     "Post ID": post_id,
@@ -233,11 +234,16 @@ def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, data_s
                     "Reactions": sum([type_total for type_total in post_metrics["post_reactions_by_type_total"].values()])
                 })
 
-    with open("test.csv", "w") as f:
+    if len(facebook_metrics) == 0:
+        # No Facebook posts detected, so don't write a metrics file.
+        return
+
+    IOUtils.ensure_dirs_exist(metrics_dir)
+    with open(f"{metrics_dir}/facebook_metrics.csv", "w") as f:
         writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
         writer.writeheader()
 
-        for metric in engagement_metrics:
+        for metric in facebook_metrics:
             writer.writerow(metric)
 
 
@@ -297,7 +303,7 @@ def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, 
         log.info(f"Saved {len(traced_comments)} traced comments")
 
 
-def main(user, google_cloud_credentials_file_path, pipeline_configuration_file_path, raw_data_dir):
+def main(user, google_cloud_credentials_file_path, pipeline_configuration_file_path, raw_data_dir, metrics_dir):
     # Read the settings from the configuration file
     log.info("Loading Pipeline Configuration File...")
     with open(pipeline_configuration_file_path) as f:
@@ -318,9 +324,6 @@ def main(user, google_cloud_credentials_file_path, pipeline_configuration_file_p
     )
     log.info("Initialised the Firestore UUID table")
 
-    # TODO: Move
-    fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, pipeline_configuration.raw_data_sources)
-
     log.info(f"Fetching data from {len(pipeline_configuration.raw_data_sources)} sources...")
     for i, raw_data_source in enumerate(pipeline_configuration.raw_data_sources):
         log.info(f"Fetching from source {i + 1}/{len(pipeline_configuration.raw_data_sources)}...")
@@ -337,6 +340,9 @@ def main(user, google_cloud_credentials_file_path, pipeline_configuration_file_p
         else:
             assert False, f"Unknown raw_data_source type {type(raw_data_source)}"
 
+    fetch_facebook_engagement_metrics(
+        google_cloud_credentials_file_path, metrics_dir, pipeline_configuration.raw_data_sources)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Fetches all the raw data for this project from Rapid Pro. "
@@ -350,7 +356,11 @@ if __name__ == "__main__":
                         help="Path to the pipeline configuration json file"),
     parser.add_argument("raw_data_dir", metavar="raw-data-dir",
                         help="Path to a directory to save the raw data to")
+    parser.add_argument("metrics_dir", metavar="metrics-dir",
+                        help="Path to a directory to save any fetch-time engagement metrics to, for example "
+                             "social media impressions metrics")
 
     args = parser.parse_args()
 
-    main(args.user, args.google_cloud_credentials_file_path, args.pipeline_configuration_file_path, args.raw_data_dir)
+    main(args.user, args.google_cloud_credentials_file_path, args.pipeline_configuration_file_path, args.raw_data_dir,
+         args.metrics_dir)

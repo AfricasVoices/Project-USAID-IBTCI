@@ -28,8 +28,14 @@ GOOGLE_CLOUD_CREDENTIALS_FILE_PATH=$2
 PIPELINE_CONFIGURATION_FILE_PATH=$3
 DATA_ROOT=$4
 
+
+if [ -d "$DATA_ROOT/Engagement Metrics" ]
+then
+    rm -r "$DATA_ROOT/Engagement Metrics"
+fi
+
 mkdir -p "$DATA_ROOT/Raw Data"
 
 cd ..
 ./docker-run-fetch-raw-data.sh ${CPU_PROFILE_ARG} \
-    "$USER" "$GOOGLE_CLOUD_CREDENTIALS_FILE_PATH" "$PIPELINE_CONFIGURATION_FILE_PATH" "$DATA_ROOT/Raw Data"
+    "$USER" "$GOOGLE_CLOUD_CREDENTIALS_FILE_PATH" "$PIPELINE_CONFIGURATION_FILE_PATH" "$DATA_ROOT/Raw Data" "$DATA_ROOT/Engagement Metrics"
