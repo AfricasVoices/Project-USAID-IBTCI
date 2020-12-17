@@ -196,6 +196,8 @@ def fetch_from_recovery_csv(user, google_cloud_credentials_file_path, raw_data_d
 
 
 def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, metrics_dir, data_sources):
+    IOUtils.ensure_dirs_exist(metrics_dir)
+
     headers = ["Page ID", "Dataset", "Post ID", "Post Type", "Post Impressions", "Unique Post Impressions",
                "Post Engaged Users", "Comments", "Reactions"]
     facebook_metrics = []  # of dict with keys in `headers`
@@ -238,7 +240,6 @@ def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, metric
         # No Facebook posts detected, so don't write a metrics file.
         return
 
-    IOUtils.ensure_dirs_exist(metrics_dir)
     with open(f"{metrics_dir}/facebook_metrics.csv", "w") as f:
         writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
         writer.writeheader()
