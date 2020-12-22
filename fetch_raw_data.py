@@ -264,7 +264,7 @@ def get_facebook_post_ids(facebook_client, page_id, post_ids, search):
             created_after=search.start_date, created_before=search.end_date
         )
         for post in posts_to_search:
-            if "message" in post and search.match in post["message"]:
+            if "message" in post and search.match in post["message"] and post["id"] not in combined_post_ids:
                 combined_post_ids.append(post["id"])
 
     return combined_post_ids
