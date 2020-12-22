@@ -29,7 +29,7 @@ if [[ $# -ne 6 ]]; then
     echo "Usage: ./docker-run-automated-analysis.sh
     [--profile-cpu <profile-output-path>]
     <user> <pipeline-configuration-file-path> <messages-traced-data>
-    <individuals-traced-data> <metrics-dir> <automated-analysis-output-dir>"
+    <individuals-traced-data> <engagement-metrics-dir> <automated-analysis-output-dir>"
     exit
 fi
 
