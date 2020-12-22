@@ -321,22 +321,59 @@ class FacebookSource(RawDataSource):
 
 
 class FacebookDataset(object):
-    def __init__(self, name, post_ids):
+    def __init__(self, name, post_ids=None, search=None):
         self.name = name
         self.post_ids = post_ids
+        self.search = search
+
+        self.validate()
 
     @classmethod
     def from_configuration_dict(cls, configuration_dict):
         name = configuration_dict["Name"]
-        post_ids = configuration_dict["PostIDs"]
+        post_ids = configuration_dict.get("PostIDs")
+        search = configuration_dict.get("Search")
 
-        return cls(name, post_ids)
+        if search is not None:
+            search = FacebookSearch.from_configuration_dict(search)
+
+        return cls(name, post_ids, search)
 
     def validate(self):
         validators.validate_string(self.name, "name")
-        validators.validate_list(self.post_ids, "post_ids")
-        for i, post_id in enumerate(self.post_ids):
-            validators.validate_string(post_id, f"post_ids[{i}]")
+
+        assert self.post_ids is not None or self.search is not None, \
+            "Must provide at least one of post_id or search"
+
+        if self.post_ids is not None:
+            validators.validate_list(self.post_ids, "post_ids")
+            for i, post_id in enumerate(self.post_ids):
+                validators.validate_string(post_id, f"post_ids[{i}]")
+
+        if self.search is not None:
+            self.search.validate()
+
+
+class FacebookSearch(object):
+    def __init__(self, match, start_date, end_date):
+        self.match = match
+        self.start_date = start_date
+        self.end_date = end_date
+
+        self.validate()
+
+    @classmethod
+    def from_configuration_dict(cls, configuration_dict):
+        match = configuration_dict["Match"]
+        start_date = isoparse(configuration_dict["StartDate"])
+        end_date = isoparse(configuration_dict["EndDate"])
+
+        return cls(match, start_date, end_date)
+
+    def validate(self):
+        validators.validate_string(self.match, "mach")
+        validators.validate_datetime(self.start_date, "start_date")
+        validators.validate_datetime(self.end_date, "end_date")
 
 
 class UuidTable(object):
