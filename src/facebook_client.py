@@ -83,6 +83,24 @@ class FacebookClient(object):
             }
         )
 
+    def get_raw_metrics_for_post(self, post_id, metrics):
+        return self._make_get_request(
+            f"/{post_id}/insights?metric={','.join(metrics)}"
+        )["data"]
+
+    def get_metrics_for_post(self, post_id, metrics):
+        raw_metrics = self.get_raw_metrics_for_post(post_id, metrics)
+
+        cleaned_metrics = dict()
+        for m in raw_metrics:
+            assert len(m["values"]) == 1, f"Metric {m['name']} has {len(m['values'])} values, but " \
+                                          f"FacebookClient.get_metrics_for_post only expects one. " \
+                                          f"Use `FacebookClient.get_raw_metrics_for_post` instead or report" \
+                                          f"this to the developers of FacebookClient"
+            cleaned_metrics[m["name"]] = m["values"][0]["value"]
+
+        return cleaned_metrics
+
     def get_all_comments_on_post(self, post_id, fields=["parent", "attachments", "created_time", "message"],
                                  raw_export_log_file=None):
         log.info(f"Fetching all comments on post '{post_id}'...")

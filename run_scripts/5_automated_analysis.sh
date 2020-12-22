@@ -42,4 +42,4 @@ cd ..
 ./docker-run-automated-analysis.sh ${CPU_PROFILE_ARG} ${MEMORY_PROFILE_ARG} \
   "$USER" "$PIPELINE_CONFIGURATION_FILE_PATH" \
   "$DATA_ROOT/Outputs/messages_traced_data.jsonl" "$DATA_ROOT/Outputs/individuals_traced_data.jsonl" \
-  "$DATA_ROOT/Outputs/Automated Analysis/"
+  "$DATA_ROOT/Engagement Metrics" "$DATA_ROOT/Outputs/Automated Analysis/"

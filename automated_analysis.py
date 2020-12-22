@@ -1,7 +1,9 @@
 import argparse
 import csv
+import glob
 import itertools
 import random
+import shutil
 from collections import OrderedDict
 import sys
 
@@ -36,6 +38,9 @@ if __name__ == "__main__":
                         help="Path to a JSONL file to read the TracedData of the messages data from")
     parser.add_argument("individuals_json_input_path", metavar="individuals-json-input-path",
                         help="Path to a JSONL file to read the TracedData of the messages data from")
+    parser.add_argument("engagement_metrics_input_dir", metavar="engagement-metrics-input-dir",
+                        help="Path to a directory containing existing analysis generated earlier in the pipeline, to "
+                             "be copied straight-through to the automated-analysis-output-dir")
     parser.add_argument("automated_analysis_output_dir", metavar="automated-analysis-output-dir",
                         help="Directory to write the automated analysis outputs to")
 
@@ -46,6 +51,7 @@ if __name__ == "__main__":
 
     messages_json_input_path = args.messages_json_input_path
     individuals_json_input_path = args.individuals_json_input_path
+    engagement_metrics_input_dir = args.engagement_metrics_input_dir
     automated_analysis_output_dir = args.automated_analysis_output_dir
 
     IOUtils.ensure_dirs_exist(automated_analysis_output_dir)
@@ -75,6 +81,11 @@ if __name__ == "__main__":
         for i in range (len(individuals)):
             individuals[i] = dict(individuals[i].items())
     log.info(f"Loaded {len(individuals)} individuals")
+
+    log.info("Copying existing engagement metrics through to the analysis folder...")
+    for path in glob.glob(f"{engagement_metrics_input_dir}/*"):
+        log.info(f"Copying {path} -> {automated_analysis_output_dir}")
+        shutil.copy(path, f"{automated_analysis_output_dir}")
 
     log.info(f"Computing the estimated engagement types")
     stats = []
