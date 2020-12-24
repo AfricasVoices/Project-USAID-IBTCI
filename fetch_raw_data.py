@@ -216,6 +216,8 @@ def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, metric
             for post_id in dataset.post_ids:
                 post = facebook.get_post(post_id, fields=["attachments", "comments.limit(0).summary(true)"])
 
+                comments = facebook.get_all_comments_on_post(post_id)
+
                 post_metrics = facebook.get_metrics_for_post(
                     post_id,
                     ["post_impressions", "post_impressions_unique", "post_engaged_users",
@@ -230,7 +232,8 @@ def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, metric
                     "Post Impressions": post_metrics["post_impressions"],
                     "Unique Post Impressions": post_metrics["post_impressions_unique"],
                     "Post Engaged Users": post_metrics["post_engaged_users"],
-                    "Comments": post["comments"]["summary"]["total_count"],
+                    # "Comments": post["comments"]["summary"]["total_count"],
+                    "Comments": len(comments),
                     # post_reactions_by_type_total is a dict of reaction_type -> total, but we're only interested in
                     # the total across all types, so sum all the values.
                     "Reactions": sum([type_total for type_total in post_metrics["post_reactions_by_type_total"].values()])
