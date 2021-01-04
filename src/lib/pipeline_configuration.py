@@ -314,7 +314,7 @@ class FacebookSource(RawDataSource):
 
     # TODO: Rename to refer to datasets instead of flows, since 'flows' don't really make sense for Facebook
     def get_activation_flow_names(self):
-        return [dataset.name for dataset in self.datasets]
+        return [f"{dataset.name}_{self.page_id}" for dataset in self.datasets]
 
     def get_survey_flow_names(self):
         return []
