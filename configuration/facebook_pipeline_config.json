@@ -6,18 +6,18 @@
       "PageID": "dhaayow655",
       "TokenFileURL": "gs://avf-credentials/dhaayow655-facebook-token.txt",
       "Datasets": [
-        {"Name": "facebook_s08e01_dhaayow655", "PostIDs": [
+        {"Name": "facebook_s08e01", "PostIDs": [
           "342722832782775_1496920597362987",
           "342722832782775_1499022967152750",
           "342722832782775_1500052827049764"
         ]},
-        {"Name": "facebook_s08e02_dhaayow655", "PostIDs": [
+        {"Name": "facebook_s08e02", "PostIDs": [
           "342722832782775_1503659086689138",
           "342722832782775_1505659819822398",
           "342722832782775_1506611219727258",
           "342722832782775_1508439062877807"
         ]},
-        {"Name": "facebook_s08e03_dhaayow655", "PostIDs": [
+        {"Name": "facebook_s08e03", "PostIDs": [
           "342722832782775_1510397106015336",
           "342722832782775_1512895462432167",
           "342722832782775_1514804622241251"
@@ -29,18 +29,18 @@
       "PageID": "AbdirizakHAtosh",
       "TokenFileURL": "gs://avf-credentials/AbdirizakHAtosh-facebook-token.txt",
       "Datasets": [
-        {"Name": "facebook_s08e01_AbdirizakHAtosh", "PostIDs": [
+        {"Name": "facebook_s08e01", "PostIDs": [
           "1584334095169246_2794844634118180",
           "1584334095169246_2797140103888633",
           "1584334095169246_2798289113773732"
         ]},
-        {"Name": "facebook_s08e02_AbdirizakHAtosh", "PostIDs": [
+        {"Name": "facebook_s08e02", "PostIDs": [
           "1584334095169246_2802181710051139",
           "1584334095169246_2804248333177810",
           "1584334095169246_2805175469751763",
           "1584334095169246_2807018386234138"
         ]},
-        {"Name": "facebook_s08e03_AbdirizakHAtosh", "PostIDs": [
+        {"Name": "facebook_s08e03", "PostIDs": [
           "1584334095169246_2809122856023691",
           "1584334095169246_2811698025766174",
           "1584334095169246_2813726475563329"
@@ -52,19 +52,19 @@
       "PageID": "BarnaamijkaHage",
       "TokenFileURL": "gs://avf-credentials/BarnaamijkaHage-facebook-token.txt",
       "Datasets": [
-        {"Name": "facebook_s08e01_BarnaamijkaHage", "PostIDs": [
+        {"Name": "facebook_s08e01", "PostIDs": [
           "325301151525528_697701827618790",
           "325301151525528_699376604117979",
           "325301151525528_700208297368143",
           "325301151525528_700986553956984"
         ]},
-        {"Name": "facebook_s08e02_BarnaamijkaHage", "PostIDs": [
+        {"Name": "facebook_s08e02", "PostIDs": [
           "325301151525528_703164037072569",
           "325301151525528_704759343579705",
           "325301151525528_705505060171800",
           "325301151525528_706951713360468"
         ]},
-        {"Name": "facebook_s08e03_BarnaamijkaHage", "PostIDs": [
+        {"Name": "facebook_s08e03", "PostIDs": [
           "325301151525528_708474849874821",
           "325301151525528_710463649675941",
           "325301151525528_711934782862161"
@@ -76,18 +76,18 @@
       "PageID": "M2amedia",
       "TokenFileURL": "gs://avf-credentials/M2A-Media-Communication-Consultancy-548414038603623-facebook-token.txt",
       "Datasets": [
-        {"Name": "facebook_s08e01_M2amedia", "PostIDs": [
+        {"Name": "facebook_s08e01", "PostIDs": [
           "548414038603623_3190238431087824",
           "548414038603623_3196246417153692",
           "548414038603623_3199269190184748"
         ]},
-        {"Name": "facebook_s08e02_M2amedia", "PostIDs": [
+        {"Name": "facebook_s08e02", "PostIDs": [
           "548414038603623_3209732449138422",
           "548414038603623_3215586821886318",
           "548414038603623_3218241841620816",
           "548414038603623_3223431354435198"
         ]},
-        {"Name": "facebook_s08e03_M2amedia", "PostIDs": [
+        {"Name": "facebook_s08e03", "PostIDs": [
           "548414038603623_3228851770559823",
           "548414038603623_3236211706490496",
           "548414038603623_3242196812558652"
@@ -103,77 +103,23 @@
   "SourceKeyRemappings": [
     {"SourceKey": "avf_facebook_id", "PipelineKey": "uid"},
 
-    {"SourceKey": "facebook_s08e01_dhaayow655.message", "PipelineKey": "facebook_s08e01_raw"},
-    {"SourceKey": "facebook_s08e01_dhaayow655.id", "PipelineKey": "facebook_s08e01_comment_id"},
-    {"SourceKey": "facebook_s08e01_dhaayow655.created_time", "PipelineKey": "sent_on"},
-    {"SourceKey": "facebook_s08e01_dhaayow655.parent", "PipelineKey": "facebook_s08e01_comment_reply_to_raw"},
-    {"SourceKey": "facebook_s08e01_dhaayow655.post", "PipelineKey": "facebook_s08e01_post_raw"},
+    {"SourceKey": "facebook_s08e01.message", "PipelineKey": "facebook_s08e01_raw"},
+    {"SourceKey": "facebook_s08e01.id", "PipelineKey": "facebook_s08e01_comment_id"},
+    {"SourceKey": "facebook_s08e01.created_time", "PipelineKey": "sent_on"},
+    {"SourceKey": "facebook_s08e01.parent", "PipelineKey": "facebook_s08e01_comment_reply_to_raw"},
+    {"SourceKey": "facebook_s08e01.post", "PipelineKey": "facebook_s08e01_post_raw"},
 
-    {"SourceKey": "facebook_s08e01_AbdirizakHAtosh.message", "PipelineKey": "facebook_s08e01_raw"},
-    {"SourceKey": "facebook_s08e01_AbdirizakHAtosh.id", "PipelineKey": "facebook_s08e01_comment_id"},
-    {"SourceKey": "facebook_s08e01_AbdirizakHAtosh.created_time", "PipelineKey": "sent_on"},
-    {"SourceKey": "facebook_s08e01_AbdirizakHAtosh.parent", "PipelineKey": "facebook_s08e01_comment_reply_to_raw"},
-    {"SourceKey": "facebook_s08e01_AbdirizakHAtosh.post", "PipelineKey": "facebook_s08e01_post_raw"},
+    {"SourceKey": "facebook_s08e02.message", "PipelineKey": "facebook_s08e02_raw"},
+    {"SourceKey": "facebook_s08e02.id", "PipelineKey": "facebook_s08e02_comment_id"},
+    {"SourceKey": "facebook_s08e02.created_time", "PipelineKey": "sent_on"},
+    {"SourceKey": "facebook_s08e02.parent", "PipelineKey": "facebook_s08e02_comment_reply_to_raw"},
+    {"SourceKey": "facebook_s08e02.post", "PipelineKey": "facebook_s08e02_post_raw"},
 
-    {"SourceKey": "facebook_s08e01_BarnaamijkaHage.message", "PipelineKey": "facebook_s08e01_raw"},
-    {"SourceKey": "facebook_s08e01_BarnaamijkaHage.id", "PipelineKey": "facebook_s08e01_comment_id"},
-    {"SourceKey": "facebook_s08e01_BarnaamijkaHage.created_time", "PipelineKey": "sent_on"},
-    {"SourceKey": "facebook_s08e01_BarnaamijkaHage.parent", "PipelineKey": "facebook_s08e01_comment_reply_to_raw"},
-    {"SourceKey": "facebook_s08e01_BarnaamijkaHage.post", "PipelineKey": "facebook_s08e01_post_raw"},
-
-    {"SourceKey": "facebook_s08e01_M2A-Media-Communication-Consultancy-548414038603623.message", "PipelineKey": "facebook_s08e01_raw"},
-    {"SourceKey": "facebook_s08e01_M2A-Media-Communication-Consultancy-548414038603623.id", "PipelineKey": "facebook_s08e01_comment_id"},
-    {"SourceKey": "facebook_s08e01_M2A-Media-Communication-Consultancy-548414038603623.created_time", "PipelineKey": "sent_on"},
-    {"SourceKey": "facebook_s08e01_M2A-Media-Communication-Consultancy-548414038603623.parent", "PipelineKey": "facebook_s08e01_comment_reply_to_raw"},
-    {"SourceKey": "facebook_s08e01_M2A-Media-Communication-Consultancy-548414038603623.post", "PipelineKey": "facebook_s08e01_post_raw"},
-
-    {"SourceKey": "facebook_s08e02_dhaayow655.message", "PipelineKey": "facebook_s08e02_raw"},
-    {"SourceKey": "facebook_s08e02_dhaayow655.id", "PipelineKey": "facebook_s08e02_comment_id"},
-    {"SourceKey": "facebook_s08e02_dhaayow655.created_time", "PipelineKey": "sent_on"},
-    {"SourceKey": "facebook_s08e02_dhaayow655.parent", "PipelineKey": "facebook_s08e02_comment_reply_to_raw"},
-    {"SourceKey": "facebook_s08e02_dhaayow655.post", "PipelineKey": "facebook_s08e02_post_raw"},
-
-    {"SourceKey": "facebook_s08e02_AbdirizakHAtosh.message", "PipelineKey": "facebook_s08e02_raw"},
-    {"SourceKey": "facebook_s08e02_AbdirizakHAtosh.id", "PipelineKey": "facebook_s08e02_comment_id"},
-    {"SourceKey": "facebook_s08e02_AbdirizakHAtosh.created_time", "PipelineKey": "sent_on"},
-    {"SourceKey": "facebook_s08e02_AbdirizakHAtosh.parent", "PipelineKey": "facebook_s08e02_comment_reply_to_raw"},
-    {"SourceKey": "facebook_s08e02_AbdirizakHAtosh.post", "PipelineKey": "facebook_s08e02_post_raw"},
-
-    {"SourceKey": "facebook_s08e02_BarnaamijkaHage.message", "PipelineKey": "facebook_s08e02_raw"},
-    {"SourceKey": "facebook_s08e02_BarnaamijkaHage.id", "PipelineKey": "facebook_s08e02_comment_id"},
-    {"SourceKey": "facebook_s08e02_BarnaamijkaHage.created_time", "PipelineKey": "sent_on"},
-    {"SourceKey": "facebook_s08e02_BarnaamijkaHage.parent", "PipelineKey": "facebook_s08e02_comment_reply_to_raw"},
-    {"SourceKey": "facebook_s08e02_BarnaamijkaHage.post", "PipelineKey": "facebook_s08e02_post_raw"},
-
-    {"SourceKey": "facebook_s08e02_M2A-Media-Communication-Consultancy-548414038603623.message", "PipelineKey": "facebook_s08e02_raw"},
-    {"SourceKey": "facebook_s08e02_M2A-Media-Communication-Consultancy-548414038603623.id", "PipelineKey": "facebook_s08e02_comment_id"},
-    {"SourceKey": "facebook_s08e02_M2A-Media-Communication-Consultancy-548414038603623.created_time", "PipelineKey": "sent_on"},
-    {"SourceKey": "facebook_s08e02_M2A-Media-Communication-Consultancy-548414038603623.parent", "PipelineKey": "facebook_s08e02_comment_reply_to_raw"},
-    {"SourceKey": "facebook_s08e02_M2A-Media-Communication-Consultancy-548414038603623.post", "PipelineKey": "facebook_s08e02_post_raw"},
-    
-    {"SourceKey": "facebook_s08e03_dhaayow655.message", "PipelineKey": "facebook_s08e03_raw"},
-    {"SourceKey": "facebook_s08e03_dhaayow655.id", "PipelineKey": "facebook_s08e03_comment_id"},
-    {"SourceKey": "facebook_s08e03_dhaayow655.created_time", "PipelineKey": "sent_on"},
-    {"SourceKey": "facebook_s08e03_dhaayow655.parent", "PipelineKey": "facebook_s08e03_comment_reply_to_raw"},
-    {"SourceKey": "facebook_s08e03_dhaayow655.post", "PipelineKey": "facebook_s08e03_post_raw"},
-
-    {"SourceKey": "facebook_s08e03_AbdirizakHAtosh.message", "PipelineKey": "facebook_s08e03_raw"},
-    {"SourceKey": "facebook_s08e03_AbdirizakHAtosh.id", "PipelineKey": "facebook_s08e03_comment_id"},
-    {"SourceKey": "facebook_s08e03_AbdirizakHAtosh.created_time", "PipelineKey": "sent_on"},
-    {"SourceKey": "facebook_s08e03_AbdirizakHAtosh.parent", "PipelineKey": "facebook_s08e03_comment_reply_to_raw"},
-    {"SourceKey": "facebook_s08e03_AbdirizakHAtosh.post", "PipelineKey": "facebook_s08e03_post_raw"},
-
-    {"SourceKey": "facebook_s08e03_BarnaamijkaHage.message", "PipelineKey": "facebook_s08e03_raw"},
-    {"SourceKey": "facebook_s08e03_BarnaamijkaHage.id", "PipelineKey": "facebook_s08e03_comment_id"},
-    {"SourceKey": "facebook_s08e03_BarnaamijkaHage.created_time", "PipelineKey": "sent_on"},
-    {"SourceKey": "facebook_s08e03_BarnaamijkaHage.parent", "PipelineKey": "facebook_s08e03_comment_reply_to_raw"},
-    {"SourceKey": "facebook_s08e03_BarnaamijkaHage.post", "PipelineKey": "facebook_s08e03_post_raw"},
-
-    {"SourceKey": "facebook_s08e03_M2A-Media-Communication-Consultancy-548414038603623.message", "PipelineKey": "facebook_s08e03_raw"},
-    {"SourceKey": "facebook_s08e03_M2A-Media-Communication-Consultancy-548414038603623.id", "PipelineKey": "facebook_s08e03_comment_id"},
-    {"SourceKey": "facebook_s08e03_M2A-Media-Communication-Consultancy-548414038603623.created_time", "PipelineKey": "sent_on"},
-    {"SourceKey": "facebook_s08e03_M2A-Media-Communication-Consultancy-548414038603623.parent", "PipelineKey": "facebook_s08e03_comment_reply_to_raw"},
-    {"SourceKey": "facebook_s08e03_M2A-Media-Communication-Consultancy-548414038603623.post", "PipelineKey": "facebook_s08e03_post_raw"}
+    {"SourceKey": "facebook_s08e03.message", "PipelineKey": "facebook_s08e03_raw"},
+    {"SourceKey": "facebook_s08e03.id", "PipelineKey": "facebook_s08e03_comment_id"},
+    {"SourceKey": "facebook_s08e03.created_time", "PipelineKey": "sent_on"},
+    {"SourceKey": "facebook_s08e03.parent", "PipelineKey": "facebook_s08e03_comment_reply_to_raw"},
+    {"SourceKey": "facebook_s08e03.post", "PipelineKey": "facebook_s08e03_post_raw"}
   ],
   "ProjectStartDate": "2000-01-01T00:00:00+03:00",
   "ProjectEndDate": "2100-01-01T00:00:00+03:00",
