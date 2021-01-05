@@ -14,11 +14,10 @@ from core_data_modules.traced_data.io import TracedDataJsonIO
 from core_data_modules.util import IOUtils, TimeUtils, SHAUtils
 from id_infrastructure.firestore_uuid_table import FirestoreUuidTable
 from rapid_pro_tools.rapid_pro_client import RapidProClient
+from social_media_tools.facebook import FacebookClient, facebook_utils
 from storage.google_cloud import google_cloud_utils
 from temba_client.v2 import Contact, Run
 
-from src.facebook_utils import FacebookUtils
-from src.facebook_client import FacebookClient
 from src.lib import PipelineConfiguration
 from src.lib.pipeline_configuration import RapidProSource, GCloudBucketSource, RecoveryCSVSource, FacebookSource
 from configuration.code_imputation_functions import CodeSchemes
@@ -228,7 +227,7 @@ def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, metric
                     "Page ID": source.page_id,
                     "Dataset": dataset.name,
                     "Post ID": post_id,
-                    "Post Type": FacebookUtils.clean_post_type(post),
+                    "Post Type": facebook_utils.clean_post_type(post),
                     "Post Impressions": post_metrics["post_impressions"],
                     "Unique Post Impressions": post_metrics["post_impressions_unique"],
                     "Post Engaged Users": post_metrics["post_engaged_users"],
@@ -262,7 +261,7 @@ def get_facebook_post_ids(facebook_client, page_id, post_ids, search):
     if search is not None:
         # Download the posts in the time-range to search, and add those which contain the match string to the list
         # of post_ids to download comments from.
-        posts_to_search = facebook_client.get_all_posts_published_by_page(
+        posts_to_search = facebook_client.get_posts_published_by_page(
             page_id, fields=["message", "created_time"],
             created_after=search.start_date, created_before=search.end_date
         )
@@ -312,7 +311,7 @@ def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, 
                 comment["parent"] = {}
 
         # Convert the comments to TracedData.
-        traced_comments = facebook.convert_facebook_comments_to_traced_data(
+        traced_comments = facebook_utils.convert_facebook_comments_to_traced_data(
             user, dataset.name, raw_comments, facebook_uuid_table)
 
         # Export to disk.
