@@ -13,9 +13,9 @@ class FacebookUtils(object):
         """
         post_type = None
         for attachment in post["attachments"]["data"]:
-            assert attachment["type"] in {"video_inline", "photo"}, post
+            assert attachment["type"] in {"video_inline", "video_direct_response", "photo"}, post
 
-            if attachment["type"] == "video_inline":
+            if attachment["type"] in {"video_inline", "video_direct_response"}:
                 assert post_type in {"video", None}, post
                 post_type = "video"
             elif attachment["type"] == "photo":

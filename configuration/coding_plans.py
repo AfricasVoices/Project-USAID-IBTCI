@@ -74,128 +74,59 @@ def clean_engagement_type(sent_on, episode):
     return Codes.TRUE_MISSING
 
 
+def _make_facebook_coding_plan(name, code_scheme):
+    return \
+        CodingPlan(dataset_name=name,
+                   raw_field=f"{name}_raw",
+                   time_field="sent_on",
+                   run_id_field=f"{name}_run_id",
+                   coda_filename=f"USAID_IBTCI_{name}.json",
+                   message_id_fn=lambda td: SHAUtils.sha_string(td[f"{name}_comment_id"]),
+                   icr_filename=f"{name}.csv",
+                   coding_configurations=[
+                       CodingConfiguration(
+                           coding_mode=CodingModes.MULTIPLE,
+                           code_scheme=code_scheme,
+                           coded_field=f"{name}_coded",
+                           analysis_file_key=name,
+                           fold_strategy=lambda x, y: FoldStrategies.list_of_labels(code_scheme, x, y)
+                       ),
+                       CodingConfiguration(
+                           raw_field=f"{name}_comment_reply_to_raw",
+                           coding_mode=CodingModes.SINGLE,
+                           code_scheme=CodeSchemes.FACEBOOK_COMMENT_REPLY_TO,
+                           cleaner=lambda parent: "post" if parent == {} else "comment",
+                           coded_field=f"{name}_comment_reply_to_coded",
+                           requires_manual_verification=False,
+                           analysis_file_key=f"{name}_comment_reply_to",
+                           fold_strategy=None,
+                           include_in_individuals_file=False
+                       ),
+                       CodingConfiguration(
+                           raw_field=f"{name}_post_raw",
+                           coding_mode=CodingModes.SINGLE,
+                           code_scheme=CodeSchemes.FACEBOOK_POST_TYPE,
+                           cleaner=clean_facebook_post_type,
+                           coded_field=f"{name}_post_type_coded",
+                           requires_manual_verification=False,
+                           analysis_file_key=f"{name}_post_type",
+                           fold_strategy=None,
+                           include_in_individuals_file=False
+                       )
+                   ],
+                   raw_field_fold_strategy=FoldStrategies.concatenate)
+
+
 def get_rqa_coding_plans(pipeline_name):
     if pipeline_name == "USAID-IBTCI-Facebook":
         return [
-            CodingPlan(dataset_name="facebook_s08e01",
-                       raw_field="facebook_s08e01_raw",
-                       time_field="sent_on",
-                       run_id_field="facebook_s08e01_run_id",
-                       coda_filename="USAID_IBTCI_facebook_s08e01.json",
-                       message_id_fn=lambda td: SHAUtils.sha_string(td["facebook_s08e01_comment_id"]),
-                       icr_filename="facebook_s08e01.csv",
-                       coding_configurations=[
-                           CodingConfiguration(
-                               coding_mode=CodingModes.MULTIPLE,
-                               code_scheme=CodeSchemes.FACEBOOK_S08E01,
-                               coded_field="facebook_s08e01_coded",
-                               analysis_file_key="facebook_s08e01",
-                               fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.FACEBOOK_S08E01, x, y)
-                           ),
-                           CodingConfiguration(
-                               raw_field="facebook_s08e01_comment_reply_to_raw",
-                               coding_mode=CodingModes.SINGLE,
-                               code_scheme=CodeSchemes.FACEBOOK_COMMENT_REPLY_TO,
-                               cleaner=lambda parent: "post" if parent == {} else "comment",
-                               coded_field="facebook_s08e01_comment_reply_to_coded",
-                               requires_manual_verification=False,
-                               analysis_file_key="facebook_s08e01_comment_reply_to",
-                               fold_strategy=None,
-                               include_in_individuals_file=False
-                           ),
-                           CodingConfiguration(
-                               raw_field="facebook_s08e01_post_raw",
-                               coding_mode=CodingModes.SINGLE,
-                               code_scheme=CodeSchemes.FACEBOOK_POST_TYPE,
-                               cleaner=clean_facebook_post_type,
-                               coded_field="facebook_s08e01_post_type_coded",
-                               requires_manual_verification=False,
-                               analysis_file_key="facebook_s08e01_post_type",
-                               fold_strategy=None,
-                               include_in_individuals_file=False
-                           )
-                       ],
-                       raw_field_fold_strategy=FoldStrategies.concatenate),
+            _make_facebook_coding_plan("facebook_s08e01", CodeSchemes.FACEBOOK_S08E01),
+            _make_facebook_coding_plan("facebook_s08e02", CodeSchemes.FACEBOOK_S08E02),
+            _make_facebook_coding_plan("facebook_s08e03", CodeSchemes.FACEBOOK_S08E03),
 
-            CodingPlan(raw_field="facebook_s08e02_raw",
-                       time_field="sent_on",
-                       run_id_field="facebook_s08e02_run_id",
-                       coda_filename="USAID_IBTCI_facebook_s08e02.json",
-                       message_id_fn=lambda td: SHAUtils.sha_string(td["facebook_s08e02_comment_id"]),
-                       icr_filename="facebook_s08e02.csv",
-                       coding_configurations=[
-                           CodingConfiguration(
-                               coding_mode=CodingModes.MULTIPLE,
-                               code_scheme=CodeSchemes.FACEBOOK_S08E02,
-                               coded_field="facebook_s08e02_coded",
-                               analysis_file_key="facebook_s08e02",
-                               fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.FACEBOOK_S08E02, x,
-                                                                                        y)
-                           ),
-                           CodingConfiguration(
-                               raw_field="facebook_s08e02_comment_reply_to_raw",
-                               coding_mode=CodingModes.SINGLE,
-                               code_scheme=CodeSchemes.FACEBOOK_COMMENT_REPLY_TO,
-                               cleaner=lambda parent: "post" if parent == {} else "comment",
-                               coded_field="facebook_s08e02_comment_reply_to_coded",
-                               requires_manual_verification=False,
-                               analysis_file_key="facebook_s08e02_comment_reply_to",
-                               fold_strategy=None,
-                               include_in_individuals_file=False
-                           ),
-                           CodingConfiguration(
-                               raw_field="facebook_s08e02_post_raw",
-                               coding_mode=CodingModes.SINGLE,
-                               code_scheme=CodeSchemes.FACEBOOK_POST_TYPE,
-                               cleaner=clean_facebook_post_type,
-                               coded_field="facebook_s08e02_post_type_coded",
-                               requires_manual_verification=False,
-                               analysis_file_key="facebook_s08e02_post_type",
-                               fold_strategy=None,
-                               include_in_individuals_file=False
-                           )
-                       ],
-                       raw_field_fold_strategy=FoldStrategies.concatenate),
-
-            CodingPlan(raw_field="facebook_s08e03_raw",
-                       time_field="sent_on",
-                       run_id_field="facebook_s08e03_run_id",
-                       coda_filename="USAID_IBTCI_facebook_s08e03.json",
-                       message_id_fn=lambda td: SHAUtils.sha_string(td["facebook_s08e03_comment_id"]),
-                       icr_filename="facebook_s08e03.csv",
-                       coding_configurations=[
-                           CodingConfiguration(
-                               coding_mode=CodingModes.MULTIPLE,
-                               code_scheme=CodeSchemes.FACEBOOK_S08E03,
-                               coded_field="facebook_s08e03_coded",
-                               analysis_file_key="facebook_s08e03",
-                               fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.FACEBOOK_S08E03, x,
-                                                                                        y)
-                           ),
-                           CodingConfiguration(
-                               raw_field="facebook_s08e03_comment_reply_to_raw",
-                               coding_mode=CodingModes.SINGLE,
-                               code_scheme=CodeSchemes.FACEBOOK_COMMENT_REPLY_TO,
-                               cleaner=lambda parent: "post" if parent == {} else "comment",
-                               coded_field="facebook_s08e03_comment_reply_to_coded",
-                               requires_manual_verification=False,
-                               analysis_file_key="facebook_s08e03_comment_reply_to",
-                               fold_strategy=None,
-                               include_in_individuals_file=False
-                           ),
-                           CodingConfiguration(
-                               raw_field="facebook_s08e03_post_raw",
-                               coding_mode=CodingModes.SINGLE,
-                               code_scheme=CodeSchemes.FACEBOOK_POST_TYPE,
-                               cleaner=clean_facebook_post_type,
-                               coded_field="facebook_s08e03_post_type_coded",
-                               requires_manual_verification=False,
-                               analysis_file_key="facebook_s08e03_post_type",
-                               fold_strategy=None,
-                               include_in_individuals_file=False
-                           )
-                       ],
-                       raw_field_fold_strategy=FoldStrategies.concatenate)
+            _make_facebook_coding_plan("facebook_s08e03_break_w01", CodeSchemes.FACEBOOK_S08E03_BREAK_W01),
+            _make_facebook_coding_plan("facebook_s08e03_break_w02", CodeSchemes.FACEBOOK_S08E03_BREAK_W02),
+            _make_facebook_coding_plan("facebook_s08e03_break_w03", CodeSchemes.FACEBOOK_S08E03_BREAK_W03)
         ]
     else:
         assert pipeline_name == "USAID-IBTCI-SMS"
