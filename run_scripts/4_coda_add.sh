@@ -26,6 +26,9 @@ DATASETS=(
     "USAID_IBTCI_facebook_s08e03_break_w01"
     "USAID_IBTCI_facebook_s08e03_break_w02"
     "USAID_IBTCI_facebook_s08e03_break_w03"
+    "USAID_IBTCI_facebook_s08e03_break_w04"
+    "USAID_IBTCI_facebook_s08e03_break_w05"
+    "USAID_IBTCI_facebook_s08e03_break_w06"
 
     "CSAP_age"
     "CSAP_gender"
