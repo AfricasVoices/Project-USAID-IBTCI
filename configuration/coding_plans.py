@@ -5,6 +5,7 @@ from dateutil.parser import isoparse
 
 from configuration import code_imputation_functions
 from configuration.code_schemes import CodeSchemes
+from src.facebook_utils import FacebookUtils
 from src.lib.configuration_objects import CodingConfiguration, CodingModes, CodingPlan
 
 
@@ -27,24 +28,6 @@ def clean_district_if_no_mogadishu_sub_district(text):
         return somali.DemographicCleaner.clean_somalia_district(text)
     else:
         return Codes.NOT_CODED
-
-
-def clean_facebook_post_type(post):
-    post_type = None
-    # Assume that there is only one attachment type, which is either a photo or inline_video, as this is the plan for
-    # this project. If that assumption doesn't hold, this will fail and we can adapt to what the data actually looks
-    # in that case when we see it.
-    for attachment in post["attachments"]["data"]:
-        assert attachment["type"] in {"video_inline", "photo"}, post
-
-        if attachment["type"] == "video_inline":
-            assert post_type in {"video", None}, post
-            post_type = "video"
-        elif attachment["type"] == "photo":
-            assert post_type in {"photo", None}, post
-            post_type = "photo"
-
-    return post_type
 
 
 def clean_engagement_type(sent_on, episode):
@@ -106,7 +89,7 @@ def _make_facebook_coding_plan(name, code_scheme):
                            raw_field=f"{name}_post_raw",
                            coding_mode=CodingModes.SINGLE,
                            code_scheme=CodeSchemes.FACEBOOK_POST_TYPE,
-                           cleaner=clean_facebook_post_type,
+                           cleaner=FacebookUtils.clean_post_type,
                            coded_field=f"{name}_post_type_coded",
                            requires_manual_verification=False,
                            analysis_file_key=f"{name}_post_type",
