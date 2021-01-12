@@ -283,8 +283,8 @@ def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, 
 
     for dataset in facebook_source.datasets:
         log.info(f"Exporting comments for dataset {dataset.name}...")
-        raw_comments_output_path = f"{raw_data_dir}/{dataset.name}_raw.json"
-        traced_comments_output_path = f"{raw_data_dir}/{dataset.name}.jsonl"
+        raw_comments_output_path = f"{raw_data_dir}/{dataset.name}_{facebook_source.page_id}_raw.json"
+        traced_comments_output_path = f"{raw_data_dir}/{dataset.name}_{facebook_source.page_id}.jsonl"
 
         # Download all the comments on all the posts in this dataset, logging the raw data returned by Facebook.
         raw_comments = []
