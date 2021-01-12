@@ -199,7 +199,7 @@ def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, metric
     IOUtils.ensure_dirs_exist(metrics_dir)
 
     headers = ["Page ID", "Dataset", "Post ID", "Post Type", "Post Impressions", "Unique Post Impressions",
-               "Post Engaged Users", "Comments", "Reactions"]
+               "Post Engaged Users", "Total Comments", "Visible (analysed) Comments", "Reactions"]
     facebook_metrics = []  # of dict with keys in `headers`
     for source in data_sources:
         if not isinstance(source, FacebookSource):
@@ -214,7 +214,9 @@ def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, metric
 
         for dataset in source.datasets:
             for post_id in get_facebook_post_ids(facebook, source.page_id, dataset.post_ids, dataset.search):
-                post = facebook.get_post(post_id, fields=["attachments", "comments.limit(0).summary(true)"])
+                post = facebook.get_post(post_id, fields=["attachments", "comments.filter(stream).limit(0).summary(true)"])
+
+                comments = facebook.get_all_comments_on_post(post_id)
 
                 post_metrics = facebook.get_metrics_for_post(
                     post_id,
@@ -230,7 +232,8 @@ def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, metric
                     "Post Impressions": post_metrics["post_impressions"],
                     "Unique Post Impressions": post_metrics["post_impressions_unique"],
                     "Post Engaged Users": post_metrics["post_engaged_users"],
-                    "Comments": post["comments"]["summary"]["total_count"],
+                    "Total Comments": post["comments"]["summary"]["total_count"],
+                    "Visible (analysed) Comments": len(comments),
                     # post_reactions_by_type_total is a dict of reaction_type -> total, but we're only interested in
                     # the total across all types, so sum all the values.
                     "Reactions": sum([type_total for type_total in post_metrics["post_reactions_by_type_total"].values()])
