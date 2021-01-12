@@ -1,5 +1,6 @@
 import json
 
+import pytz
 from core_data_modules.data_models import validators
 from core_data_modules.logging import Logger
 import requests
@@ -18,6 +19,20 @@ _MAX_RESULTS_PER_PAGE = 100  # For paged requests, the maximum number of records
 class FacebookClient(object):
     def __init__(self, access_token):
         self._access_token = access_token
+
+    @staticmethod
+    def _date_to_facebook_time(date):
+        """
+        Converts a datetime into a format compatible with Facebook's API.
+
+        Facebook only accepts dates as ISO 8601 strings in Zulu-time (UTC with a 'Z' indicator of timezone).
+
+        :param date: Date to convert to Facebook time.
+        :type date: datetime
+        :return: `dat` in a format compatible with Facebook's APIs.
+        :rtype: str
+        """
+        return date.astimezone(pytz.utc).isoformat().replace("+00:00", "Z")
 
     def _make_get_request(self, endpoint, params=None):
         if params is None:
@@ -61,16 +76,30 @@ class FacebookClient(object):
             }
         )
 
-    def get_all_posts_published_by_page(self, page_id, fields=["attachments", "created_time", "message"]):
-        log.debug(f"Fetching all posts published by page '{page_id}'...")
+    def get_all_posts_published_by_page(self, page_id, fields=["attachments", "created_time", "message"],
+                                        created_after=None, created_before=None):
+        log_str = f"Fetching all posts published by page '{page_id}'"
+        if created_after is not None:
+            log_str += f", created after {created_after.isoformat()}"
+        if created_before is not None:
+            log_str += f", created after {created_before.isoformat()}"
+        log.debug(f"{log_str}...")
+
+        params = {
+            "fields": ",".join(fields),
+            "limit": _MAX_RESULTS_PER_PAGE
+        }
+        if created_after is not None:
+            params["since"] = self._date_to_facebook_time(created_after)
+        if created_before is not None:
+            params["until"] = self._date_to_facebook_time(created_before)
+
         posts = self._make_paged_get_request(
             f"/{page_id}/published_posts",
-            {
-                "fields": ",".join(fields),
-                "limit": _MAX_RESULTS_PER_PAGE
-            }
+            params
         )
         log.info(f"Fetched {len(posts)} posts")
+
         return posts
 
     def get_top_level_comments_on_post(self, post_id, fields=["attachments", "created_time", "message"]):
