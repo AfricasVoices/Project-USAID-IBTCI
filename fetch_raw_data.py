@@ -213,7 +213,7 @@ def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, metric
         facebook = FacebookClient(facebook_token)
 
         for dataset in source.datasets:
-            for post_id in dataset.post_ids:
+            for post_id in get_facebook_post_ids(facebook, source.page_id, dataset.post_ids, dataset.search):
                 post = facebook.get_post(post_id, fields=["attachments", "comments.limit(0).summary(true)"])
 
                 post_metrics = facebook.get_metrics_for_post(
@@ -248,6 +248,28 @@ def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, metric
             writer.writerow(metric)
 
 
+def get_facebook_post_ids(facebook_client, page_id, post_ids, search):
+    # Establish the posts to download the comments from.
+    # Posts can be defined as a list of post_ids and/or a search object containing a search string and time range.
+    combined_post_ids = []
+
+    if post_ids is not None:
+        combined_post_ids.extend(post_ids)
+
+    if search is not None:
+        # Download the posts in the time-range to search, and add those which contain the match string to the list
+        # of post_ids to download comments from.
+        posts_to_search = facebook_client.get_all_posts_published_by_page(
+            page_id, fields=["message", "created_time"],
+            created_after=search.start_date, created_before=search.end_date
+        )
+        for post in posts_to_search:
+            if "message" in post and search.match in post["message"] and post["id"] not in combined_post_ids:
+                combined_post_ids.append(post["id"])
+
+    return combined_post_ids
+
+
 def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, facebook_uuid_table, facebook_source):
     log.info("Fetching data from Facebook...")
     log.info("Downloading Facebook access token...")
@@ -263,7 +285,7 @@ def fetch_from_facebook(user, google_cloud_credentials_file_path, raw_data_dir, 
 
         # Download all the comments on all the posts in this dataset, logging the raw data returned by Facebook.
         raw_comments = []
-        for post_id in dataset.post_ids:
+        for post_id in get_facebook_post_ids(facebook, facebook_source.page_id, dataset.post_ids, dataset.search):
             comments_log_path = f"{raw_data_dir}/{post_id}_comments_log.jsonl"
             with open(comments_log_path, "a") as raw_comments_log_file:
                 post_comments = facebook.get_all_comments_on_post(
