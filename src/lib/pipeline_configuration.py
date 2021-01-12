@@ -371,7 +371,7 @@ class FacebookSearch(object):
         return cls(match, start_date, end_date)
 
     def validate(self):
-        validators.validate_string(self.match, "mach")
+        validators.validate_string(self.match, "match")
         validators.validate_datetime(self.start_date, "start_date")
         validators.validate_datetime(self.end_date, "end_date")
 
