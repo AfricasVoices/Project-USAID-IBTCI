@@ -2,6 +2,7 @@ import argparse
 import csv
 import glob
 import itertools
+import json
 import random
 import shutil
 from collections import OrderedDict
@@ -9,6 +10,7 @@ import sys
 
 import geopandas
 import matplotlib.pyplot as plt
+from core_data_modules.analysis import AnalysisConfiguration, engagement_counts, theme_distributions
 from core_data_modules.cleaners import Codes
 from core_data_modules.data_models.code_scheme import CodeTypes
 from core_data_modules.logging import Logger
@@ -115,46 +117,35 @@ if __name__ == "__main__":
         for row in stats:
             writer.writerow(row)
 
-    # Compute the number of messages, individuals, and relevant messages per episode and overall.
-    log.info("Computing the per-episode and per-season engagement counts...")
-    engagement_counts = OrderedDict()  # of episode name to counts
-    for plan in PipelineConfiguration.RQA_CODING_PLANS:
-        engagement_counts[plan.raw_field] = {
-            "Episode": plan.raw_field,
+    def coding_plans_to_analysis_configurations(coding_plans):
+        analysis_configurations = []
+        for plan in coding_plans:
+            for cc in plan.coding_configurations:
+                analysis_configurations.append(
+                    AnalysisConfiguration(plan.dataset_name, cc.coded_field, cc.code_scheme)
+                )
+        return analysis_configurations
 
-            "Total Messages": "-",  # Can't report this for individual weeks because the data has been overwritten with "STOP"
-            "Total Messages with Opt-Ins": len(AnalysisUtils.filter_opt_ins(messages, CONSENT_WITHDRAWN_KEY, [plan])),
-            "Total Labelled Messages": len(AnalysisUtils.filter_fully_labelled(messages, CONSENT_WITHDRAWN_KEY, [plan])),
-            "Total Relevant Messages": len(AnalysisUtils.filter_relevant(messages, CONSENT_WITHDRAWN_KEY, [plan])),
-
-            "Total Participants": "-",
-            "Total Participants with Opt-Ins": len(AnalysisUtils.filter_opt_ins(individuals, CONSENT_WITHDRAWN_KEY, [plan])),
-            "Total Relevant Participants": len(AnalysisUtils.filter_relevant(individuals, CONSENT_WITHDRAWN_KEY, [plan]))
-        }
-    engagement_counts["Total"] = {
-        "Episode": "Total",
-
-        "Total Messages": len(messages),
-        "Total Messages with Opt-Ins": len(AnalysisUtils.filter_opt_ins(messages, CONSENT_WITHDRAWN_KEY, PipelineConfiguration.RQA_CODING_PLANS)),
-        "Total Labelled Messages": len(AnalysisUtils.filter_partially_labelled(messages, CONSENT_WITHDRAWN_KEY, PipelineConfiguration.RQA_CODING_PLANS)),
-        "Total Relevant Messages": len(AnalysisUtils.filter_relevant(messages, CONSENT_WITHDRAWN_KEY, PipelineConfiguration.RQA_CODING_PLANS)),
-
-        "Total Participants": len(individuals),
-        "Total Participants with Opt-Ins": len(AnalysisUtils.filter_opt_ins(individuals, CONSENT_WITHDRAWN_KEY, PipelineConfiguration.RQA_CODING_PLANS)),
-        "Total Relevant Participants": len(AnalysisUtils.filter_relevant(individuals, CONSENT_WITHDRAWN_KEY, PipelineConfiguration.RQA_CODING_PLANS))
-    }
-
+    # Engagement Counts
+    log.info("Computing engagement counts...")
     with open(f"{automated_analysis_output_dir}/engagement_counts.csv", "w") as f:
-        headers = [
-            "Episode",
-            "Total Messages", "Total Messages with Opt-Ins", "Total Labelled Messages", "Total Relevant Messages",
-            "Total Participants", "Total Participants with Opt-Ins", "Total Relevant Participants"
-        ]
-        writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
-        writer.writeheader()
+        engagement_counts.write_engagement_counts_csv(
+            messages, individuals, CONSENT_WITHDRAWN_KEY,
+            coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
+            f
+        )
 
-        for row in engagement_counts.values():
-            writer.writerow(row)
+    # Theme distributions
+    log.info("Computing theme distributions...")
+    with open(f"{automated_analysis_output_dir}/theme_distributions.csv", "w") as f:
+        theme_distributions.write_theme_distributions_csv(
+            individuals, CONSENT_WITHDRAWN_KEY,
+            coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
+            coding_plans_to_analysis_configurations(PipelineConfiguration.SURVEY_CODING_PLANS),
+            f
+        )
+
+    exit(0)
 
     log.info("Computing the participation frequencies...")
     repeat_participations = OrderedDict()
