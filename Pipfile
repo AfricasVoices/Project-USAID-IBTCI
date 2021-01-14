@@ -24,4 +24,4 @@ mapclassify = "*"  # Needed by geopandas for choropleth classification
 [dev-packages]
 
 [requires]
-python_version = "3.6"
+python_version = "3.8"
