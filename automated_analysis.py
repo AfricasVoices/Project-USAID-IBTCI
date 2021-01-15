@@ -121,8 +121,11 @@ if __name__ == "__main__":
         analysis_configurations = []
         for plan in coding_plans:
             for cc in plan.coding_configurations:
+                if not cc.include_in_theme_distribution:
+                    continue
+
                 analysis_configurations.append(
-                    AnalysisConfiguration(plan.dataset_name, cc.coded_field, cc.code_scheme)
+                    AnalysisConfiguration(cc.analysis_file_key, cc.coded_field, cc.code_scheme)
                 )
         return analysis_configurations
 
