@@ -129,7 +129,7 @@ if __name__ == "__main__":
     # Engagement Counts
     log.info("Computing engagement counts...")
     with open(f"{automated_analysis_output_dir}/engagement_counts.csv", "w") as f:
-        engagement_counts.write_engagement_counts_csv(
+        engagement_counts.export_engagement_counts_csv(
             messages, individuals, CONSENT_WITHDRAWN_KEY,
             coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
             f
@@ -138,7 +138,7 @@ if __name__ == "__main__":
     # Theme distributions
     log.info("Computing theme distributions...")
     with open(f"{automated_analysis_output_dir}/theme_distributions.csv", "w") as f:
-        theme_distributions.write_theme_distributions_csv(
+        theme_distributions.export_theme_distributions_csv(
             individuals, CONSENT_WITHDRAWN_KEY,
             coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
             coding_plans_to_analysis_configurations(PipelineConfiguration.SURVEY_CODING_PLANS),
