@@ -2,10 +2,10 @@ from core_data_modules.cleaners import somali, swahili, Codes
 from core_data_modules.traced_data.util.fold_traced_data import FoldStrategies
 from core_data_modules.util import SHAUtils
 from dateutil.parser import isoparse
+from social_media_tools.facebook import facebook_utils
 
 from configuration import code_imputation_functions
 from configuration.code_schemes import CodeSchemes
-from src.facebook_utils import FacebookUtils
 from src.lib.configuration_objects import CodingConfiguration, CodingModes, CodingPlan
 
 
@@ -89,7 +89,7 @@ def _make_facebook_coding_plan(name, code_scheme):
                            raw_field=f"{name}_post_raw",
                            coding_mode=CodingModes.SINGLE,
                            code_scheme=CodeSchemes.FACEBOOK_POST_TYPE,
-                           cleaner=FacebookUtils.clean_post_type,
+                           cleaner=facebook_utils.clean_post_type,
                            coded_field=f"{name}_post_type_coded",
                            requires_manual_verification=False,
                            analysis_file_key=f"{name}_post_type",
