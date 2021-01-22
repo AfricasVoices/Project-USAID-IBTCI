@@ -116,58 +116,6 @@ if __name__ == "__main__":
         for row in traffic_counts:
             writer.writerow(row)
 
-    # Broadcast analysis
-    class TrafficLabel(object):
-        def __init__(self, label, start_date, end_date):
-            self.label = label
-            self.start_date = isoparse(start_date)
-            self.end_date = isoparse(end_date)
-
-    traffic_labels = [
-        TrafficLabel("E01 Ad",           "2020-11-01T16:30+03:00", "2020-11-01T17:30+03:00"),
-        TrafficLabel("E01 Dalsan/Danan", "2020-11-05T14:30+03:00", "2020-11-05T15:30+03:00"),
-        TrafficLabel("E01 Risala",       "2020-11-05T15:00+03:00", "2020-11-05T16:00+03:00"),
-        TrafficLabel("E01 Star",         "2020-11-05T11:30+03:00", "2020-11-05T12:30+03:00"),
-        TrafficLabel("E01 Mustaqbal",    "2020-11-05T16:30+03:00", "2020-11-05T17:30+03:00"),
-
-        TrafficLabel("E02 Ad",        "2020-11-08T16:30+03:00", "2020-11-08T17:30+03:00"),
-        TrafficLabel("E02 Dalsan/Danan",    "2020-11-12T14:30+03:00", "2020-11-12T15:30+03:00"),
-        TrafficLabel("E02 Risala",    "2020-11-12T15:00+03:00", "2020-11-12T16:00+03:00"),
-        TrafficLabel("E02 Star",      "2020-11-12T11:30+03:00", "2020-11-12T12:30+03:00"),
-        TrafficLabel("E02 Mustaqbal", "2020-11-12T16:30+03:00", "2020-11-12T17:30+03:00"),
-
-        TrafficLabel("E03 Ad",        "2020-11-15T16:30+03:00", "2020-11-15T17:30+03:00"),
-        TrafficLabel("E03 Imaqal Ad", "2020-11-18T16:30+03:00", "2020-11-18T17:30+03:00"),
-        TrafficLabel("E03 Dalsan/Danan",    "2020-11-19T14:30+03:00", "2020-11-19T15:30+03:00"),
-        TrafficLabel("E03 Risala",    "2020-11-19T15:00+03:00", "2020-11-19T16:00+03:00"),
-        TrafficLabel("E03 Star",      "2020-11-19T11:30+03:00", "2020-11-19T12:30+03:00"),
-        TrafficLabel("E03 Mustaqbal", "2020-11-19T16:30+03:00", "2020-11-19T17:30+03:00"),
-    ]
-
-    traffic_counts = []
-    for tl in traffic_labels:
-        opt_in_messages = AnalysisUtils.filter_opt_ins(messages, CONSENT_WITHDRAWN_KEY, PipelineConfiguration.RQA_CODING_PLANS)
-        opt_in_messages_in_time_range = [msg for msg in opt_in_messages if tl.start_date <= isoparse(msg["sent_on"]) < tl.end_date]
-
-        traffic_counts.append({
-            "Start Date": tl.start_date.isoformat(),
-            "End Date": tl.end_date.isoformat(),
-            "Label": tl.label,
-            "Messages with Opt-Ins": len(opt_in_messages_in_time_range),
-            "Relevant Messages": len(AnalysisUtils.filter_relevant(opt_in_messages_in_time_range, CONSENT_WITHDRAWN_KEY, PipelineConfiguration.RQA_CODING_PLANS))
-        })
-
-    with open(f"{automated_analysis_output_dir}/traffic_counts.csv", "w") as f:
-        headers = ["Start Date", "End Date", "Label", "Messages with Opt-Ins", "Relevant Messages"]
-        writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
-        writer.writeheader()
-
-        for row in traffic_counts:
-            writer.writerow(row)
-
-    exit(0)
-
-
     # Compute the number of messages, individuals, and relevant messages per episode and overall.
     log.info("Computing the per-episode and per-season engagement counts...")
     engagement_counts = OrderedDict()  # of episode name to counts
@@ -278,6 +226,33 @@ if __name__ == "__main__":
                 "Episode Combination": ", ".join(episode_combination),
                 "Participants": participants
             })
+
+    # Export traffic analysis
+    if pipeline_configuration.automated_analysis.traffic_labels is not None:
+        traffic_analysis = []
+        for tl in pipeline_configuration.automated_analysis.traffic_labels:
+            opt_in_messages = AnalysisUtils.filter_opt_ins(messages, CONSENT_WITHDRAWN_KEY,
+                                                           PipelineConfiguration.RQA_CODING_PLANS)
+            opt_in_messages_in_time_range = [msg for msg in opt_in_messages if
+                                             tl.start_date <= isoparse(msg["sent_on"]) < tl.end_date]
+
+            traffic_analysis.append({
+                "Start Date": tl.start_date.isoformat(),
+                "End Date": tl.end_date.isoformat(),
+                "Label": tl.label,
+                "Messages with Opt-Ins": len(opt_in_messages_in_time_range),
+                "Relevant Messages": len(
+                    AnalysisUtils.filter_relevant(opt_in_messages_in_time_range, CONSENT_WITHDRAWN_KEY,
+                                                  PipelineConfiguration.RQA_CODING_PLANS))
+            })
+
+        with open(f"{automated_analysis_output_dir}/traffic_analysis.csv", "w") as f:
+            headers = ["Start Date", "End Date", "Label", "Messages with Opt-Ins", "Relevant Messages"]
+            writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
+            writer.writeheader()
+
+            for row in traffic_analysis:
+                writer.writerow(row)
 
     log.info("Computing the demographic distributions...")
     # Compute the number of individuals with each demographic code.
