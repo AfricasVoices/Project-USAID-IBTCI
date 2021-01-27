@@ -2,7 +2,6 @@ import argparse
 import csv
 import glob
 import itertools
-import json
 import random
 import shutil
 from collections import OrderedDict
@@ -10,7 +9,8 @@ import sys
 
 import geopandas
 import matplotlib.pyplot as plt
-from core_data_modules.analysis import AnalysisConfiguration, engagement_counts, theme_distributions
+from core_data_modules.analysis import AnalysisConfiguration, engagement_counts, theme_distributions, \
+    repeat_participations
 from core_data_modules.cleaners import Codes
 from core_data_modules.data_models.code_scheme import CodeTypes
 from core_data_modules.logging import Logger
@@ -138,13 +138,29 @@ if __name__ == "__main__":
             f
         )
 
-    # Theme distributions
+    log.info("Computing participation frequencies...")
+    with open(f"{automated_analysis_output_dir}/participation_frequencies.csv", "w") as f:
+        repeat_participations.export_repeat_participations_csv(
+            individuals, CONSENT_WITHDRAWN_KEY,
+            coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
+            f
+        )
+
     log.info("Computing theme distributions...")
     with open(f"{automated_analysis_output_dir}/theme_distributions.csv", "w") as f:
         theme_distributions.export_theme_distributions_csv(
             individuals, CONSENT_WITHDRAWN_KEY,
             coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
             coding_plans_to_analysis_configurations(PipelineConfiguration.SURVEY_CODING_PLANS),
+            f
+        )
+
+    log.info("Computing demographic distributions...")
+    with open(f"{automated_analysis_output_dir}/demographic_distributions.csv", "w") as f:
+        theme_distributions.export_theme_distributions_csv(
+            individuals, CONSENT_WITHDRAWN_KEY,
+            coding_plans_to_analysis_configurations(PipelineConfiguration.DEMOG_CODING_PLANS),
+            [],
             f
         )
 
