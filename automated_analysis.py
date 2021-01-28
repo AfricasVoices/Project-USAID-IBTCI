@@ -89,7 +89,7 @@ if __name__ == "__main__":
         shutil.copy(path, f"{automated_analysis_output_dir}")
 
     log.info(f"Computing the estimated engagement types")
-    traffic_counts = []
+    stats = []
     for (plan, rqa_plan) in zip(PipelineConfiguration.ENGAGEMENT_CODING_PLANS, PipelineConfiguration.RQA_CODING_PLANS):
         opt_ins = AnalysisUtils.filter_opt_ins(messages, CONSENT_WITHDRAWN_KEY, [rqa_plan])
         relevant = AnalysisUtils.filter_relevant(messages, CONSENT_WITHDRAWN_KEY, [rqa_plan])
@@ -101,7 +101,7 @@ if __name__ == "__main__":
                 if code.control_code == Codes.STOP:
                     continue
 
-                traffic_counts.append({
+                stats.append({
                     "Episode": plan.dataset_name,
                     "Estimated Engagement Type": code.string_value,
                     "Messages with Opt-Ins": len([msg for msg in opt_ins if msg[cc.coded_field]["CodeID"] == code.code_id]),
@@ -113,7 +113,7 @@ if __name__ == "__main__":
         writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
         writer.writeheader()
 
-        for row in traffic_counts:
+        for row in stats:
             writer.writerow(row)
 
     # Compute the number of messages, individuals, and relevant messages per episode and overall.
