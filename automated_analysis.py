@@ -172,8 +172,6 @@ if __name__ == "__main__":
             limit_per_code=100
         )
 
-    exit(0)
-
     log.info("Computing loyalty...")
     loyalty = OrderedDict()
     dataset_names = [plan.dataset_name for plan in PipelineConfiguration.RQA_CODING_PLANS]
@@ -229,7 +227,7 @@ if __name__ == "__main__":
     region_frequencies = dict()
     for code in CodeSchemes.SOMALIA_REGION.codes:
         if code.code_type == CodeTypes.NORMAL:
-            region_frequencies[code.string_value] = demographic_distributions["region"][code.string_value]
+            region_frequencies[code.string_value] = demographic_distributions["region"][code.string_value]["Total Participants"]
 
     fig, ax = plt.subplots()
     MappingUtils.plot_frequency_map(regions_map, "ADM1_AVF", region_frequencies,
@@ -240,7 +238,7 @@ if __name__ == "__main__":
 
     if pipeline_configuration.automated_analysis.generate_region_theme_distribution_maps:
         for plan in PipelineConfiguration.RQA_CODING_PLANS:
-            episode = episodes[plan.raw_field]
+            episode = episodes[plan.dataset_name]
 
             for cc in plan.coding_configurations:
                 # Plot a map of the total relevant participants for this coding configuration.
@@ -264,9 +262,8 @@ if __name__ == "__main__":
                     if code.code_type != CodeTypes.NORMAL:
                         continue
 
-                    theme = f"{cc.analysis_file_key}_{code.string_value}"
-                    log.info(f"Generating a map of per-region participation for {theme}...")
-                    demographic_counts = episode[theme]
+                    log.info(f"Generating a map of per-region participation for {code.string_value}...")
+                    demographic_counts = episode[code.string_value]
 
                     theme_region_frequencies = dict()
                     for region_code in CodeSchemes.SOMALIA_REGION.codes:
@@ -293,7 +290,7 @@ if __name__ == "__main__":
     district_frequencies = dict()
     for code in CodeSchemes.SOMALIA_DISTRICT.codes:
         if code.code_type == CodeTypes.NORMAL:
-            district_frequencies[code.string_value] = demographic_distributions["district"][code.string_value]
+            district_frequencies[code.string_value] = demographic_distributions["district"][code.string_value]["Total Participants"]
 
     fig, ax = plt.subplots()
     MappingUtils.plot_frequency_map(districts_map, "ADM2_AVF", district_frequencies, ax=ax)
@@ -302,7 +299,7 @@ if __name__ == "__main__":
 
     if pipeline_configuration.automated_analysis.generate_district_theme_distribution_maps:
         for plan in PipelineConfiguration.RQA_CODING_PLANS:
-            episode = episodes[plan.raw_field]
+            episode = episodes[plan.dataset_name]
 
             for cc in plan.coding_configurations:
                 # Plot a map of the total relevant participants for this coding configuration.
@@ -324,9 +321,8 @@ if __name__ == "__main__":
                     if code.code_type != CodeTypes.NORMAL:
                         continue
 
-                    theme = f"{cc.analysis_file_key}_{code.string_value}"
-                    log.info(f"Generating a map of per-district participation for {theme}...")
-                    demographic_counts = episode[theme]
+                    log.info(f"Generating a map of per-district participation for {code.string_value}...")
+                    demographic_counts = episode[code.string_value]
 
                     theme_district_frequencies = dict()
                     for district_code in CodeSchemes.SOMALIA_DISTRICT.codes:
@@ -353,7 +349,7 @@ if __name__ == "__main__":
     for code in CodeSchemes.MOGADISHU_SUB_DISTRICT.codes:
         if code.code_type == CodeTypes.NORMAL:
             mogadishu_frequencies[code.string_value] = demographic_distributions["mogadishu_sub_district"][
-                code.string_value]
+                code.string_value]["Total Participants"]
 
     fig, ax = plt.subplots()
     MappingUtils.plot_frequency_map(mogadishu_map, "ADM3_AVF", mogadishu_frequencies, ax=ax,
@@ -363,7 +359,7 @@ if __name__ == "__main__":
 
     if pipeline_configuration.automated_analysis.generate_mogadishu_theme_distribution_maps:
         for plan in PipelineConfiguration.RQA_CODING_PLANS:
-            episode = episodes[plan.raw_field]
+            episode = episodes[plan.dataset_name]
 
             for cc in plan.coding_configurations:
                 # Plot a map of the total relevant participants for this coding configuration.
@@ -386,9 +382,8 @@ if __name__ == "__main__":
                     if code.code_type != CodeTypes.NORMAL:
                         continue
 
-                    theme = f"{cc.analysis_file_key}_{code.string_value}"
-                    log.info(f"Generating a map of Mogadishu participation for {theme}...")
-                    demographic_counts = episode[theme]
+                    log.info(f"Generating a map of Mogadishu participation for {code.string_value}...")
+                    demographic_counts = episode[code.string_value]
 
                     mogadishu_theme_frequencies = dict()
                     for sub_district_code in CodeSchemes.MOGADISHU_SUB_DISTRICT.codes:
