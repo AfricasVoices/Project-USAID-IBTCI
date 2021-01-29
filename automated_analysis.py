@@ -9,15 +9,14 @@ import sys
 import geopandas
 import matplotlib.pyplot as plt
 from core_data_modules.analysis import AnalysisConfiguration, engagement_counts, theme_distributions, \
-    repeat_participations, sample_messages
+    repeat_participations, sample_messages, analysis_utils
 from core_data_modules.cleaners import Codes
 from core_data_modules.data_models.code_scheme import CodeTypes
 from core_data_modules.logging import Logger
 from core_data_modules.traced_data.io import TracedDataJsonIO
 from core_data_modules.util import IOUtils
 
-from src import AnalysisUtils
-from configuration.code_schemes import  CodeSchemes
+from configuration.code_schemes import CodeSchemes
 from src.lib.configuration_objects import CodingModes
 from src.mapping_utils import MappingUtils
 from src.lib.pipeline_configuration import PipelineConfiguration
@@ -88,34 +87,6 @@ if __name__ == "__main__":
         log.info(f"Copying {path} -> {automated_analysis_output_dir}")
         shutil.copy(path, f"{automated_analysis_output_dir}")
 
-    log.info(f"Computing the estimated engagement types")
-    stats = []
-    for (plan, rqa_plan) in zip(PipelineConfiguration.ENGAGEMENT_CODING_PLANS, PipelineConfiguration.RQA_CODING_PLANS):
-        opt_ins = AnalysisUtils.filter_opt_ins(messages, CONSENT_WITHDRAWN_KEY, [rqa_plan])
-        relevant = AnalysisUtils.filter_relevant(messages, CONSENT_WITHDRAWN_KEY, [rqa_plan])
-
-        for cc in plan.coding_configurations:
-            assert cc.coding_mode == CodingModes.SINGLE
-
-            for code in cc.code_scheme.codes:
-                if code.control_code == Codes.STOP:
-                    continue
-
-                stats.append({
-                    "Episode": plan.dataset_name,
-                    "Estimated Engagement Type": code.string_value,
-                    "Messages with Opt-Ins": len([msg for msg in opt_ins if msg[cc.coded_field]["CodeID"] == code.code_id]),
-                    "Relevant Messages": len([msg for msg in relevant if msg[cc.coded_field]["CodeID"] == code.code_id])
-                })
-
-    with open(f"{automated_analysis_output_dir}/estimated_engagement_types.csv", "w") as f:
-        headers = ["Episode", "Estimated Engagement Type", "Messages with Opt-Ins", "Relevant Messages"]
-        writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
-        writer.writeheader()
-
-        for row in stats:
-            writer.writerow(row)
-
     def coding_plans_to_analysis_configurations(coding_plans):
         analysis_configurations = []
         for plan in coding_plans:
@@ -137,8 +108,8 @@ if __name__ == "__main__":
             f
         )
 
-    log.info("Computing participation frequencies...")
-    with open(f"{automated_analysis_output_dir}/participation_frequencies.csv", "w") as f:
+    log.info("Computing repeat participations...")
+    with open(f"{automated_analysis_output_dir}/repeat_participations.csv", "w") as f:
         repeat_participations.export_repeat_participations_csv(
             individuals, CONSENT_WITHDRAWN_KEY,
             coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
@@ -172,6 +143,35 @@ if __name__ == "__main__":
             limit_per_code=100
         )
 
+    log.info(f"Computing the estimated engagement types")
+    stats = []
+    for (plan, rqa_plan) in zip(PipelineConfiguration.ENGAGEMENT_CODING_PLANS, PipelineConfiguration.RQA_CODING_PLANS):
+        opt_ins = analysis_utils.filter_opt_ins(messages, CONSENT_WITHDRAWN_KEY, coding_plans_to_analysis_configurations([rqa_plan]))
+        relevant = analysis_utils.filter_relevant(messages, CONSENT_WITHDRAWN_KEY, coding_plans_to_analysis_configurations([rqa_plan]))
+
+        for cc in plan.coding_configurations:
+            assert cc.coding_mode == CodingModes.SINGLE
+
+            for code in cc.code_scheme.codes:
+                if code.control_code == Codes.STOP:
+                    continue
+
+                stats.append({
+                    "Episode": plan.dataset_name,
+                    "Estimated Engagement Type": code.string_value,
+                    "Messages with Opt-Ins": len(
+                        [msg for msg in opt_ins if msg[cc.coded_field]["CodeID"] == code.code_id]),
+                    "Relevant Messages": len([msg for msg in relevant if msg[cc.coded_field]["CodeID"] == code.code_id])
+                })
+
+    with open(f"{automated_analysis_output_dir}/estimated_engagement_types.csv", "w") as f:
+        headers = ["Episode", "Estimated Engagement Type", "Messages with Opt-Ins", "Relevant Messages"]
+        writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
+        writer.writeheader()
+
+        for row in stats:
+            writer.writerow(row)
+
     log.info("Computing loyalty...")
     loyalty = OrderedDict()
     dataset_names = [plan.dataset_name for plan in PipelineConfiguration.RQA_CODING_PLANS]
@@ -181,12 +181,12 @@ if __name__ == "__main__":
             loyalty[normalise_episodes(episodes)] = 0
 
     for ind in individuals:
-        if AnalysisUtils.withdrew_consent(ind, CONSENT_WITHDRAWN_KEY):
+        if analysis_utils.withdrew_consent(ind, CONSENT_WITHDRAWN_KEY):
             continue
 
         participated_episodes = set()
         for plan in PipelineConfiguration.RQA_CODING_PLANS:
-            if AnalysisUtils.responded(ind, plan):
+            if analysis_utils.responded(ind, coding_plans_to_analysis_configurations([plan])[0]):
                 participated_episodes.add(plan.dataset_name)
         loyalty[normalise_episodes(participated_episodes)] += 1
 
