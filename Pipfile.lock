@@ -122,7 +122,7 @@
         "coredatamodules": {
             "editable": true,
             "git": "https://www.github.com/AfricasVoices/CoreDataModules",
-            "ref": "b8f0503d204a9ff2780b0e517e151d8d861bb0be"
+            "ref": "aca0557265868b93632a5e1583ce3b0e40cd7bd9"
         },
         "cycler": {
             "hashes": [
