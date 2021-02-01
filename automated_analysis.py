@@ -9,8 +9,8 @@ import sys
 from core_data_modules.analysis import AnalysisConfiguration, engagement_counts, theme_distributions, \
     repeat_participations, sample_messages, analysis_utils
 from core_data_modules.analysis.mapping import somalia_mapper
+from core_data_modules.analysis.participation_maps import export_participation_maps
 from core_data_modules.cleaners import Codes
-from core_data_modules.data_models.code_scheme import CodeTypes
 from core_data_modules.logging import Logger
 from core_data_modules.traced_data.io import TracedDataJsonIO
 from core_data_modules.util import IOUtils
@@ -23,58 +23,6 @@ log = Logger(__name__)
 
 IMG_SCALE_FACTOR = 10  # Increase this to increase the resolution of the outputted PNGs
 CONSENT_WITHDRAWN_KEY = "consent_withdrawn"
-
-
-def export_participation_maps(individuals, consent_withdrawn_field, theme_configurations, region_configuration, mapper, file_prefix,
-                              export_by_theme=True):
-    IOUtils.ensure_dirs_exist_for_file(file_prefix)
-
-    # Export a map showing the total participations
-    log.info(f"Exporting map to '{file_prefix}_total_participants.png'...")
-    region_distributions = theme_distributions.compute_theme_distributions(
-        individuals, consent_withdrawn_field,
-        [region_configuration],
-        []
-    )[region_configuration.dataset_name]
-
-    total_frequencies = dict()
-    for region_code in [c for c in region_configuration.code_scheme.codes if c.code_type == CodeTypes.NORMAL]:
-        total_frequencies[region_code.string_value] = region_distributions[region_code.string_value]["Total Participants"]
-
-    mapper(total_frequencies, f"{file_prefix}_total_participants.png")
-
-    if not export_by_theme:
-        return
-
-    # For each theme_configuration, export:
-    #  1. A map showing the totals for individuals relevant to that episode.
-    #  2. A map showing the totals for each theme
-    themes = theme_distributions.compute_theme_distributions(
-        individuals, consent_withdrawn_field,
-        theme_configurations,
-        [region_configuration]
-    )
-
-    for config in theme_configurations:
-        log.info(f"Exporting map to '{file_prefix}_{config.dataset_name}_1_total_relevant.png'...")
-        config_total_frequencies = dict()
-        for region_code in [c for c in region_configuration.code_scheme.codes if c.code_type == CodeTypes.NORMAL]:
-            config_total_frequencies[region_code.string_value] = themes[config.dataset_name]["Total Relevant Participants"][
-                f"{region_configuration.dataset_name}:{region_code.string_value}"]
-
-        mapper(config_total_frequencies, f"{file_prefix}_{config.dataset_name}_1_total_relevant.png")
-
-        map_index = 2
-        for theme in [c for c in config.code_scheme.codes if c.code_type == CodeTypes.NORMAL]:
-            log.info(f"Exporting map to '{file_prefix}_{config.dataset_name}_{map_index}_{theme.string_value}.png'...")
-            theme_frequencies = dict()
-            for region_code in [c for c in region_configuration.code_scheme.codes if c.code_type == CodeTypes.NORMAL]:
-                theme_frequencies[region_code.string_value] = themes[config.dataset_name][theme.string_value][
-                    f"{region_configuration.dataset_name}:{region_code.string_value}"]
-
-            mapper(theme_frequencies, f"{file_prefix}_{config.dataset_name}_{map_index}_{theme.string_value}.png")
-
-            map_index += 1
 
 
 if __name__ == "__main__":
@@ -260,7 +208,7 @@ if __name__ == "__main__":
         coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
         AnalysisConfiguration("region", "location_raw", "region_coded", CodeSchemes.SOMALIA_REGION),
         somalia_mapper.export_somalia_region_frequencies_map,
-        f"{automated_analysis_output_dir}/maps/regions/regions",
+        f"{automated_analysis_output_dir}/maps/regions/regions_",
         export_by_theme=pipeline_configuration.automated_analysis.generate_region_theme_distribution_maps
     )
 
@@ -270,7 +218,7 @@ if __name__ == "__main__":
         coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
         AnalysisConfiguration("district", "location_raw", "district_coded", CodeSchemes.SOMALIA_DISTRICT),
         somalia_mapper.export_somalia_district_frequencies_map,
-        f"{automated_analysis_output_dir}/maps/districts/districts",
+        f"{automated_analysis_output_dir}/maps/districts/districts_",
         export_by_theme=pipeline_configuration.automated_analysis.generate_district_theme_distribution_maps
     )
 
@@ -280,7 +228,7 @@ if __name__ == "__main__":
         coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
         AnalysisConfiguration("mogadishu_sub_district", "location_raw", "mogadishu_sub_district_coded", CodeSchemes.MOGADISHU_SUB_DISTRICT),
         somalia_mapper.export_mogadishu_sub_district_frequencies_map,
-        f"{automated_analysis_output_dir}/maps/mogadishu/mogadishu",
+        f"{automated_analysis_output_dir}/maps/mogadishu/mogadishu_",
         export_by_theme=pipeline_configuration.automated_analysis.generate_mogadishu_theme_distribution_maps
     )
 
