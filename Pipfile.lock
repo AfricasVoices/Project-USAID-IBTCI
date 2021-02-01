@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f5c285593dadc44139e4200ce36c0491f25e1b044d51b0e5a45d4e494fdc2526"
+            "sha256": "1bb0423dde64681475cac8672d00be28839ede04e64c264c5546108912ba9880"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -121,9 +121,7 @@
         },
         "coredatamodules": {
             "editable": true,
-            "extras": [
-                "mapping"
-            ],
+            "extras": [],
             "git": "https://github.com/AfricasVoices/CoreDataModules",
             "ref": "ce69ed3af7e07cce1fb485fdd8c1f0922bb09cb4"
         },
@@ -147,7 +145,6 @@
                 "sha256:4c62dc41109689d03e4b35de0a2bcbdeeb81047badc607c4415d5c753bd683af",
                 "sha256:b7e412e7e6e294412f1d0f661f187babc970088c2456089e6801eebb043c2e1b"
             ],
-            "index": "pypi",
             "version": "==1.1.0"
         },
         "fiona": {
@@ -179,7 +176,7 @@
                 "sha256:8f53aa98e4ddb054afc46d289c930e96267d32c35c3dc685721ec2fddee77e60",
                 "sha256:aa9ae82e4e6b52efa244bd4b8bd2363d66693e5592ad1a0f52b6afa8c36348cb"
             ],
-            "index": "pypi",
+            "markers": "python_version >= '3.5'",
             "version": "==0.8.2"
         },
         "google-api-core": {
@@ -424,7 +421,6 @@
                 "sha256:bc20954aa433466f5fbc572e3f23b05f9606b59209f40b0ded93ac1ca983d24e",
                 "sha256:e2c9585bc0b17457d6b13bacaf1fc4222f7196408b6317e431b0397a03dad8c3"
             ],
-            "index": "pypi",
             "version": "==2.4.2"
         },
         "matplotlib": {
@@ -455,7 +451,7 @@
                 "sha256:ed4a9e6dcacba56b17a0a9ac22ae2c72a35b7f0ef0693aa68574f0b2df607a89",
                 "sha256:f44149a0ef5b4991aaef12a93b8e8d66d6412e762745fea1faa61d98524e0ba9"
             ],
-            "index": "pypi",
+            "markers": "python_version >= '3.6'",
             "version": "==3.3.4"
         },
         "msgpack": {
