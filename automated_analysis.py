@@ -27,6 +27,8 @@ CONSENT_WITHDRAWN_KEY = "consent_withdrawn"
 
 def export_participation_maps(individuals, consent_withdrawn_field, theme_configurations, region_configuration, mapper, file_prefix,
                               export_by_theme=True):
+    IOUtils.ensure_dirs_exist_for_file(file_prefix)
+
     # Export a map showing the total participations
     log.info(f"Exporting map to '{file_prefix}_total_participants.png'...")
     region_distributions = theme_distributions.compute_theme_distributions(
@@ -104,9 +106,6 @@ if __name__ == "__main__":
     automated_analysis_output_dir = args.automated_analysis_output_dir
 
     IOUtils.ensure_dirs_exist(automated_analysis_output_dir)
-    IOUtils.ensure_dirs_exist(f"{automated_analysis_output_dir}/maps/regions")
-    IOUtils.ensure_dirs_exist(f"{automated_analysis_output_dir}/maps/districts")
-    IOUtils.ensure_dirs_exist(f"{automated_analysis_output_dir}/maps/mogadishu")
 
     log.info("Loading Pipeline Configuration File...")
     with open(pipeline_configuration_file_path) as f:
