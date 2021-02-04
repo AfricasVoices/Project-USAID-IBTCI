@@ -2,13 +2,14 @@ import argparse
 import csv
 import glob
 import itertools
-import random
 import shutil
 from collections import OrderedDict
 import sys
 
 import geopandas
 import matplotlib.pyplot as plt
+from core_data_modules.analysis import AnalysisConfiguration, engagement_counts, theme_distributions, \
+    repeat_participations, sample_messages, analysis_utils
 from core_data_modules.cleaners import Codes
 from core_data_modules.data_models.code_scheme import CodeTypes
 from core_data_modules.logging import Logger
@@ -16,8 +17,7 @@ from core_data_modules.traced_data.io import TracedDataJsonIO
 from core_data_modules.util import IOUtils
 from dateutil.parser import isoparse
 
-from src import AnalysisUtils
-from configuration.code_schemes import  CodeSchemes
+from configuration.code_schemes import CodeSchemes
 from src.lib.configuration_objects import CodingModes
 from src.mapping_utils import MappingUtils
 from src.lib.pipeline_configuration import PipelineConfiguration
@@ -88,11 +88,66 @@ if __name__ == "__main__":
         log.info(f"Copying {path} -> {automated_analysis_output_dir}")
         shutil.copy(path, f"{automated_analysis_output_dir}")
 
+    def coding_plans_to_analysis_configurations(coding_plans):
+        analysis_configurations = []
+        for plan in coding_plans:
+            for cc in plan.coding_configurations:
+                if not cc.include_in_theme_distribution:
+                    continue
+
+                analysis_configurations.append(
+                    AnalysisConfiguration(cc.analysis_file_key, plan.raw_field, cc.coded_field, cc.code_scheme)
+                )
+        return analysis_configurations
+
+    log.info("Computing engagement counts...")
+    with open(f"{automated_analysis_output_dir}/engagement_counts.csv", "w") as f:
+        engagement_counts.export_engagement_counts_csv(
+            messages, individuals, CONSENT_WITHDRAWN_KEY,
+            coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
+            f
+        )
+
+    log.info("Computing repeat participations...")
+    with open(f"{automated_analysis_output_dir}/repeat_participations.csv", "w") as f:
+        repeat_participations.export_repeat_participations_csv(
+            individuals, CONSENT_WITHDRAWN_KEY,
+            coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
+            f
+        )
+
+    log.info("Computing theme distributions...")
+    with open(f"{automated_analysis_output_dir}/theme_distributions.csv", "w") as f:
+        theme_distributions.export_theme_distributions_csv(
+            individuals, CONSENT_WITHDRAWN_KEY,
+            coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
+            coding_plans_to_analysis_configurations(PipelineConfiguration.SURVEY_CODING_PLANS),
+            f
+        )
+
+    log.info("Computing demographic distributions...")
+    with open(f"{automated_analysis_output_dir}/demographic_distributions.csv", "w") as f:
+        theme_distributions.export_theme_distributions_csv(
+            individuals, CONSENT_WITHDRAWN_KEY,
+            coding_plans_to_analysis_configurations(PipelineConfiguration.DEMOG_CODING_PLANS),
+            [],
+            f
+        )
+
+    log.info("Exporting up to 100 sample messages for each RQA code...")
+    with open(f"{automated_analysis_output_dir}/sample_messages.csv", "w") as f:
+        sample_messages.export_sample_messages_csv(
+            messages, CONSENT_WITHDRAWN_KEY,
+            coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
+            f,
+            limit_per_code=100
+        )
+
     log.info(f"Computing the estimated engagement types")
     stats = []
     for (plan, rqa_plan) in zip(PipelineConfiguration.ENGAGEMENT_CODING_PLANS, PipelineConfiguration.RQA_CODING_PLANS):
-        opt_ins = AnalysisUtils.filter_opt_ins(messages, CONSENT_WITHDRAWN_KEY, [rqa_plan])
-        relevant = AnalysisUtils.filter_relevant(messages, CONSENT_WITHDRAWN_KEY, [rqa_plan])
+        opt_ins = analysis_utils.filter_opt_ins(messages, CONSENT_WITHDRAWN_KEY, coding_plans_to_analysis_configurations([rqa_plan]))
+        relevant = analysis_utils.filter_relevant(messages, CONSENT_WITHDRAWN_KEY, coding_plans_to_analysis_configurations([rqa_plan]))
 
         for cc in plan.coding_configurations:
             assert cc.coding_mode == CodingModes.SINGLE
@@ -104,7 +159,8 @@ if __name__ == "__main__":
                 stats.append({
                     "Episode": plan.dataset_name,
                     "Estimated Engagement Type": code.string_value,
-                    "Messages with Opt-Ins": len([msg for msg in opt_ins if msg[cc.coded_field]["CodeID"] == code.code_id]),
+                    "Messages with Opt-Ins": len(
+                        [msg for msg in opt_ins if msg[cc.coded_field]["CodeID"] == code.code_id]),
                     "Relevant Messages": len([msg for msg in relevant if msg[cc.coded_field]["CodeID"] == code.code_id])
                 })
 
@@ -115,117 +171,6 @@ if __name__ == "__main__":
 
         for row in stats:
             writer.writerow(row)
-
-    # Compute the number of messages, individuals, and relevant messages per episode and overall.
-    log.info("Computing the per-episode and per-season engagement counts...")
-    engagement_counts = OrderedDict()  # of episode name to counts
-    for plan in PipelineConfiguration.RQA_CODING_PLANS:
-        engagement_counts[plan.raw_field] = {
-            "Episode": plan.raw_field,
-
-            "Total Messages": "-",  # Can't report this for individual weeks because the data has been overwritten with "STOP"
-            "Total Messages with Opt-Ins": len(AnalysisUtils.filter_opt_ins(messages, CONSENT_WITHDRAWN_KEY, [plan])),
-            "Total Labelled Messages": len(AnalysisUtils.filter_fully_labelled(messages, CONSENT_WITHDRAWN_KEY, [plan])),
-            "Total Relevant Messages": len(AnalysisUtils.filter_relevant(messages, CONSENT_WITHDRAWN_KEY, [plan])),
-
-            "Total Participants": "-",
-            "Total Participants with Opt-Ins": len(AnalysisUtils.filter_opt_ins(individuals, CONSENT_WITHDRAWN_KEY, [plan])),
-            "Total Relevant Participants": len(AnalysisUtils.filter_relevant(individuals, CONSENT_WITHDRAWN_KEY, [plan]))
-        }
-    engagement_counts["Total"] = {
-        "Episode": "Total",
-
-        "Total Messages": len(messages),
-        "Total Messages with Opt-Ins": len(AnalysisUtils.filter_opt_ins(messages, CONSENT_WITHDRAWN_KEY, PipelineConfiguration.RQA_CODING_PLANS)),
-        "Total Labelled Messages": len(AnalysisUtils.filter_partially_labelled(messages, CONSENT_WITHDRAWN_KEY, PipelineConfiguration.RQA_CODING_PLANS)),
-        "Total Relevant Messages": len(AnalysisUtils.filter_relevant(messages, CONSENT_WITHDRAWN_KEY, PipelineConfiguration.RQA_CODING_PLANS)),
-
-        "Total Participants": len(individuals),
-        "Total Participants with Opt-Ins": len(AnalysisUtils.filter_opt_ins(individuals, CONSENT_WITHDRAWN_KEY, PipelineConfiguration.RQA_CODING_PLANS)),
-        "Total Relevant Participants": len(AnalysisUtils.filter_relevant(individuals, CONSENT_WITHDRAWN_KEY, PipelineConfiguration.RQA_CODING_PLANS))
-    }
-
-    with open(f"{automated_analysis_output_dir}/engagement_counts.csv", "w") as f:
-        headers = [
-            "Episode",
-            "Total Messages", "Total Messages with Opt-Ins", "Total Labelled Messages", "Total Relevant Messages",
-            "Total Participants", "Total Participants with Opt-Ins", "Total Relevant Participants"
-        ]
-        writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
-        writer.writeheader()
-
-        for row in engagement_counts.values():
-            writer.writerow(row)
-
-    log.info("Computing the participation frequencies...")
-    repeat_participations = OrderedDict()
-    for i in range(1, len(PipelineConfiguration.RQA_CODING_PLANS) + 1):
-        repeat_participations[i] = {
-            "Number of Episodes Participated In": i,
-            "Number of Participants with Opt-Ins": 0,
-            "% of Participants with Opt-Ins": None
-        }
-
-    # Compute the number of individuals who participated each possible number of times, from 1 to <number of RQAs>
-    # An individual is considered to have participated if they sent a message and didn't opt-out, regardless of the
-    # relevance of any of their messages.
-    for ind in individuals:
-        if AnalysisUtils.withdrew_consent(ind, CONSENT_WITHDRAWN_KEY):
-            continue
-
-        weeks_participated = 0
-        for plan in PipelineConfiguration.RQA_CODING_PLANS:
-            if AnalysisUtils.opt_in(ind, CONSENT_WITHDRAWN_KEY, plan):
-                weeks_participated += 1
-        assert weeks_participated != 0, f"Found individual '{ind['uid']}' with no participation in any week"
-        repeat_participations[weeks_participated]["Number of Participants with Opt-Ins"] += 1
-
-    # Compute the percentage of individuals who participated each possible number of times.
-    # Percentages are computed out of the total number of participants who opted-in.
-    total_participants = len(AnalysisUtils.filter_opt_ins(
-        individuals, CONSENT_WITHDRAWN_KEY, PipelineConfiguration.RQA_CODING_PLANS))
-    for rp in repeat_participations.values():
-        rp["% of Participants with Opt-Ins"] = \
-            round(rp["Number of Participants with Opt-Ins"] / total_participants * 100, 1)
-
-    # Export the participation frequency data to a csv
-    with open(f"{automated_analysis_output_dir}/repeat_participations.csv", "w") as f:
-        headers = ["Number of Episodes Participated In", "Number of Participants with Opt-Ins",
-                   "% of Participants with Opt-Ins"]
-        writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
-        writer.writeheader()
-
-        for row in repeat_participations.values():
-            writer.writerow(row)
-
-    log.info("Computing loyalty...")
-    loyalty = OrderedDict()
-    dataset_names = [plan.dataset_name for plan in PipelineConfiguration.RQA_CODING_PLANS]
-    normalise_episodes = lambda episodes: tuple(sorted(list(set(episodes))))
-    for r in range(1, len(dataset_names) + 1):
-        for episodes in itertools.combinations(dataset_names, r):
-            loyalty[normalise_episodes(episodes)] = 0
-
-    for ind in individuals:
-        if AnalysisUtils.withdrew_consent(ind, CONSENT_WITHDRAWN_KEY):
-            continue
-
-        participated_episodes = set()
-        for plan in PipelineConfiguration.RQA_CODING_PLANS:
-            if AnalysisUtils.responded(ind, plan):
-                participated_episodes.add(plan.dataset_name)
-        loyalty[normalise_episodes(participated_episodes)] += 1
-
-    with open(f"{automated_analysis_output_dir}/loyalty.csv", "w") as f:
-        headers = ["Episode Combination", "Participants"]
-        writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
-        writer.writeheader()
-
-        for episode_combination, participants in loyalty.items():
-            writer.writerow({
-                "Episode Combination": ", ".join(episode_combination),
-                "Participants": participants
-            })
 
     # Export traffic analysis
     if pipeline_configuration.automated_analysis.traffic_labels is not None:
@@ -256,231 +201,53 @@ if __name__ == "__main__":
             for row in traffic_analysis:
                 writer.writerow(row)
 
-    log.info("Computing the demographic distributions...")
-    # Compute the number of individuals with each demographic code.
-    # Count excludes individuals who withdrew consent. STOP codes in each scheme are not exported, as it would look
-    # like 0 individuals opted out otherwise, which could be confusing.
-    # TODO: Report percentages?
-    # TODO: Handle distributions for other variables too or just demographics?
-    demographic_distributions = OrderedDict()  # of analysis_file_key -> code string_value -> number of individuals
-    if pipeline_configuration.pipeline_name != "TIS-Plus-Facebook":
-         # Don't export any demographic distributions for Facebook, as we don't ask any demogs
-        for plan in PipelineConfiguration.SURVEY_CODING_PLANS:
-            for cc in plan.coding_configurations:
-                if cc.analysis_file_key is None:
-                    continue
+    log.info("Computing loyalty...")
+    loyalty = OrderedDict()
+    dataset_names = [plan.dataset_name for plan in PipelineConfiguration.RQA_CODING_PLANS]
+    normalise_episodes = lambda episodes: tuple(sorted(list(set(episodes))))
+    for r in range(1, len(dataset_names) + 1):
+        for episodes in itertools.combinations(dataset_names, r):
+            loyalty[normalise_episodes(episodes)] = 0
 
-                demographic_distributions[cc.analysis_file_key] = OrderedDict()
-                for code in cc.code_scheme.codes:
-                    if code.control_code == Codes.STOP:
-                        continue
-                    demographic_distributions[cc.analysis_file_key][code.string_value] = 0
+    for ind in individuals:
+        if analysis_utils.withdrew_consent(ind, CONSENT_WITHDRAWN_KEY):
+            continue
 
-        for ind in individuals:
-            if ind["consent_withdrawn"] == Codes.TRUE:
-                continue
+        participated_episodes = set()
+        for plan in PipelineConfiguration.RQA_CODING_PLANS:
+            if analysis_utils.responded(ind, coding_plans_to_analysis_configurations([plan])[0]):
+                participated_episodes.add(plan.dataset_name)
+        loyalty[normalise_episodes(participated_episodes)] += 1
 
-            for plan in PipelineConfiguration.DEMOG_CODING_PLANS:
-                for cc in plan.coding_configurations:
-                    if not cc.include_in_theme_distribution:
-                        continue
-
-                    code = cc.code_scheme.get_code_with_code_id(ind[cc.coded_field]["CodeID"])
-                    if code.control_code == Codes.STOP:
-                        continue
-                    demographic_distributions[cc.analysis_file_key][code.string_value] += 1
-
-        with open(f"{automated_analysis_output_dir}/demographic_distributions.csv", "w") as f:
-            headers = ["Demographic", "Code", "Number of Participants"]
-            writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
-            writer.writeheader()
-
-            last_demographic = None
-            for demographic, counts in demographic_distributions.items():
-                for code_string_value, number_of_participants in counts.items():
-                    writer.writerow({
-                        "Demographic": demographic if demographic != last_demographic else "",
-                        "Code": code_string_value,
-                        "Number of Participants": number_of_participants
-                    })
-                    last_demographic = demographic
-
-    # Compute the theme distributions
-    log.info("Computing the theme distributions...")
-
-    def make_survey_counts_dict():
-        survey_counts = OrderedDict()
-        survey_counts["Total Participants"] = 0
-        survey_counts["Total Participants %"] = None
-        for plan in PipelineConfiguration.SURVEY_CODING_PLANS:
-            for cc in plan.coding_configurations:
-                if not cc.include_in_theme_distribution:
-                    continue
-
-                for code in cc.code_scheme.codes:
-                    if code.control_code == Codes.STOP:
-                        continue  # Ignore STOP codes because we already excluded everyone who opted out.
-                    survey_counts[f"{cc.analysis_file_key}:{code.string_value}"] = 0
-                    survey_counts[f"{cc.analysis_file_key}:{code.string_value} %"] = None
-
-        return survey_counts
-
-    def update_survey_counts(survey_counts, td):
-        for plan in PipelineConfiguration.SURVEY_CODING_PLANS:
-            for cc in plan.coding_configurations:
-                if not cc.include_in_theme_distribution:
-                    continue
-
-                if cc.coding_mode == CodingModes.SINGLE:
-                    codes = [cc.code_scheme.get_code_with_code_id(td[cc.coded_field]["CodeID"])]
-                else:
-                    assert cc.coding_mode == CodingModes.MULTIPLE
-                    codes = [cc.code_scheme.get_code_with_code_id(label["CodeID"]) for label in td[cc.coded_field]]
-
-                for code in codes:
-                    if code.control_code == Codes.STOP:
-                        continue
-                    survey_counts[f"{cc.analysis_file_key}:{code.string_value}"] += 1
-
-    def set_survey_percentages(survey_counts, total_survey_counts):
-        if total_survey_counts["Total Participants"] == 0:
-            survey_counts["Total Participants %"] = "-"
-        else:
-            survey_counts["Total Participants %"] = \
-                round(survey_counts["Total Participants"] / total_survey_counts["Total Participants"] * 100, 1)
-
-        for plan in PipelineConfiguration.SURVEY_CODING_PLANS:
-            for cc in plan.coding_configurations:
-                if not cc.include_in_theme_distribution:
-                    continue
-
-                for code in cc.code_scheme.codes:
-                    if code.control_code == Codes.STOP:
-                        continue
-
-                    code_count = survey_counts[f"{cc.analysis_file_key}:{code.string_value}"]
-                    code_total = total_survey_counts[f"{cc.analysis_file_key}:{code.string_value}"]
-
-                    if code_total == 0:
-                        survey_counts[f"{cc.analysis_file_key}:{code.string_value} %"] = "-"
-                    else:
-                        survey_counts[f"{cc.analysis_file_key}:{code.string_value} %"] = \
-                            round(code_count / code_total * 100, 1)
-
-    episodes = OrderedDict()
-    for episode_plan in PipelineConfiguration.RQA_CODING_PLANS:
-        # Prepare empty counts of the survey responses for each variable
-        themes = OrderedDict()
-        episodes[episode_plan.raw_field] = themes
-        for cc in episode_plan.coding_configurations:
-            if not cc.include_in_individuals_file:
-                continue
-
-            # TODO: Add support for CodingModes.SINGLE if we need it e.g. for IMAQAL?
-            assert cc.coding_mode == CodingModes.MULTIPLE, "Other CodingModes not (yet) supported"
-            themes["Total Relevant Participants"] = make_survey_counts_dict()
-            for code in cc.code_scheme.codes:
-                if code.control_code == Codes.STOP:
-                    continue
-                themes[f"{cc.analysis_file_key}_{code.string_value}"] = make_survey_counts_dict()
-
-        # Fill in the counts by iterating over every individual
-        for td in individuals:
-            if td["consent_withdrawn"] == Codes.TRUE:
-                continue
-
-            relevant_participant = False
-            for cc in episode_plan.coding_configurations:
-                if not cc.include_in_individuals_file:
-                    continue
-
-                assert cc.coding_mode == CodingModes.MULTIPLE, "Other CodingModes not (yet) supported"
-                for label in td[cc.coded_field]:
-                    code = cc.code_scheme.get_code_with_code_id(label["CodeID"])
-                    if code.control_code == Codes.STOP:
-                        continue
-                    themes[f"{cc.analysis_file_key}_{code.string_value}"]["Total Participants"] += 1
-                    update_survey_counts(themes[f"{cc.analysis_file_key}_{code.string_value}"], td)
-                    if code.code_type == CodeTypes.NORMAL:
-                        relevant_participant = True
-
-            if relevant_participant:
-                themes["Total Relevant Participants"]["Total Participants"] += 1
-                update_survey_counts(themes["Total Relevant Participants"], td)
-
-        set_survey_percentages(themes["Total Relevant Participants"], themes["Total Relevant Participants"])
-
-        for cc in episode_plan.coding_configurations:
-            if not cc.include_in_individuals_file:
-                continue
-
-            assert cc.coding_mode == CodingModes.MULTIPLE, "Other CodingModes not (yet) supported"
-
-            for code in cc.code_scheme.codes:
-                if code.code_type != CodeTypes.NORMAL:
-                    continue
-
-                theme = themes[f"{cc.analysis_file_key}_{code.string_value}"]
-                set_survey_percentages(theme, themes["Total Relevant Participants"])
-
-    with open(f"{automated_analysis_output_dir}/theme_distributions.csv", "w") as f:
-        headers = ["Question", "Variable"] + list(make_survey_counts_dict().keys())
+    with open(f"{automated_analysis_output_dir}/loyalty.csv", "w") as f:
+        headers = ["Episode Combination", "Participants"]
         writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
         writer.writeheader()
 
-        last_row_episode = None
-        for episode, themes in episodes.items():
-            for theme, survey_counts in themes.items():
-                row = {
-                    "Question": episode if episode != last_row_episode else "",
-                    "Variable": theme,
-                }
-                row.update(survey_counts)
-                writer.writerow(row)
-                last_row_episode = episode
+        for episode_combination, participants in loyalty.items():
+            writer.writerow({
+                "Episode Combination": ", ".join(episode_combination),
+                "Participants": participants
+            })
 
     if pipeline_configuration.pipeline_name == "USAID-IBTCI-Facebook":
         # Only the total engagement counts make sense for now, so don't attempt to apply any of the other standard
         # analysis to the Facebook data.
         exit(0)
 
-    # Export a random sample of 100 messages for each normal code
-    log.info("Exporting samples of up to 100 messages for each normal code...")
-    samples = []  # of dict
-    for plan in PipelineConfiguration.RQA_CODING_PLANS:
-        for cc in plan.coding_configurations:
-            code_to_messages = dict()
-            for code in cc.code_scheme.codes:
-                code_to_messages[code.string_value] = []
+    # Temporary adaptations to keep the existing mapping code working.
+    # TODO: Tidy up the mapping code.
+    demographic_distributions = theme_distributions.compute_theme_distributions(
+        individuals, CONSENT_WITHDRAWN_KEY,
+        coding_plans_to_analysis_configurations(PipelineConfiguration.DEMOG_CODING_PLANS),
+        []
+    )
 
-            for msg in messages:
-                if not AnalysisUtils.opt_in(msg, CONSENT_WITHDRAWN_KEY, plan):
-                    continue
-
-                for label in msg[cc.coded_field]:
-                    code = cc.code_scheme.get_code_with_code_id(label["CodeID"])
-                    code_to_messages[code.string_value].append(msg[plan.raw_field])
-
-            for code_string_value in code_to_messages:
-                # Sample for at most 100 messages (note: this will give a different sample on each pipeline run)
-                sample_size = min(100, len(code_to_messages[code_string_value]))
-                sample_messages = random.sample(code_to_messages[code_string_value], sample_size)
-
-                for msg in sample_messages:
-                    samples.append({
-                        "Episode": plan.raw_field,
-                        "Code Scheme": cc.code_scheme.name,
-                        "Code": code_string_value,
-                        "Sample Message": msg
-                    })
-
-    with open(f"{automated_analysis_output_dir}/sample_messages.csv", "w") as f:
-        headers = ["Episode", "Code Scheme", "Code", "Sample Message"]
-        writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
-        writer.writeheader()
-
-        for sample in samples:
-            writer.writerow(sample)
+    episodes = theme_distributions.compute_theme_distributions(
+        individuals, CONSENT_WITHDRAWN_KEY,
+        coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
+        coding_plans_to_analysis_configurations(PipelineConfiguration.DEMOG_CODING_PLANS)
+    )
 
     log.info("Loading the Somali regions geojson...")
     regions_map = geopandas.read_file("geojson/somalia_regions.geojson")
@@ -489,7 +256,7 @@ if __name__ == "__main__":
     region_frequencies = dict()
     for code in CodeSchemes.SOMALIA_REGION.codes:
         if code.code_type == CodeTypes.NORMAL:
-            region_frequencies[code.string_value] = demographic_distributions["region"][code.string_value]
+            region_frequencies[code.string_value] = demographic_distributions["region"][code.string_value]["Total Participants"]
 
     fig, ax = plt.subplots()
     MappingUtils.plot_frequency_map(regions_map, "ADM1_AVF", region_frequencies,
@@ -500,7 +267,7 @@ if __name__ == "__main__":
 
     if pipeline_configuration.automated_analysis.generate_region_theme_distribution_maps:
         for plan in PipelineConfiguration.RQA_CODING_PLANS:
-            episode = episodes[plan.raw_field]
+            episode = episodes[plan.dataset_name]
 
             for cc in plan.coding_configurations:
                 # Plot a map of the total relevant participants for this coding configuration.
@@ -524,9 +291,8 @@ if __name__ == "__main__":
                     if code.code_type != CodeTypes.NORMAL:
                         continue
 
-                    theme = f"{cc.analysis_file_key}_{code.string_value}"
-                    log.info(f"Generating a map of per-region participation for {theme}...")
-                    demographic_counts = episode[theme]
+                    log.info(f"Generating a map of per-region participation for {plan.dataset_name}_{code.string_value}...")
+                    demographic_counts = episode[code.string_value]
 
                     theme_region_frequencies = dict()
                     for region_code in CodeSchemes.SOMALIA_REGION.codes:
@@ -553,7 +319,7 @@ if __name__ == "__main__":
     district_frequencies = dict()
     for code in CodeSchemes.SOMALIA_DISTRICT.codes:
         if code.code_type == CodeTypes.NORMAL:
-            district_frequencies[code.string_value] = demographic_distributions["district"][code.string_value]
+            district_frequencies[code.string_value] = demographic_distributions["district"][code.string_value]["Total Participants"]
 
     fig, ax = plt.subplots()
     MappingUtils.plot_frequency_map(districts_map, "ADM2_AVF", district_frequencies, ax=ax)
@@ -562,7 +328,7 @@ if __name__ == "__main__":
 
     if pipeline_configuration.automated_analysis.generate_district_theme_distribution_maps:
         for plan in PipelineConfiguration.RQA_CODING_PLANS:
-            episode = episodes[plan.raw_field]
+            episode = episodes[plan.dataset_name]
 
             for cc in plan.coding_configurations:
                 # Plot a map of the total relevant participants for this coding configuration.
@@ -584,9 +350,8 @@ if __name__ == "__main__":
                     if code.code_type != CodeTypes.NORMAL:
                         continue
 
-                    theme = f"{cc.analysis_file_key}_{code.string_value}"
-                    log.info(f"Generating a map of per-district participation for {theme}...")
-                    demographic_counts = episode[theme]
+                    log.info(f"Generating a map of per-district participation for {plan.dataset_name}_{code.string_value}...")
+                    demographic_counts = episode[code.string_value]
 
                     theme_district_frequencies = dict()
                     for district_code in CodeSchemes.SOMALIA_DISTRICT.codes:
@@ -613,7 +378,7 @@ if __name__ == "__main__":
     for code in CodeSchemes.MOGADISHU_SUB_DISTRICT.codes:
         if code.code_type == CodeTypes.NORMAL:
             mogadishu_frequencies[code.string_value] = demographic_distributions["mogadishu_sub_district"][
-                code.string_value]
+                code.string_value]["Total Participants"]
 
     fig, ax = plt.subplots()
     MappingUtils.plot_frequency_map(mogadishu_map, "ADM3_AVF", mogadishu_frequencies, ax=ax,
@@ -623,7 +388,7 @@ if __name__ == "__main__":
 
     if pipeline_configuration.automated_analysis.generate_mogadishu_theme_distribution_maps:
         for plan in PipelineConfiguration.RQA_CODING_PLANS:
-            episode = episodes[plan.raw_field]
+            episode = episodes[plan.dataset_name]
 
             for cc in plan.coding_configurations:
                 # Plot a map of the total relevant participants for this coding configuration.
@@ -646,9 +411,8 @@ if __name__ == "__main__":
                     if code.code_type != CodeTypes.NORMAL:
                         continue
 
-                    theme = f"{cc.analysis_file_key}_{code.string_value}"
-                    log.info(f"Generating a map of Mogadishu participation for {theme}...")
-                    demographic_counts = episode[theme]
+                    log.info(f"Generating a map of Mogadishu participation for {plan.dataset_name}_{code.string_value}...")
+                    demographic_counts = episode[code.string_value]
 
                     mogadishu_theme_frequencies = dict()
                     for sub_district_code in CodeSchemes.MOGADISHU_SUB_DISTRICT.codes:
