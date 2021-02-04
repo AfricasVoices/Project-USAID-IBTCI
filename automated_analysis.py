@@ -176,8 +176,11 @@ if __name__ == "__main__":
     if pipeline_configuration.automated_analysis.traffic_labels is not None:
         traffic_analysis = []
         for traffic_label in pipeline_configuration.automated_analysis.traffic_labels:
-            opt_in_messages = AnalysisUtils.filter_opt_ins(messages, CONSENT_WITHDRAWN_KEY,
-                                                           PipelineConfiguration.RQA_CODING_PLANS)
+            opt_in_messages = analysis_utils.filter_opt_ins(
+                messages, CONSENT_WITHDRAWN_KEY,
+                coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS)
+            )
+
             opt_in_messages_in_time_range = [
                 msg for msg in opt_in_messages
                 if traffic_label.start_date <= isoparse(msg["sent_on"]) < traffic_label.end_date
@@ -189,8 +192,11 @@ if __name__ == "__main__":
                 "Label": traffic_label.label,
                 "Messages with Opt-Ins": len(opt_in_messages_in_time_range),
                 "Relevant Messages": len(
-                    AnalysisUtils.filter_relevant(opt_in_messages_in_time_range, CONSENT_WITHDRAWN_KEY,
-                                                  PipelineConfiguration.RQA_CODING_PLANS))
+                    analysis_utils.filter_relevant(
+                        opt_in_messages_in_time_range, CONSENT_WITHDRAWN_KEY,
+                        coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS)
+                    )
+                )
             })
 
         with open(f"{automated_analysis_output_dir}/traffic_analysis.csv", "w") as f:
