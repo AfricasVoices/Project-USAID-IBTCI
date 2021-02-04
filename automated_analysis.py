@@ -261,7 +261,7 @@ if __name__ == "__main__":
                     if code.code_type != CodeTypes.NORMAL:
                         continue
 
-                    log.info(f"Generating a map of per-region participation for {code.string_value}...")
+                    log.info(f"Generating a map of per-region participation for {plan.dataset_name}_{code.string_value}...")
                     demographic_counts = episode[code.string_value]
 
                     theme_region_frequencies = dict()
@@ -320,7 +320,7 @@ if __name__ == "__main__":
                     if code.code_type != CodeTypes.NORMAL:
                         continue
 
-                    log.info(f"Generating a map of per-district participation for {code.string_value}...")
+                    log.info(f"Generating a map of per-district participation for {plan.dataset_name}_{code.string_value}...")
                     demographic_counts = episode[code.string_value]
 
                     theme_district_frequencies = dict()
@@ -381,7 +381,7 @@ if __name__ == "__main__":
                     if code.code_type != CodeTypes.NORMAL:
                         continue
 
-                    log.info(f"Generating a map of Mogadishu participation for {code.string_value}...")
+                    log.info(f"Generating a map of Mogadishu participation for {plan.dataset_name}_{code.string_value}...")
                     demographic_counts = episode[code.string_value]
 
                     mogadishu_theme_frequencies = dict()
