@@ -230,16 +230,18 @@ if __name__ == "__main__":
     # Export traffic analysis
     if pipeline_configuration.automated_analysis.traffic_labels is not None:
         traffic_analysis = []
-        for tl in pipeline_configuration.automated_analysis.traffic_labels:
+        for traffic_label in pipeline_configuration.automated_analysis.traffic_labels:
             opt_in_messages = AnalysisUtils.filter_opt_ins(messages, CONSENT_WITHDRAWN_KEY,
                                                            PipelineConfiguration.RQA_CODING_PLANS)
-            opt_in_messages_in_time_range = [msg for msg in opt_in_messages if
-                                             tl.start_date <= isoparse(msg["sent_on"]) < tl.end_date]
+            opt_in_messages_in_time_range = [
+                msg for msg in opt_in_messages
+                if traffic_label.start_date <= isoparse(msg["sent_on"]) < traffic_label.end_date
+            ]
 
             traffic_analysis.append({
-                "Start Date": tl.start_date.isoformat(),
-                "End Date": tl.end_date.isoformat(),
-                "Label": tl.label,
+                "Start Date": traffic_label.start_date.isoformat(),
+                "End Date": traffic_label.end_date.isoformat(),
+                "Label": traffic_label.label,
                 "Messages with Opt-Ins": len(opt_in_messages_in_time_range),
                 "Relevant Messages": len(
                     AnalysisUtils.filter_relevant(opt_in_messages_in_time_range, CONSENT_WITHDRAWN_KEY,
