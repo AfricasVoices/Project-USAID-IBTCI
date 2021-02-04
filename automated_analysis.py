@@ -14,6 +14,7 @@ from core_data_modules.cleaners import Codes
 from core_data_modules.logging import Logger
 from core_data_modules.traced_data.io import TracedDataJsonIO
 from core_data_modules.util import IOUtils
+from dateutil.parser import isoparse
 
 from configuration.code_schemes import CodeSchemes
 from src.lib.configuration_objects import CodingModes
@@ -95,7 +96,6 @@ if __name__ == "__main__":
                 )
         return analysis_configurations
 
-    # Engagement Counts
     log.info("Computing engagement counts...")
     with open(f"{automated_analysis_output_dir}/engagement_counts.csv", "w") as f:
         engagement_counts.export_engagement_counts_csv(
@@ -167,6 +167,41 @@ if __name__ == "__main__":
 
         for row in stats:
             writer.writerow(row)
+
+    # Export traffic analysis
+    if pipeline_configuration.automated_analysis.traffic_labels is not None:
+        traffic_analysis = []
+        for traffic_label in pipeline_configuration.automated_analysis.traffic_labels:
+            opt_in_messages = analysis_utils.filter_opt_ins(
+                messages, CONSENT_WITHDRAWN_KEY,
+                coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS)
+            )
+
+            opt_in_messages_in_time_range = [
+                msg for msg in opt_in_messages
+                if traffic_label.start_date <= isoparse(msg["sent_on"]) < traffic_label.end_date
+            ]
+
+            traffic_analysis.append({
+                "Start Date": traffic_label.start_date.isoformat(),
+                "End Date": traffic_label.end_date.isoformat(),
+                "Label": traffic_label.label,
+                "Messages with Opt-Ins": len(opt_in_messages_in_time_range),
+                "Relevant Messages": len(
+                    analysis_utils.filter_relevant(
+                        opt_in_messages_in_time_range, CONSENT_WITHDRAWN_KEY,
+                        coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS)
+                    )
+                )
+            })
+
+        with open(f"{automated_analysis_output_dir}/traffic_analysis.csv", "w") as f:
+            headers = ["Start Date", "End Date", "Label", "Messages with Opt-Ins", "Relevant Messages"]
+            writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
+            writer.writeheader()
+
+            for row in traffic_analysis:
+                writer.writerow(row)
 
     log.info("Computing loyalty...")
     loyalty = OrderedDict()

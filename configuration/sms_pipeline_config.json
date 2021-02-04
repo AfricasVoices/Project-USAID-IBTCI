@@ -182,7 +182,28 @@
   "AutomatedAnalysis": {
     "GenerateRegionThemeDistributionMaps": true,
     "GenerateDistrictThemeDistributionMaps": true,
-    "GenerateMogadishuThemeDistributionMaps": true
+    "GenerateMogadishuThemeDistributionMaps": true,
+
+    "TrafficLabels": [
+      {"StartDate": "2020-11-01T16:30+03:00", "EndDate": "2020-11-01T17:30+03:00", "Label": "E01 Ad"},
+      {"StartDate": "2020-11-05T14:30+03:00", "EndDate": "2020-11-05T15:30+03:00", "Label": "E01 Dalsan/Danan"},
+      {"StartDate": "2020-11-05T15:00+03:00", "EndDate": "2020-11-05T16:00+03:00", "Label": "E01 Risala"},
+      {"StartDate": "2020-11-05T11:30+03:00", "EndDate": "2020-11-05T12:30+03:00", "Label": "E01 Star"},
+      {"StartDate": "2020-11-05T16:30+03:00", "EndDate": "2020-11-05T17:30+03:00", "Label": "E01 Mustaqbal"},
+
+      {"StartDate": "2020-11-08T16:30+03:00", "EndDate": "2020-11-08T17:30+03:00", "Label": "E02 Ad"},
+      {"StartDate": "2020-11-12T14:30+03:00", "EndDate": "2020-11-12T15:30+03:00", "Label": "E02 Dalsan/Danan"},
+      {"StartDate": "2020-11-12T15:00+03:00", "EndDate": "2020-11-12T16:00+03:00", "Label": "E02 Risala"},
+      {"StartDate": "2020-11-12T11:30+03:00", "EndDate": "2020-11-12T12:30+03:00", "Label": "E02 Star"},
+      {"StartDate": "2020-11-12T16:30+03:00", "EndDate": "2020-11-12T17:30+03:00", "Label": "E02 Mustaqbal"},
+
+      {"StartDate": "2020-11-15T16:30+03:00", "EndDate": "2020-11-15T17:30+03:00", "Label": "E03 Ad"},
+      {"StartDate": "2020-11-18T16:30+03:00", "EndDate": "2020-11-18T17:30+03:00", "Label": "E03 Imaqal Ad"},
+      {"StartDate": "2020-11-19T14:30+03:00", "EndDate": "2020-11-19T15:30+03:00", "Label": "E03 Dalsan/Danan"},
+      {"StartDate": "2020-11-19T15:00+03:00", "EndDate": "2020-11-19T16:00+03:00", "Label": "E03 Risala"},
+      {"StartDate": "2020-11-19T11:30+03:00", "EndDate": "2020-11-19T12:30+03:00", "Label": "E03 Star"},
+      {"StartDate": "2020-11-19T16:30+03:00", "EndDate": "2020-11-19T17:30+03:00", "Label": "E03 Mustaqbal"}
+    ]
   },
   "DriveUpload": {
      "DriveCredentialsFileURL": "gs://avf-credentials/pipeline-runner-service-acct-avf-data-core-64cc71459fe7.json",

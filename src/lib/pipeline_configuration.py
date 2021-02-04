@@ -551,7 +551,7 @@ class DriveUpload(object):
 
 class AutomatedAnalysis(object):
     def __init__(self, generate_region_theme_distribution_maps, generate_district_theme_distribution_maps,
-                 generate_mogadishu_theme_distribution_maps):
+                 generate_mogadishu_theme_distribution_maps, traffic_labels=None):
         """
         :param generate_region_theme_distribution_maps: Whether to generate somali region theme distribution maps.
         :type generate_region_theme_distribution_maps: bool
@@ -563,6 +563,7 @@ class AutomatedAnalysis(object):
         self.generate_region_theme_distribution_maps = generate_region_theme_distribution_maps
         self.generate_district_theme_distribution_maps = generate_district_theme_distribution_maps
         self.generate_mogadishu_theme_distribution_maps = generate_mogadishu_theme_distribution_maps
+        self.traffic_labels = traffic_labels
 
         self.validate()
 
@@ -571,9 +572,12 @@ class AutomatedAnalysis(object):
         generate_region_theme_distribution_maps = configuration_dict["GenerateRegionThemeDistributionMaps"]
         generate_district_theme_distribution_maps = configuration_dict["GenerateDistrictThemeDistributionMaps"]
         generate_mogadishu_theme_distribution_maps = configuration_dict["GenerateMogadishuThemeDistributionMaps"]
+        traffic_labels = configuration_dict.get("TrafficLabels")
+        if traffic_labels is not None:
+            traffic_labels = [TrafficLabel.from_configuration_dict(d) for d in traffic_labels]
 
         return cls(generate_region_theme_distribution_maps, generate_district_theme_distribution_maps,
-                   generate_mogadishu_theme_distribution_maps)
+                   generate_mogadishu_theme_distribution_maps, traffic_labels)
 
     def validate(self):
         validators.validate_bool(self.generate_region_theme_distribution_maps,
@@ -582,3 +586,31 @@ class AutomatedAnalysis(object):
                                  "generate_district_theme_distribution_maps")
         validators.validate_bool(self.generate_mogadishu_theme_distribution_maps,
                                  "generate_mogadishu_theme_distribution_maps")
+
+        if self.traffic_labels is not None:
+            assert isinstance(self.traffic_labels, list)
+            for tl in self.traffic_labels:
+                assert isinstance(tl, TrafficLabel)
+                tl.validate()
+
+
+class TrafficLabel(object):
+    def __init__(self, label, start_date, end_date):
+        self.label = label
+        self.start_date = start_date
+        self.end_date = end_date
+
+        self.validate()
+
+    @classmethod
+    def from_configuration_dict(cls, configuration_dict):
+        label = configuration_dict["Label"]
+        start_date = isoparse(configuration_dict["StartDate"])
+        end_date = isoparse(configuration_dict["EndDate"])
+
+        return cls(label, start_date, end_date)
+
+    def validate(self):
+        validators.validate_string(self.label, "label")
+        validators.validate_datetime(self.start_date, "start_date")
+        validators.validate_datetime(self.end_date, "end_date")
