@@ -9,7 +9,7 @@ import sys
 import geopandas
 import matplotlib.pyplot as plt
 from core_data_modules.analysis import AnalysisConfiguration, engagement_counts, theme_distributions, \
-    repeat_participations, sample_messages, analysis_utils
+    repeat_participations, sample_messages, traffic_analysis, analysis_utils
 from core_data_modules.cleaners import Codes
 from core_data_modules.data_models.code_scheme import CodeTypes
 from core_data_modules.logging import Logger
@@ -26,6 +26,7 @@ log = Logger(__name__)
 
 IMG_SCALE_FACTOR = 10  # Increase this to increase the resolution of the outputted PNGs
 CONSENT_WITHDRAWN_KEY = "consent_withdrawn"
+SENT_ON_KEY = "sent_on"
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Runs automated analysis over the outputs produced by "
@@ -143,7 +144,18 @@ if __name__ == "__main__":
             limit_per_code=100
         )
 
-    log.info(f"Computing the estimated engagement types")
+    if pipeline_configuration.automated_analysis.traffic_labels is not None:
+        log.info("Exporting traffic analysis...")
+        with open(f"{automated_analysis_output_dir}/traffic_analysis.csv", "w") as f:
+            traffic_analysis.export_traffic_analysis_csv(
+                messages, CONSENT_WITHDRAWN_KEY,
+                coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
+                SENT_ON_KEY,
+                pipeline_configuration.automated_analysis.traffic_labels,
+                f
+            )
+
+    log.info(f"Computing the estimated engagement types...")
     stats = []
     for (plan, rqa_plan) in zip(PipelineConfiguration.ENGAGEMENT_CODING_PLANS, PipelineConfiguration.RQA_CODING_PLANS):
         opt_ins = analysis_utils.filter_opt_ins(messages, CONSENT_WITHDRAWN_KEY, coding_plans_to_analysis_configurations([rqa_plan]))
@@ -171,41 +183,6 @@ if __name__ == "__main__":
 
         for row in stats:
             writer.writerow(row)
-
-    # Export traffic analysis
-    if pipeline_configuration.automated_analysis.traffic_labels is not None:
-        traffic_analysis = []
-        for traffic_label in pipeline_configuration.automated_analysis.traffic_labels:
-            opt_in_messages = analysis_utils.filter_opt_ins(
-                messages, CONSENT_WITHDRAWN_KEY,
-                coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS)
-            )
-
-            opt_in_messages_in_time_range = [
-                msg for msg in opt_in_messages
-                if traffic_label.start_date <= isoparse(msg["sent_on"]) < traffic_label.end_date
-            ]
-
-            traffic_analysis.append({
-                "Start Date": traffic_label.start_date.isoformat(),
-                "End Date": traffic_label.end_date.isoformat(),
-                "Label": traffic_label.label,
-                "Messages with Opt-Ins": len(opt_in_messages_in_time_range),
-                "Relevant Messages": len(
-                    analysis_utils.filter_relevant(
-                        opt_in_messages_in_time_range, CONSENT_WITHDRAWN_KEY,
-                        coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS)
-                    )
-                )
-            })
-
-        with open(f"{automated_analysis_output_dir}/traffic_analysis.csv", "w") as f:
-            headers = ["Start Date", "End Date", "Label", "Messages with Opt-Ins", "Relevant Messages"]
-            writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
-            writer.writeheader()
-
-            for row in traffic_analysis:
-                writer.writerow(row)
 
     log.info("Computing loyalty...")
     loyalty = OrderedDict()
