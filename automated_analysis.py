@@ -7,9 +7,8 @@ from collections import OrderedDict
 import sys
 
 from core_data_modules.analysis import AnalysisConfiguration, engagement_counts, theme_distributions, \
-    repeat_participations, sample_messages, analysis_utils
-from core_data_modules.analysis.mapping import somalia_mapper
-from core_data_modules.analysis.participation_maps import export_participation_maps
+    repeat_participations, sample_messages, analysis_utils, traffic_analysis
+from core_data_modules.analysis.mapping import participation_maps, somalia_mapper
 from core_data_modules.cleaners import Codes
 from core_data_modules.logging import Logger
 from core_data_modules.traced_data.io import TracedDataJsonIO
@@ -22,8 +21,8 @@ from src.lib.pipeline_configuration import PipelineConfiguration
 
 log = Logger(__name__)
 
-IMG_SCALE_FACTOR = 10  # Increase this to increase the resolution of the outputted PNGs
 CONSENT_WITHDRAWN_KEY = "consent_withdrawn"
+SENT_ON_KEY = "sent_on"
 
 
 if __name__ == "__main__":
@@ -238,7 +237,7 @@ if __name__ == "__main__":
         exit(0)
 
     log.info(f"Exporting participation maps for each Somalia region...")
-    export_participation_maps(
+    participation_maps.export_participation_maps(
         individuals, CONSENT_WITHDRAWN_KEY,
         coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
         AnalysisConfiguration("region", "location_raw", "region_coded", CodeSchemes.SOMALIA_REGION),
@@ -248,7 +247,7 @@ if __name__ == "__main__":
     )
 
     log.info(f"Exporting participation maps for each Somalia district...")
-    export_participation_maps(
+    participation_maps.export_participation_maps(
         individuals, CONSENT_WITHDRAWN_KEY,
         coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
         AnalysisConfiguration("district", "location_raw", "district_coded", CodeSchemes.SOMALIA_DISTRICT),
@@ -258,7 +257,7 @@ if __name__ == "__main__":
     )
 
     log.info(f"Exporting participation maps for each Mogadishu sub-district...")
-    export_participation_maps(
+    participation_maps.export_participation_maps(
         individuals, CONSENT_WITHDRAWN_KEY,
         coding_plans_to_analysis_configurations(PipelineConfiguration.RQA_CODING_PLANS),
         AnalysisConfiguration("mogadishu_sub_district", "location_raw", "mogadishu_sub_district_coded", CodeSchemes.MOGADISHU_SUB_DISTRICT),
