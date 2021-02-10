@@ -30,7 +30,10 @@ def label_somalia_operator(user, traced_runs, phone_number_uuid_table):
     uuids = {td["avf_phone_id"] for td in traced_runs}
     uuid_to_phone_lut = phone_number_uuid_table.uuid_to_data_batch(uuids)
     for td in traced_runs:
-        operator_raw = uuid_to_phone_lut[td["avf_phone_id"]][:5]  # Returns the country code 252 and the next two digits
+        if td["urn_type"] == "tel":
+            operator_raw = uuid_to_phone_lut[td["avf_phone_id"]][:5]  # Returns the country code 252 and the next two digits
+        else:
+            operator_raw = td["urn_type"]
 
         operator_code = PhoneCleaner.clean_operator(operator_raw)
         if operator_code == Codes.NOT_CODED:
