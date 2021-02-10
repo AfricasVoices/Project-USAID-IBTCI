@@ -19,6 +19,9 @@ DATASETS=(
     "USAID_IBTCI_rqa_s08e02"
     "USAID_IBTCI_rqa_s08e03"
     "USAID_IBTCI_rqa_s08e03_break"
+    "USAID_IBTCI_rqa_s08e04"
+    "USAID_IBTCI_rqa_s08e05"
+    "USAID_IBTCI_rqa_s08e06"
 
     "USAID_IBTCI_facebook_s08e01"
     "USAID_IBTCI_facebook_s08e02"

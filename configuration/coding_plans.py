@@ -59,40 +59,40 @@ def clean_engagement_type(sent_on, episode):
 
 def _make_facebook_coding_plan(name, code_scheme):
     return \
-        CodingPlan(dataset_name=name,
-                   raw_field=f"{name}_raw",
+        CodingPlan(dataset_name=f"facebook_{name}",
+                   raw_field=f"facebook_{name}_raw",
                    time_field="sent_on",
-                   run_id_field=f"{name}_run_id",
-                   coda_filename=f"USAID_IBTCI_{name}.json",
-                   message_id_fn=lambda td: SHAUtils.sha_string(td[f"{name}_comment_id"]),
-                   icr_filename=f"{name}.csv",
+                   run_id_field=f"facebook_{name}_run_id",
+                   coda_filename=f"USAID_IBTCI_facebook_{name}.json",
+                   message_id_fn=lambda td: SHAUtils.sha_string(td[f"facebook_{name}_comment_id"]),
+                   icr_filename=f"facebook_{name}.csv",
                    coding_configurations=[
                        CodingConfiguration(
                            coding_mode=CodingModes.MULTIPLE,
                            code_scheme=code_scheme,
-                           coded_field=f"{name}_coded",
-                           analysis_file_key=name,
+                           coded_field=f"facebook_{name}_coded",
+                           analysis_file_key=f"facebook_{name}",
                            fold_strategy=lambda x, y: FoldStrategies.list_of_labels(code_scheme, x, y)
                        ),
                        CodingConfiguration(
-                           raw_field=f"{name}_comment_reply_to_raw",
+                           raw_field=f"facebook_{name}_comment_reply_to_raw",
                            coding_mode=CodingModes.SINGLE,
                            code_scheme=CodeSchemes.FACEBOOK_COMMENT_REPLY_TO,
                            cleaner=lambda parent: "post" if parent == {} else "comment",
-                           coded_field=f"{name}_comment_reply_to_coded",
+                           coded_field=f"facebook_{name}_comment_reply_to_coded",
                            requires_manual_verification=False,
-                           analysis_file_key=f"{name}_comment_reply_to",
+                           analysis_file_key=f"facebook_{name}_comment_reply_to",
                            fold_strategy=None,
                            include_in_individuals_file=False
                        ),
                        CodingConfiguration(
-                           raw_field=f"{name}_post_raw",
+                           raw_field=f"facebook_{name}_post_raw",
                            coding_mode=CodingModes.SINGLE,
                            code_scheme=CodeSchemes.FACEBOOK_POST_TYPE,
                            cleaner=facebook_utils.clean_post_type,
-                           coded_field=f"{name}_post_type_coded",
+                           coded_field=f"facebook_{name}_post_type_coded",
                            requires_manual_verification=False,
-                           analysis_file_key=f"{name}_post_type",
+                           analysis_file_key=f"facebook_{name}_post_type",
                            fold_strategy=None,
                            include_in_individuals_file=False
                        )
@@ -100,94 +100,50 @@ def _make_facebook_coding_plan(name, code_scheme):
                    raw_field_fold_strategy=FoldStrategies.concatenate)
 
 
+def _make_rqa_coding_plan(name, code_scheme):
+    return CodingPlan(dataset_name=f"rqa_{name}",
+                      raw_field=f"rqa_{name}_raw",
+                      time_field="sent_on",
+                      run_id_field=f"rqa_{name}_run_id",
+                      coda_filename=f"USAID_IBTCI_rqa_{name}.json",
+                      icr_filename=f"rqa_{name}.csv",
+                      coding_configurations=[
+                          CodingConfiguration(
+                              coding_mode=CodingModes.MULTIPLE,
+                              code_scheme=code_scheme,
+                              coded_field=f"rqa_{name}_coded",
+                              analysis_file_key=f"rqa_{name}",
+                              fold_strategy=lambda x, y: FoldStrategies.list_of_labels(code_scheme, x, y)
+                          )
+                      ],
+                      ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value(name),
+                      raw_field_fold_strategy=FoldStrategies.concatenate)
+
+
 def get_rqa_coding_plans(pipeline_name):
     if pipeline_name == "USAID-IBTCI-Facebook":
         return [
-            _make_facebook_coding_plan("facebook_s08e01", CodeSchemes.FACEBOOK_S08E01),
-            _make_facebook_coding_plan("facebook_s08e02", CodeSchemes.FACEBOOK_S08E02),
-            _make_facebook_coding_plan("facebook_s08e03", CodeSchemes.FACEBOOK_S08E03),
+            _make_facebook_coding_plan("s08e01", CodeSchemes.FACEBOOK_S08E01),
+            _make_facebook_coding_plan("s08e02", CodeSchemes.FACEBOOK_S08E02),
+            _make_facebook_coding_plan("s08e03", CodeSchemes.FACEBOOK_S08E03),
 
-            _make_facebook_coding_plan("facebook_s08e03_break_w01", CodeSchemes.FACEBOOK_S08E03_BREAK_W01),
-            _make_facebook_coding_plan("facebook_s08e03_break_w02", CodeSchemes.FACEBOOK_S08E03_BREAK_W02),
-            _make_facebook_coding_plan("facebook_s08e03_break_w03", CodeSchemes.FACEBOOK_S08E03_BREAK_W03),
-            _make_facebook_coding_plan("facebook_s08e03_break_w04", CodeSchemes.FACEBOOK_S08E03_BREAK_W04),
-            _make_facebook_coding_plan("facebook_s08e03_break_w05", CodeSchemes.FACEBOOK_S08E03_BREAK_W05),
-            _make_facebook_coding_plan("facebook_s08e03_break_w06", CodeSchemes.FACEBOOK_S08E03_BREAK_W06)
+            _make_facebook_coding_plan("s08e03_break_w01", CodeSchemes.FACEBOOK_S08E03_BREAK_W01),
+            _make_facebook_coding_plan("s08e03_break_w02", CodeSchemes.FACEBOOK_S08E03_BREAK_W02),
+            _make_facebook_coding_plan("s08e03_break_w03", CodeSchemes.FACEBOOK_S08E03_BREAK_W03),
+            _make_facebook_coding_plan("s08e03_break_w04", CodeSchemes.FACEBOOK_S08E03_BREAK_W04),
+            _make_facebook_coding_plan("s08e03_break_w05", CodeSchemes.FACEBOOK_S08E03_BREAK_W05),
+            _make_facebook_coding_plan("s08e03_break_w06", CodeSchemes.FACEBOOK_S08E03_BREAK_W06)
         ]
     else:
         assert pipeline_name == "USAID-IBTCI-SMS"
         return [
-            CodingPlan(dataset_name="rqa_s08e01",
-                       raw_field="rqa_s08e01_raw",
-                       time_field="sent_on",
-                       run_id_field="rqa_s08e01_run_id",
-                       coda_filename="USAID_IBTCI_rqa_s08e01.json",
-                       icr_filename="rqa_s08e01.csv",
-                       coding_configurations=[
-                           CodingConfiguration(
-                               coding_mode=CodingModes.MULTIPLE,
-                               code_scheme=CodeSchemes.RQA_S08E01,
-                               coded_field="rqa_s08e01_coded",
-                               analysis_file_key="rqa_s08e01",
-                               fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.RQA_S08E01, x, y)
-                           )
-                       ],
-                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("s08e01"),
-                       raw_field_fold_strategy=FoldStrategies.concatenate),
-
-            CodingPlan(dataset_name="rqa_s08e02",
-                       raw_field="rqa_s08e02_raw",
-                       time_field="sent_on",
-                       run_id_field="rqa_s08e02_run_id",
-                       coda_filename="USAID_IBTCI_rqa_s08e02.json",
-                       icr_filename="rqa_s08e02.csv",
-                       coding_configurations=[
-                           CodingConfiguration(
-                               coding_mode=CodingModes.MULTIPLE,
-                               code_scheme=CodeSchemes.RQA_S08E02,
-                               coded_field="rqa_s08e02_coded",
-                               analysis_file_key="rqa_s08e02",
-                               fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.RQA_S08E02, x, y)
-                           )
-                       ],
-                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("s08e02"),
-                       raw_field_fold_strategy=FoldStrategies.concatenate),
-
-            CodingPlan(dataset_name="rqa_s08e03",
-                       raw_field="rqa_s08e03_raw",
-                       time_field="sent_on",
-                       run_id_field="rqa_s08e03_run_id",
-                       coda_filename="USAID_IBTCI_rqa_s08e03.json",
-                       icr_filename="rqa_s08e03.csv",
-                       coding_configurations=[
-                           CodingConfiguration(
-                               coding_mode=CodingModes.MULTIPLE,
-                               code_scheme=CodeSchemes.RQA_S08E03,
-                               coded_field="rqa_s08e03_coded",
-                               analysis_file_key="rqa_s08e03",
-                               fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.RQA_S08E03, x, y)
-                           )
-                       ],
-                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("s08e03"),
-                       raw_field_fold_strategy=FoldStrategies.concatenate),
-
-            CodingPlan(dataset_name="rqa_s08e03_break",
-                       raw_field="rqa_s08e03_break_raw",
-                       time_field="sent_on",
-                       run_id_field="rqa_s08e03_break_run_id",
-                       coda_filename="USAID_IBTCI_rqa_s08e03_break.json",
-                       icr_filename="rqa_s08e03_break.csv",
-                       coding_configurations=[
-                           CodingConfiguration(
-                               coding_mode=CodingModes.MULTIPLE,
-                               code_scheme=CodeSchemes.RQA_S08E03_BREAK,
-                               coded_field="rqa_s08e03_break_coded",
-                               analysis_file_key="rqa_s08e03_break",
-                               fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.RQA_S08E03_BREAK, x, y)
-                           )
-                       ],
-                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("s08e03_break"),
-                       raw_field_fold_strategy=FoldStrategies.concatenate)
+            _make_rqa_coding_plan("s08e01", CodeSchemes.RQA_S08E01),
+            _make_rqa_coding_plan("s08e02", CodeSchemes.RQA_S08E02),
+            _make_rqa_coding_plan("s08e03", CodeSchemes.RQA_S08E03),
+            _make_rqa_coding_plan("s08e03_break", CodeSchemes.RQA_S08E03_BREAK),
+            _make_rqa_coding_plan("s08e04", CodeSchemes.RQA_S08E04),
+            _make_rqa_coding_plan("s08e05", CodeSchemes.RQA_S08E05),
+            _make_rqa_coding_plan("s08e06", CodeSchemes.RQA_S08E06),
         ]
 
 
