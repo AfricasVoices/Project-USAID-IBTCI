@@ -1,0 +1,156 @@
+{
+  "SchemeID": "Scheme-969537eb",
+  "Name": "Facebook S08E05",
+  "Version": "0.0.0.1",
+  "Codes": [
+
+    {
+      "CodeID": "code-ed617d7c",
+      "CodeType": "Normal",
+      "DisplayText": "agreeing with others",
+      "NumericValue": 10,
+      "StringValue": "agreeing_with_others",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-b7eb9bc9",
+      "CodeType": "Normal",
+      "DisplayText": "disagreeing with others",
+      "NumericValue": 11,
+      "StringValue": "disagreeing_with_others",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-e9ad4bac",
+      "CodeType": "Normal",
+      "DisplayText": "comment to page owner",
+      "NumericValue": 12,
+      "StringValue": "comment_to_page_owner",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-0bc2370f",
+      "CodeType": "Normal",
+      "DisplayText": "other side discussions",
+      "NumericValue": 13,
+      "StringValue": "other_side_discussions",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-2ac075f1",
+      "CodeType": "Normal",
+      "DisplayText": "only emoji",
+      "NumericValue": 14,
+      "StringValue": "only_emoji",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-NA-f93d3eb7",
+      "CodeType": "Control",
+      "ControlCode": "NA",
+      "DisplayText": "NA (missing)",
+      "NumericValue": -10,
+      "StringValue": "NA",
+      "VisibleInCoda": false
+    },
+    {
+      "CodeID": "code-NS-2c11b7c9",
+      "CodeType": "Control",
+      "ControlCode": "NS",
+      "DisplayText": "NS (skip)",
+      "NumericValue": -20,
+      "StringValue": "NS",
+      "VisibleInCoda": false
+    },
+    {
+      "CodeID": "code-NC-42f1d983",
+      "CodeType": "Control",
+      "ControlCode": "NC",
+      "DisplayText": "NC (not coded)",
+      "NumericValue": -30,
+      "StringValue": "NC",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-NR-5e3eee23",
+      "CodeType": "Control",
+      "ControlCode": "NR",
+      "DisplayText": "NR (not reviewed)",
+      "NumericValue": -40,
+      "StringValue": "NR",
+      "VisibleInCoda": false
+    },
+    {
+      "CodeID": "code-NIC-99631cb8",
+      "CodeType": "Control",
+      "ControlCode": "NIC",
+      "DisplayText": "NIC (not internally consistent)",
+      "NumericValue": -50,
+      "StringValue": "NIC",
+      "VisibleInCoda": false
+    },
+    {
+      "CodeID": "code-STOP-08b832a8",
+      "CodeType": "Control",
+      "ControlCode": "STOP",
+      "DisplayText": "STOP",
+      "NumericValue": -90,
+      "StringValue": "STOP",
+      "VisibleInCoda": false
+    },
+    {
+      "CodeID": "code-WS-adb25603b7af",
+      "CodeType": "Control",
+      "ControlCode": "WS",
+      "DisplayText": "WS (wrong scheme)",
+      "NumericValue": -100,
+      "StringValue": "WS",
+      "VisibleInCoda": false
+    },
+    {
+      "CodeID": "code-CE-016c1e22",
+      "CodeType": "Control",
+      "ControlCode": "CE",
+      "DisplayText": "CE (coding error)",
+      "NumericValue": -110,
+      "StringValue": "CE",
+      "VisibleInCoda": false
+    },
+    {
+      "CodeID": "code-Q-a5d3700d",
+      "CodeType": "Meta",
+      "MetaCode": "question",
+      "DisplayText": "meta: question",
+      "NumericValue": -100010,
+      "StringValue": "question",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-G-97cb3199",
+      "CodeType": "Meta",
+      "MetaCode": "greeting",
+      "DisplayText": "meta: greeting",
+      "NumericValue": -100020,
+      "StringValue": "greeting",
+      "VisibleInCoda": true
+    },
+    {
+      "DisplayText": "meta: gratitude",
+      "VisibleInCoda": true,
+      "NumericValue": -100100,
+      "CodeID": "code-GR-e6de1b7e",
+      "CodeType": "Meta",
+      "MetaCode": "gratitude",
+      "StringValue": "gratitude"
+    },
+    {
+      "NumericValue": -100140,
+      "CodeID": "code-I-b13a41f6",
+      "CodeType": "Meta",
+      "MetaCode": "impact",
+      "StringValue": "impact",
+      "DisplayText": "meta: impact",
+      "VisibleInCoda": true
+    }
+  ]
+}
