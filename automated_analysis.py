@@ -86,7 +86,12 @@ if __name__ == "__main__":
     def coding_plans_to_analysis_configurations(coding_plans):
         analysis_configurations = []
         for plan in coding_plans:
-            for cc in plan.coding_configurations:
+            if pipeline_configuration.pipeline_name == "USAID-IBTCI-Facebook":
+                ccs = [plan.coding_configurations[0]]
+            else:
+                ccs = plan.coding_configurations
+
+            for cc in ccs:
                 if not cc.include_in_theme_distribution:
                     continue
 
