@@ -25,13 +25,14 @@
     {
       "SourceType": "RapidPro",
       "Domain": "textit.in",
-      "TokenFileURL": "gs://avf-credentials/csap-secondary-text-it-token.txt",
-      "ContactsFileName": "csap_secondary_contacts",
+      "TokenFileURL": "gs://avf-credentials/csap-2-textit-token.txt",
+      "ContactsFileName": "csap_2_contacts",
       "ActivationFlowNames": [
         "csap_s08e01_activation",
         "csap_s08e02_activation",
         "csap_s08e03_activation",
-        "csap_s08e03_break_activation"
+        "csap_s08e03_break_activation",
+        "csap_s08e04_activation"
       ],
       "SurveyFlowNames": [
         "csap_s04_demog",
@@ -69,6 +70,16 @@
     {"SourceKey": "Rqa_S08E03_Break (Text) - csap_s08e03_break_activation", "PipelineKey": "rqa_s08e03_break_raw", "IsActivationMessage": true},
     {"SourceKey": "Rqa_S08E03_Break (Run ID) - csap_s08e03_break_activation", "PipelineKey": "rqa_s08e03_break_run_id"},
     {"SourceKey": "Rqa_S08E03_Break (Time) - csap_s08e03_break_activation", "PipelineKey": "sent_on"},
+    
+    {"SourceKey": "Rqa_S08E04 (Text) - csap_s08e04_activation", "PipelineKey": "rqa_s08e04_raw", "IsActivationMessage": true},
+    {"SourceKey": "Rqa_S08E04 (Run ID) - csap_s08e04_activation", "PipelineKey": "rqa_s08e04_run_id"},
+    {"SourceKey": "Rqa_S08E04 (Time) - csap_s08e04_activation", "PipelineKey": "sent_on"},
+    {"SourceKey": "Rqa_S08E05 (Text) - csap_s08e05_activation", "PipelineKey": "rqa_s08e05_raw", "IsActivationMessage": true},
+    {"SourceKey": "Rqa_S08E05 (Run ID) - csap_s08e05_activation", "PipelineKey": "rqa_s08e05_run_id"},
+    {"SourceKey": "Rqa_S08E05 (Time) - csap_s08e05_activation", "PipelineKey": "sent_on"},
+    {"SourceKey": "Rqa_S08E06 (Text) - csap_s08e06_activation", "PipelineKey": "rqa_s08e06_raw", "IsActivationMessage": true},
+    {"SourceKey": "Rqa_S08E06 (Run ID) - csap_s08e06_activation", "PipelineKey": "rqa_s08e06_run_id"},
+    {"SourceKey": "Rqa_S08E06 (Time) - csap_s08e06_activation", "PipelineKey": "sent_on"},
 
     {"SourceKey": "Mog_Sub_District (Text) - csap_demog", "PipelineKey": "location_raw"},
     {"SourceKey": "Mog_Sub_District (Time) - csap_demog", "PipelineKey": "location_time"},

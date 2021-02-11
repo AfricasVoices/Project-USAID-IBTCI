@@ -48,6 +48,39 @@
       ]
     },
     {
+      "CodeID": "code-050049c8",
+      "CodeType": "Normal",
+      "DisplayText": "s08e04",
+      "StringValue": "s08e04",
+      "NumericValue": 63,
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "s08e04"
+      ]
+    },
+    {
+      "CodeID": "code-262fa0fc",
+      "CodeType": "Normal",
+      "DisplayText": "s08e05",
+      "StringValue": "s08e05",
+      "NumericValue": 64,
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "s08e05"
+      ]
+    },
+    {
+      "CodeID": "code-c9115c69",
+      "CodeType": "Normal",
+      "DisplayText": "s08e06",
+      "StringValue": "s08e06",
+      "NumericValue": 65,
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "s08e06"
+      ]
+    },
+    {
       "CodeID": "code-70ac05ab",
       "CodeType": "Normal",
       "DisplayText": "age",
@@ -596,6 +629,83 @@
       "VisibleInCoda": true,
       "MatchValues": [
         "s10e02"
+      ]
+    },
+    {
+      "CodeID": "code-4ef9de00",
+      "CodeType": "Normal",
+      "DisplayText": "s10e02 break",
+      "StringValue": "s10e02_break",
+      "NumericValue": 56,
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "s10e02 break"
+      ]
+    },
+    {
+      "CodeID": "code-1a7ea68b",
+      "CodeType": "Normal",
+      "DisplayText": "s10e03",
+      "StringValue": "s10e03",
+      "NumericValue": 58,
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "s10e03"
+      ]
+    },
+    {
+      "CodeID": "code-a137a1c8",
+      "CodeType": "Normal",
+      "DisplayText": "s10e04",
+      "StringValue": "s10e04",
+      "NumericValue": 59,
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "s10e04"
+      ]
+    },
+    {
+      "CodeID": "code-1e3211ab",
+      "CodeType": "Normal",
+      "DisplayText": "s10e01 schools informing parents",
+      "StringValue": "s10e01_schools_informing_parents",
+      "NumericValue": 55,
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "s10e01 schools informing parents"
+      ]
+    },
+    {
+      "CodeID": "code-1ca81766",
+      "CodeType": "Normal",
+      "DisplayText": "s10e02 issues in school",
+      "StringValue": "s10e02_issues_in_school",
+      "NumericValue": 57,
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "s10e02 issues in school"
+      ]
+    },
+    {
+      "CodeID": "code-cf54f435",
+      "CodeType": "Normal",
+      "DisplayText": "s10 have voice",
+      "StringValue": "s10_have_voice",
+      "NumericValue": 60,
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "s10 have voice"
+      ]
+    },
+    {
+      "CodeID": "code-b186691f",
+      "CodeType": "Normal",
+      "DisplayText": "s10 suggestions",
+      "StringValue": "s10_suggestions",
+      "NumericValue": 61,
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "s10 suggestions"
       ]
     },
     {
