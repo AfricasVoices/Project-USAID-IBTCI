@@ -47,6 +47,22 @@
         "84b4d75d-4c8e-4403-994c-05c1377700f8",
         "83ce764b-5c80-4d56-9d0f-84435570141d"
       ]
+    },
+    {
+      "SourceType": "RapidPro",
+      "Domain": "textit.in",
+      "TokenFileURL": "gs://avf-credentials/csap-3-textit-token.txt",
+      "ContactsFileName": "csap_3_contacts",
+      "ActivationFlowNames": [
+
+      ],
+      "SurveyFlowNames": [
+        "csap_s10_demog"
+      ],
+      "TestContactUUIDs": [
+        "ad1b2f2e-b6dc-4ab0-909c-fa0ba182e5ef",
+        "ed54f01c-d1ec-4644-868a-d31e8656361e"
+      ]
     }
   ],
   "UuidTable": {
@@ -172,6 +188,19 @@
     {"SourceKey": "Recently_Displaced (Time) - csap_s09_demog", "PipelineKey": "recently_displaced_time"},
     {"SourceKey": "Idp_Camp (Text) - csap_s09_demog", "PipelineKey": "in_idp_camp_raw"},
     {"SourceKey": "Idp_Camp (Time) - csap_s09_demog", "PipelineKey": "in_idp_camp_time"},
+
+    {"SourceKey": "Location (Text) - csap_s10_demog", "PipelineKey": "location_raw"},
+    {"SourceKey": "Location (Time) - csap_s10_demog", "PipelineKey": "location_time"},
+    {"SourceKey": "Gender (Text) - csap_s10_demog", "PipelineKey": "gender_raw"},
+    {"SourceKey": "Gender (Time) - csap_s10_demog", "PipelineKey": "gender_time"},
+    {"SourceKey": "Age (Text) - csap_s10_demog", "PipelineKey": "age_raw"},
+    {"SourceKey": "Age (Time) - csap_s10_demog", "PipelineKey": "age_time"},
+    {"SourceKey": "Recently_Displaced (Text) - csap_s10_demog", "PipelineKey": "recently_displaced_raw"},
+    {"SourceKey": "Recently_Displaced (Time) - csap_s10_demog", "PipelineKey": "recently_displaced_time"},
+    {"SourceKey": "Children_In_School (Text) - csap_s10_demog", "PipelineKey": "children_in_school_raw"},
+    {"SourceKey": "Children_In_School (Time) - csap_s10_demog", "PipelineKey": "children_in_school_time"},
+    {"SourceKey": "Livelihood (Text) - csap_s10_demog", "PipelineKey": "livelihood_raw"},
+    {"SourceKey": "Livelihood (Time) - csap_s10_demog", "PipelineKey": "livelihood_time"},
 
     {"SourceKey": "Location (Text) - csap_s08_demog", "PipelineKey": "location_raw"},
     {"SourceKey": "Location (Time) - csap_s08_demog", "PipelineKey": "location_time"},
