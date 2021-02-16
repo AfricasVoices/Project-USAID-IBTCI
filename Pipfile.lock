@@ -955,7 +955,7 @@
         "socialmediatools": {
             "editable": true,
             "git": "https://www.github.com/AfricasVoices/SocialMediaTools",
-            "ref": "7081bc07e6c215ceebf2a67a588b119d16e0eb69"
+            "ref": "5b4ff54745dc19178e3038140e749553b21f6aa6"
         },
         "threadpoolctl": {
             "hashes": [
