@@ -49,19 +49,10 @@
       ]
     },
     {
-      "SourceType": "RapidPro",
-      "Domain": "textit.in",
-      "TokenFileURL": "gs://avf-credentials/csap-3-textit-token.txt",
-      "ContactsFileName": "csap_3_contacts",
-      "ActivationFlowNames": [
-
-      ],
-      "SurveyFlowNames": [
-        "csap_s10_demog"
-      ],
-      "TestContactUUIDs": [
-        "ad1b2f2e-b6dc-4ab0-909c-fa0ba182e5ef",
-        "ed54f01c-d1ec-4644-868a-d31e8656361e"
+      "SourceType": "GCloudBucket",
+      "ActivationFlowURLs": [],
+      "SurveyFlowURLs": [
+        "gs://avf-project-datasets/2020/USAID-IBTCI/csap_s10_demog.jsonl"
       ]
     }
   ],
