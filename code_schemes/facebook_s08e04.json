@@ -1,9 +1,64 @@
 {
-  "SchemeID": "Scheme-80555bbe",
+  "SchemeID": "Scheme-c0555bbe",
   "Name": "Facebook S08E04",
   "Version": "0.0.0.1",
   "Codes": [
-
+    {
+      "CodeID": "code-bb4ac29d",
+      "CodeType": "Normal",
+      "DisplayText": "support from husbands & family members",
+      "NumericValue": 1,
+      "StringValue": "support_from_husbands_and_family_members",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-c6f18822",
+      "CodeType": "Normal",
+      "DisplayText": "merry-go-rounds",
+      "NumericValue": 2,
+      "StringValue": "merry_go_rounds",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-b4177896",
+      "CodeType": "Normal",
+      "DisplayText": "compensation from divorces (mehr)",
+      "NumericValue": 3,
+      "StringValue": "compensation_from_divorces_mehr",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-1658b8fe",
+      "CodeType": "Normal",
+      "DisplayText": "financial aid",
+      "NumericValue": 4,
+      "StringValue": "financial_aid",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-7625301f",
+      "CodeType": "Normal",
+      "DisplayText": "women don't need businesses",
+      "NumericValue": 5,
+      "StringValue": "women_do_not_need_businesses",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-bcd30538",
+      "CodeType": "Normal",
+      "DisplayText": "general support",
+      "NumericValue": 6,
+      "StringValue": "general_support",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-29096533",
+      "CodeType": "Normal",
+      "DisplayText": "other theme",
+      "NumericValue": 7,
+      "StringValue": "other_theme",
+      "VisibleInCoda": true
+    },
     {
       "CodeID": "code-ed617d7c",
       "CodeType": "Normal",
