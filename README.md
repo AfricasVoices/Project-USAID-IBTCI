@@ -215,3 +215,91 @@ To annotate the graph with when specific functions were entered and exited, add 
 the functions of interest. There is no need to import anything.
 
 For full details on the memory profiler, see its [documentation page](https://pypi.org/project/memory-profiler/).
+
+### Configuration JSON Spec
+
+```
+{
+  "PipelineName": string,              // Name of this pipeline, for use in logging, coding_plans etc.
+  "RawDataSources": [                  // Configuration for where to fetch raw messages or comments from. 
+    {
+      "SourceType": "RapidPro",        // Configure download of runs from a Rapid Pro workspace.
+      "Domain": string,                // Domain of Rapid Pro workspace to download data from e.g. rapidpro.io.
+      "TokenFileURL": string,          // GS URL to a text file containing the authorisation token for the Rapid Pro workspace.
+      "ContactsFileName": string       // TODO: Remove this
+      "ActivationFlowNames": string[], // The names of the Rapid Pro flows that contain the radio show responses.
+      "SurveyFlowNames": string[],     // The names of the Rapid Pro flows that contain the survey responses.
+      "TestContactUUIDs": string[]     // Rapid Pro contact UUIDs of test contacts. Runs for any of those test contacts will be tagged with {'test_run': True}, and dropped when the pipeline is run with "FilterTestMessages" set to true..
+    } | {
+      "SourceType": "GCloudBucket",    // Configure download of de-identified data directly from a Google Cloud Bucket. Data is downloaded directly, with no further processing applied.
+      "ActivationFlowURLs": string[],  // GS URLs to download radio show response runs data from. 
+      "SurveyFlowURLs": string[]       // GS URLs to download survey response runs data from.
+    } | {
+      "SourceType": "RecoveryCSV",     // Configure download of de-identified data from a recovery CSV in a Google Cloud Bucket. Data is downloaded and converted to TracedData. The recovery CSV must have headers "Sender", "Message", and "ReceivedOn".
+      "ActivationFlowURLs": string[],  // GS URLs to download recovery CSVs to process as activation data from. 
+      "SurveyFlowURLs": string[]       // GS URLs to download recoveny CSVs to process as survey data from.
+    } | {
+      "SourceType": "Facebook",        // Configure download of comments from Facebook.
+      "PageID": string,                // ID of page to download comments from.
+      "TokenFileURL": string,          // GS URL to a text file containing the page authorisation token.
+      "Datasets": [
+        {
+          "Name": string,              // The name to give this dataset e.g. facebook_e01
+          "PostIDs"?: string[],        // Optional unless 'Search' is not provided. A list of posts to download comments from, both top-level and replies to other comments.
+          "Search"?: {                 // Optional unless "PostIDs" is not provided.
+            "Match": string,           // String to look for in posts e.g. a hashtag. Comments on all posts that contain this string in the time-range will be downloaded.
+            "StartDate": ISO string,   // Start date of time range to search, inclusive. Comments on posts created within the time-range and containing the "Match" string will be downloaded. 
+            "EndDate": ISO string      // End date of time range to search, exclusive.
+          }
+        }
+      ]
+    }
+  ],
+  "UUIDTable": {                       // Configuration for the Firestore phone number/app-scoped facebook id <-> uuid table.
+    "FirebaseCredentialsFileURL": string // GS URL to a json file containing the Firebase credentials for the UUID table.
+    "TableName": string                  // Name of the table in the Firestore to store the id <-> uuid mappings.
+    "UuidPrefix": string                 // Prefix to include in each generated uuid e.g. 'avf-phone-uuid-'.
+  },
+  "TimestampRemappings"?: [            // Configuration for remapping activation messages received within the given time range to another field. Use these to bulk correct messages received by the wrong activation flow.
+    {
+      "TimeKey": string                   // SourceKey containing the time field to remap.
+      "ShowPipelineKeyToRemapTo": string  // PipelineKey to remap the raw messages to.
+      "RangeStartInclusive": ISO string   // Start of time range to remap, inclusive.
+      "RangeEndExclusive": ISO string     // End of time range to remap, exclusive.
+      "TimeToAdjustTo"?: ISO string       // Datetime to readjust each message object's `time_key` to. If not provided, timestamps will not be adjusted.
+    }
+  ],
+  "SourceKeyRemappings": [             // Configuration to convert the keys used by the raw data sources into terminology to be used by the rest of the pipeline.  
+    {
+      "SourceKey": string              // Name of key to remap in the raw data.
+      "PipelineKey": string,           // Name of the key to remap to.
+      "IsActivationMessage"?: bool     // Whether the key being remapped contains raw activation messages. Defaults to false.
+    }
+  ],
+  "ProjectStartDate": ISO string       // Start date for the project. Activation messages received before this date are dropped by the pipeline. Survey messages are not filtered, to allow for demogs from previous seasons to be easily reused.
+  "ProjectEndDate": ISO string         // End date for the project. Activation messages received after this date are dropped by the pipeline. Survey messages are not filtered.
+  "FilterTestMessages": bool           // Whether to filter out messages from contacts with uuids in RawDataSources.RapidProSource.TestContactUUIDs above.
+  "MoveWSMessages": bool               // Whether to perform Wrong-Scheme correction.
+  "AutomatedAnalysis": {
+    "GenerateRegionThemeDistributionMaps": bool,   // Whether to export a region map for each rqa theme. If False, only exports a region map showing the total participants. 
+    "GenerateDistrictThemeDistributionMaps": bool, // Whether to export a district map for each rqa theme. If False, only exports a district map showing the total participants.
+    "GenerateMogadishuDistributionMaps": bool,     // Whether to export a Mogadishu sub-district map for each rqa theme. If False, only exports a Mogadishu sub-district map showing the total participants.
+    "TrafficLabels"?: [                // Configuration for the traffic_analysis. Activation messages received within each time range are counted and exported to a CSV. If not provided, no traffic_analysis CSV is produced.
+      {
+        "StartDate": ISO string,       // Start date for the time range to search, inclusive.
+        "EndDate": ISO string,         // End date for the time range to search, exclusive.
+        "Label": string                // Label to assign to messages received within this time range.
+      }
+    ]
+  }
+  "DriveUpload"?: {                    // Configuration for uploading outputs to Google Drive. If no configuration is provided, Drive upload will be skipped.
+    "DriveCredentialsFileURL": string, // GS URL to a Google Drive service account credentials file.
+    "ProductionUploadPath": string,    // Path in the service account's 'shared_with_me' folder to upload the production CSV file to.
+    "MessagesUploadPath": string,      // Path in the service account's 'shared_with_me' folder to upload the messages CSV file to.
+    "IndividualsUploadPath": string,   // Path in the service account's 'shared_with_me' folder to upload the individuals CSV file to.
+    "AutomatedAnalysisDir": string     // Path in the service account's 'shared_with_me' folder to upload the automated analysis directory to.
+  },
+  "MemoryProfileUploadBucket": string, // The GS bucket name to upload the memory profile logs to. The name will be appended with the "BucketDirPath" and the file basename to generate the archive upload location.
+  "DataArchiveUploadBucket": string,   // The GS bucket name to upload the data archives to. The name will be appended with the "BucketDirPath" and the file basename to generate the archive upload location.
+  "BucketDirPath": string              // The GS bucket folder path to store the data archive & memory log files to.
+```
