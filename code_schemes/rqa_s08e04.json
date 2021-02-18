@@ -3,7 +3,86 @@
   "Name": "RQA S08E04",
   "Version": "0.0.0.1",
   "Codes": [
-
+    {
+      "CodeID": "code-5985ccd5",
+      "CodeType": "Normal",
+      "DisplayText": "husbands & family members",
+      "NumericValue": 1,
+      "StringValue": "husbands_and_family_members",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-52d9b298",
+      "CodeType": "Normal",
+      "DisplayText": "loans",
+      "NumericValue": 2,
+      "StringValue": "loans",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-8941356e",
+      "CodeType": "Normal",
+      "DisplayText": "support from government",
+      "NumericValue": 3,
+      "StringValue": "support_from_government",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-cba32bd3",
+      "CodeType": "Normal",
+      "DisplayText": "support from NGOs",
+      "NumericValue": 4,
+      "StringValue": "support_from_NGOs",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-e96d95cc",
+      "CodeType": "Normal",
+      "DisplayText": "ayuuto (merry-go-round)",
+      "NumericValue": 5,
+      "StringValue": "ayuuto_merry_go_round",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-da847c18",
+      "CodeType": "Normal",
+      "DisplayText": "support from large business owners",
+      "NumericValue": 6,
+      "StringValue": "support_from_large_business_owners",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-605cce83",
+      "CodeType": "Normal",
+      "DisplayText": "encouragement from the society",
+      "NumericValue": 7,
+      "StringValue": "encouragement_from_the_society",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-56d63823",
+      "CodeType": "Normal",
+      "DisplayText": "general support from the society",
+      "NumericValue": 8,
+      "StringValue": "general_support_from_the_society",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-f91b2761",
+      "CodeType": "Normal",
+      "DisplayText": "women to support themselves",
+      "NumericValue": 9,
+      "StringValue": "women_to_support_themselves",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-73923ae9",
+      "CodeType": "Normal",
+      "DisplayText": "small businesses women can start",
+      "NumericValue": 10,
+      "StringValue": "small_businesses_women_can_start",
+      "VisibleInCoda": true
+    },
     {
       "CodeID": "code-NA-f93d3eb7",
       "CodeType": "Control",
