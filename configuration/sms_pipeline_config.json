@@ -5,7 +5,6 @@
       "SourceType": "RapidPro",
       "Domain": "textit.in",
       "TokenFileURL": "gs://avf-credentials/csap-text-it-token.txt",
-      "ContactsFileName": "csap_contacts",
       "ActivationFlowNames": [
 
       ],
@@ -26,7 +25,6 @@
       "SourceType": "RapidPro",
       "Domain": "textit.in",
       "TokenFileURL": "gs://avf-credentials/csap-2-textit-token.txt",
-      "ContactsFileName": "csap_2_contacts",
       "ActivationFlowNames": [
         "csap_s08e01_activation",
         "csap_s08e02_activation",
