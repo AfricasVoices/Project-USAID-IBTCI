@@ -184,15 +184,12 @@ class RawDataSource(ABC):
 
 
 class RapidProSource(RawDataSource):
-    def __init__(self, domain, token_file_url, contacts_file_name, activation_flow_names, survey_flow_names,
-                 test_contact_uuids):
+    def __init__(self, domain, token_file_url, activation_flow_names, survey_flow_names, test_contact_uuids):
         """
         :param domain: URL of the Rapid Pro server to download data from.
         :type domain: str
         :param token_file_url: GS URL of a text file containing the authorisation token for the Rapid Pro server.
         :type token_file_url: str
-        :param contacts_file_name:
-        :type contacts_file_name: str
         :param activation_flow_names: The names of the RapidPro flows that contain the radio show responses.
         :type: activation_flow_names: list of str
         :param survey_flow_names: The names of the RapidPro flows that contain the survey responses.
@@ -204,7 +201,6 @@ class RapidProSource(RawDataSource):
         """
         self.domain = domain
         self.token_file_url = token_file_url
-        self.contacts_file_name = contacts_file_name
         self.activation_flow_names = activation_flow_names
         self.survey_flow_names = survey_flow_names
         self.test_contact_uuids = test_contact_uuids
@@ -221,18 +217,15 @@ class RapidProSource(RawDataSource):
     def from_configuration_dict(cls, configuration_dict):
         domain = configuration_dict["Domain"]
         token_file_url = configuration_dict["TokenFileURL"]
-        contacts_file_name = configuration_dict["ContactsFileName"]
         activation_flow_names = configuration_dict.get("ActivationFlowNames", [])
         survey_flow_names = configuration_dict.get("SurveyFlowNames", [])
         test_contact_uuids = configuration_dict.get("TestContactUUIDs", [])
 
-        return cls(domain, token_file_url, contacts_file_name, activation_flow_names,
-                   survey_flow_names, test_contact_uuids)
+        return cls(domain, token_file_url, activation_flow_names, survey_flow_names, test_contact_uuids)
 
     def validate(self):
         validators.validate_string(self.domain, "domain")
         validators.validate_string(self.token_file_url, "token_file_url")
-        validators.validate_string(self.contacts_file_name, "contacts_file_name")
 
         validators.validate_list(self.activation_flow_names, "activation_flow_names")
         for i, activation_flow_name in enumerate(self.activation_flow_names):
