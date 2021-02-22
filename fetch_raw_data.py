@@ -63,10 +63,11 @@ def fetch_from_rapid_pro(user, google_cloud_credentials_file_path, raw_data_dir,
         google_cloud_credentials_file_path, rapid_pro_source.token_file_url).strip()
 
     rapid_pro = RapidProClient(rapid_pro_source.domain, rapid_pro_token)
+    workspace_name = rapid_pro.get_workspace_name()
 
     # Load the previous export of contacts if it exists, otherwise fetch all contacts from Rapid Pro.
-    raw_contacts_path = f"{raw_data_dir}/{rapid_pro_source.contacts_file_name}_raw.json"
-    contacts_log_path = f"{raw_data_dir}/{rapid_pro_source.contacts_file_name}_log.jsonl"
+    raw_contacts_path = f"{raw_data_dir}/{workspace_name}_contacts_raw.json"
+    contacts_log_path = f"{raw_data_dir}/{workspace_name}_contacts_log.jsonl"
     try:
         log.info(f"Loading raw contacts from file '{raw_contacts_path}'...")
         with open(raw_contacts_path) as raw_contacts_file:
