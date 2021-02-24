@@ -377,6 +377,54 @@ def get_engagement_coding_plans(pipeline_name):
                                include_in_theme_distribution=False
                            )
                        ],
+                       raw_field_fold_strategy=FoldStrategies.concatenate),
+
+            CodingPlan(dataset_name="rqa_s08e04",
+                       raw_field="sent_on",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.ENGAGEMENT_TYPE,
+                               cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e04"),
+                               coded_field="rqa_s08e04_engagement_type_coded",
+                               analysis_file_key="rqa_s08e04_engagement_type",
+                               fold_strategy=None,
+                               include_in_individuals_file=False,
+                               include_in_theme_distribution=False
+                           )
+                       ],
+                       raw_field_fold_strategy=FoldStrategies.concatenate),
+
+            CodingPlan(dataset_name="rqa_s08e05",
+                       raw_field="sent_on",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.ENGAGEMENT_TYPE,
+                               cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e05"),
+                               coded_field="rqa_s08e05_engagement_type_coded",
+                               analysis_file_key="rqa_s08e05_engagement_type",
+                               fold_strategy=None,
+                               include_in_individuals_file=False,
+                               include_in_theme_distribution=False
+                           )
+                       ],
+                       raw_field_fold_strategy=FoldStrategies.concatenate),
+
+            CodingPlan(dataset_name="rqa_s08e06",
+                       raw_field="sent_on",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.ENGAGEMENT_TYPE,
+                               cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e06"),
+                               coded_field="rqa_s08e06_engagement_type_coded",
+                               analysis_file_key="rqa_s08e06_engagement_type",
+                               fold_strategy=None,
+                               include_in_individuals_file=False,
+                               include_in_theme_distribution=False
+                           )
+                       ],
                        raw_field_fold_strategy=FoldStrategies.concatenate)
         ]
 
