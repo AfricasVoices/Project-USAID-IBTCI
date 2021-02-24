@@ -49,6 +49,8 @@ def clean_engagement_type(sent_on, episode):
         ["rqa_s08e03", "radio_show",  "2020-11-19T00:00+03:00", "2020-11-19T24:00+03:00"],
         ["rqa_s08e03", "other",       "2020-11-15T00:00+03:00", "2020-11-24T24:00+03:00"],
 
+        ["rqa_s08e03_break", "other", "2020-11-25T00:00+03:00", "2021-02-13T24:00+03:00"],
+
         ["rqa_s08e04", "sms_ad",      "2021-02-14T16:30+03:00", "2021-02-14T24:00+03:00"],
         ["rqa_s08e04", "sms_ad",      "2021-02-16T16:30+03:00", "2021-02-16T24:00+03:00"],
         ["rqa_s08e04", "radio_promo", "2021-02-14T00:00+03:00", "2021-02-17T24:00+03:00"],  # fall-through
@@ -372,6 +374,22 @@ def get_engagement_coding_plans(pipeline_name):
                                cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e03"),
                                coded_field="rqa_s08e03_engagement_type_coded",
                                analysis_file_key="rqa_s08e03_engagement_type",
+                               fold_strategy=None,
+                               include_in_individuals_file=False,
+                               include_in_theme_distribution=False
+                           )
+                       ],
+                       raw_field_fold_strategy=FoldStrategies.concatenate),
+
+            CodingPlan(dataset_name="rqa_s08e03_break",
+                       raw_field="sent_on",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.ENGAGEMENT_TYPE,
+                               cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e03_break"),
+                               coded_field="rqa_s08e03_break_engagement_type_coded",
+                               analysis_file_key="rqa_s08e03_break_engagement_type",
                                fold_strategy=None,
                                include_in_individuals_file=False,
                                include_in_theme_distribution=False
