@@ -3,7 +3,86 @@
   "Name": "RQA S08E05",
   "Version": "0.0.0.1",
   "Codes": [
-
+    {
+      "CodeID": "code-8fe3a1ea",
+      "CodeType": "Normal",
+      "DisplayText": "poor market conditions",
+      "NumericValue": 1,
+      "StringValue": "poor_market_conditions",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-1f05bb53",
+      "CodeType": "Normal",
+      "DisplayText": "inadequate finances",
+      "NumericValue": 2,
+      "StringValue": "inadequate_finances",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-7e49eceb",
+      "CodeType": "Normal",
+      "DisplayText": "insecurity",
+      "NumericValue": 3,
+      "StringValue": "insecurity",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-203b6064",
+      "CodeType": "Normal",
+      "DisplayText": "lack of proper business skills",
+      "NumericValue": 4,
+      "StringValue": "lack_of_proper_business_skills",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-8b1c9b7a",
+      "CodeType": "Normal",
+      "DisplayText": "high tax rate",
+      "NumericValue": 5,
+      "StringValue": "high_tax_rate",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-96df9521",
+      "CodeType": "Normal",
+      "DisplayText": "limited space to operate their businesses",
+      "NumericValue": 6,
+      "StringValue": "limited_space_to_operate_their_businesses",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-4c5d329b",
+      "CodeType": "Normal",
+      "DisplayText": "unpaid debts from customers",
+      "NumericValue": 7,
+      "StringValue": "unpaid_debts_from_customers",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-e935be58",
+      "CodeType": "Normal",
+      "DisplayText": "lack of support and encouragement",
+      "NumericValue": 8,
+      "StringValue": "lack_of_support_and_encouragement",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-799b05e9",
+      "CodeType": "Normal",
+      "DisplayText": "obstacles due to family obligations",
+      "NumericValue": 9,
+      "StringValue": "obstacles_due_to_family_obligations",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-49ee528b",
+      "CodeType": "Normal",
+      "DisplayText": "other theme",
+      "NumericValue": 10,
+      "StringValue": "other_theme",
+      "VisibleInCoda": true
+    },
     {
       "CodeID": "code-NA-f93d3eb7",
       "CodeType": "Control",
