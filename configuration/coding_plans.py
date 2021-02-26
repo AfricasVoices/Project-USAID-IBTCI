@@ -48,6 +48,24 @@ def clean_engagement_type(sent_on, episode):
         ["rqa_s08e03", "radio_promo", "2020-11-16T00:00+03:00", "2020-11-18T24:00+03:00"],  # fall-through
         ["rqa_s08e03", "radio_show",  "2020-11-19T00:00+03:00", "2020-11-19T24:00+03:00"],
         ["rqa_s08e03", "other",       "2020-11-15T00:00+03:00", "2020-11-24T24:00+03:00"],
+
+        ["rqa_s08e03_break", "other", "2020-11-25T00:00+03:00", "2021-02-13T24:00+03:00"],
+
+        ["rqa_s08e04", "sms_ad",      "2021-02-14T16:30+03:00", "2021-02-14T24:00+03:00"],
+        ["rqa_s08e04", "sms_ad",      "2021-02-16T16:30+03:00", "2021-02-16T24:00+03:00"],
+        ["rqa_s08e04", "radio_promo", "2021-02-14T00:00+03:00", "2021-02-17T24:00+03:00"],  # fall-through
+        ["rqa_s08e04", "radio_show",  "2021-02-18T00:00+03:00", "2021-02-19T24:00+03:00"],
+        ["rqa_s08e04", "other",       "2021-02-14T00:00+03:00", "2021-02-20T24:00+03:00"],
+
+        ["rqa_s08e05", "sms_ad",      "2021-02-21T16:30+03:00", "2021-02-21T24:00+03:00"],
+        ["rqa_s08e05", "radio_promo", "2021-02-21T00:00+03:00", "2021-02-24T24:00+03:00"],  # fall-through
+        ["rqa_s08e05", "radio_show",  "2021-02-25T00:00+03:00", "2021-02-25T24:00+03:00"],
+        ["rqa_s08e05", "other",       "2021-02-21T00:00+03:00", "2021-02-27T24:00+03:00"],
+
+        ["rqa_s08e06", "sms_ad",      "2021-02-28T16:30+03:00", "2021-02-28T24:00+03:00"],
+        ["rqa_s08e06", "radio_promo", "2021-02-28T00:00+03:00", "2021-03-03T24:00+03:00"],  # fall-through
+        ["rqa_s08e06", "radio_show",  "2021-03-04T00:00+03:00", "2021-03-04T24:00+03:00"],
+        ["rqa_s08e06", "other",       "2021-02-28T00:00+03:00", "2021-03-06T24:00+03:00"],
     ]
 
     for time_range in time_ranges:
@@ -356,6 +374,70 @@ def get_engagement_coding_plans(pipeline_name):
                                cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e03"),
                                coded_field="rqa_s08e03_engagement_type_coded",
                                analysis_file_key="rqa_s08e03_engagement_type",
+                               fold_strategy=None,
+                               include_in_individuals_file=False,
+                               include_in_theme_distribution=False
+                           )
+                       ],
+                       raw_field_fold_strategy=FoldStrategies.concatenate),
+
+            CodingPlan(dataset_name="rqa_s08e03_break",
+                       raw_field="sent_on",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.ENGAGEMENT_TYPE,
+                               cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e03_break"),
+                               coded_field="rqa_s08e03_break_engagement_type_coded",
+                               analysis_file_key="rqa_s08e03_break_engagement_type",
+                               fold_strategy=None,
+                               include_in_individuals_file=False,
+                               include_in_theme_distribution=False
+                           )
+                       ],
+                       raw_field_fold_strategy=FoldStrategies.concatenate),
+
+            CodingPlan(dataset_name="rqa_s08e04",
+                       raw_field="sent_on",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.ENGAGEMENT_TYPE,
+                               cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e04"),
+                               coded_field="rqa_s08e04_engagement_type_coded",
+                               analysis_file_key="rqa_s08e04_engagement_type",
+                               fold_strategy=None,
+                               include_in_individuals_file=False,
+                               include_in_theme_distribution=False
+                           )
+                       ],
+                       raw_field_fold_strategy=FoldStrategies.concatenate),
+
+            CodingPlan(dataset_name="rqa_s08e05",
+                       raw_field="sent_on",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.ENGAGEMENT_TYPE,
+                               cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e05"),
+                               coded_field="rqa_s08e05_engagement_type_coded",
+                               analysis_file_key="rqa_s08e05_engagement_type",
+                               fold_strategy=None,
+                               include_in_individuals_file=False,
+                               include_in_theme_distribution=False
+                           )
+                       ],
+                       raw_field_fold_strategy=FoldStrategies.concatenate),
+
+            CodingPlan(dataset_name="rqa_s08e06",
+                       raw_field="sent_on",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.ENGAGEMENT_TYPE,
+                               cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e06"),
+                               coded_field="rqa_s08e06_engagement_type_coded",
+                               analysis_file_key="rqa_s08e06_engagement_type",
                                fold_strategy=None,
                                include_in_individuals_file=False,
                                include_in_theme_distribution=False
