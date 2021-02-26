@@ -3,7 +3,46 @@
   "Name": "Facebook S08E05",
   "Version": "0.0.0.1",
   "Codes": [
-
+    {
+      "CodeID": "code-59c77f5d",
+      "CodeType": "Normal",
+      "DisplayText": "competition from big businesses",
+      "NumericValue": 1,
+      "StringValue": "competition_from_big_businesses",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-fbeaca4a",
+      "CodeType": "Normal",
+      "DisplayText": "lack of education and business skills",
+      "NumericValue": 2,
+      "StringValue": "lack_of_education_and_business_skills",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-13d05681",
+      "CodeType": "Normal",
+      "DisplayText": "general challenges",
+      "NumericValue": 3,
+      "StringValue": "general_challenges",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-e85bfe15",
+      "CodeType": "Normal",
+      "DisplayText": "women need support and encouragement",
+      "NumericValue": 4,
+      "StringValue": "women_need_support_and_encouragement",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-afd7f4e7",
+      "CodeType": "Normal",
+      "DisplayText": "other theme",
+      "NumericValue": 5,
+      "StringValue": "other_theme",
+      "VisibleInCoda": true
+    },
     {
       "CodeID": "code-ed617d7c",
       "CodeType": "Normal",
