@@ -84,12 +84,25 @@
         {"Name": "facebook_s08e04", "Search": {
           "Match": "#Hage", "StartDate": "2021-02-15T00:00+03:00", "EndDate": "2021-02-21T24:00+03:00"
         }},
-        {"Name": "facebook_s08e05", "Search": {
-          "Match": "#Hage", "StartDate": "2021-02-22T00:00+03:00", "EndDate": "2021-02-28T24:00+03:00"
-        }},
-        {"Name": "facebook_s08e06", "Search": {
-          "Match": "#Hage", "StartDate": "2021-03-01T00:00+03:00", "EndDate": "2021-03-07T24:00+03:00"
-        }}
+        {
+          "Name": "facebook_s08e05",
+          "PostIDs": [
+            "1584334095169246_2895241987411777"
+          ],
+          "Search": {
+            "Match": "#Hage", "StartDate": "2021-02-22T00:00+03:00", "EndDate": "2021-02-28T24:00+03:00"
+          }
+        },
+        {
+          "Name": "facebook_s08e06",
+          "PostIDs": [
+            "1584334095169246_2895152237420752",
+            "1584334095169246_2894651757470800"
+          ],
+          "Search": {
+            "Match": "#Hage", "StartDate": "2021-03-03T00:00+03:00", "EndDate": "2021-03-07T24:00+03:00"
+          }
+        }
       ]
     },
     {
