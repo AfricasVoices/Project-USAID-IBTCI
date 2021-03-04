@@ -3,7 +3,62 @@
   "Name": "Facebook S08E06",
   "Version": "0.0.0.1",
   "Codes": [
-
+    {
+      "CodeID": "code-59707348",
+      "CodeType": "Normal",
+      "DisplayText": "support and encouragement",
+      "NumericValue": 1,
+      "StringValue": "support_and_encouragement",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-9c92ae9a",
+      "CodeType": "Normal",
+      "DisplayText": "women are capable",
+      "NumericValue": 2,
+      "StringValue": "women_are_capable",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-abb24a79",
+      "CodeType": "Normal",
+      "DisplayText": "provide funding",
+      "NumericValue": 3,
+      "StringValue": "provide_funding",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-7fb14151",
+      "CodeType": "Normal",
+      "DisplayText": "provide opportunities",
+      "NumericValue": 4,
+      "StringValue": "provide_opportunities",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-2d41d08d",
+      "CodeType": "Normal",
+      "DisplayText": "trainings for women",
+      "NumericValue": 5,
+      "StringValue": "trainings_for_women",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-96585061",
+      "CodeType": "Normal",
+      "DisplayText": "women should not work",
+      "NumericValue": 6,
+      "StringValue": "women_should_not_work",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-62fae239",
+      "CodeType": "Normal",
+      "DisplayText": "other theme",
+      "NumericValue": 7,
+      "StringValue": "other_theme",
+      "VisibleInCoda": true
+    },
     {
       "CodeID": "code-ed617d7c",
       "CodeType": "Normal",
