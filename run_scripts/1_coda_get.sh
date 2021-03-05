@@ -42,6 +42,9 @@ DATASETS=(
     "CSAP_recently_displaced"
     "CSAP_livelihood"
     "CSAP_household_language"
+
+    "USAID_IBTCI_s08_have_voice"
+    "USAID_IBTCI_s08_suggestions"
 )
 
 cd "$CODA_V2_ROOT/data_tools"

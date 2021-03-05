@@ -461,7 +461,7 @@
       "DisplayText": "have voice",
       "StringValue": "have_voice",
       "NumericValue": 27,
-      "VisibleInCoda": true,
+      "VisibleInCoda": false,
       "MatchValues": [
         "have voice"
       ]
@@ -472,7 +472,7 @@
       "DisplayText": "suggestions",
       "StringValue": "suggestions",
       "NumericValue": 28,
-      "VisibleInCoda": true,
+      "VisibleInCoda": false,
       "MatchValues": [
         "suggestions"
       ]
@@ -684,6 +684,28 @@
       "VisibleInCoda": true,
       "MatchValues": [
         "s10e02 issues in school"
+      ]
+    },
+    {
+      "CodeID": "code-e0d4687d",
+      "CodeType": "Normal",
+      "DisplayText": "s08 have voice",
+      "StringValue": "s08_have_voice",
+      "NumericValue": 66,
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "s08 have voice"
+      ]
+    },
+    {
+      "CodeID": "code-9f4fd804",
+      "CodeType": "Normal",
+      "DisplayText": "s08 suggestions",
+      "StringValue": "s08_suggestions",
+      "NumericValue": 67,
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "s08 suggestions"
       ]
     },
     {

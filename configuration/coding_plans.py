@@ -324,7 +324,42 @@ def get_demog_coding_plans(pipeline_name):
 
 
 def get_follow_up_coding_plans(pipeline_name):
-    return []
+    if pipeline_name == "USAID-IBTCI-Facebook":
+        return []
+    else:
+        assert pipeline_name == "USAID-IBTCI-SMS"
+        return [
+            CodingPlan(raw_field="s08_have_voice_raw",
+                       time_field="s08_have_voice_time",
+                       coda_filename="USAID_IBTCI_s08_have_voice.json",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.SINGLE,
+                               code_scheme=CodeSchemes.S08_HAVE_VOICE,
+                               cleaner=somali.DemographicCleaner.clean_yes_no,
+                               coded_field="s08_have_voice_coded",
+                               analysis_file_key="s08_have_voice",
+                               fold_strategy=FoldStrategies.assert_label_ids_equal
+                           )
+                       ],
+                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("s08 have voice"),
+                       raw_field_fold_strategy=FoldStrategies.assert_equal),
+    
+            CodingPlan(raw_field="s08_suggestions_raw",
+                       time_field="s08_suggestions_time",
+                       coda_filename="USAID_IBTCI_s08_suggestions.json",
+                       coding_configurations=[
+                           CodingConfiguration(
+                               coding_mode=CodingModes.MULTIPLE,
+                               code_scheme=CodeSchemes.S08_SUGGESTIONS,
+                               coded_field="s08_suggestions_coded",
+                               analysis_file_key="s08_suggestions",
+                               fold_strategy=lambda x, y: FoldStrategies.list_of_labels(CodeSchemes.S08_SUGGESTIONS, x, y)
+                           )
+                       ],
+                       ws_code=CodeSchemes.WS_CORRECT_DATASET.get_code_with_match_value("s08 suggestions"),
+                       raw_field_fold_strategy=FoldStrategies.assert_equal)
+        ]
 
 
 def get_engagement_coding_plans(pipeline_name):
