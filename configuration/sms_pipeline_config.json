@@ -214,7 +214,7 @@
   ],
   "ProjectStartDate": "2020-11-01T00:00:00+03:00",
   "ProjectEndDate": "2100-01-01T00:00+03:00",
-  "FilterTestMessages": false,
+  "FilterTestMessages": true,
   "MoveWSMessages": true,
   "AutomatedAnalysis": {
     "GenerateRegionThemeDistributionMaps": true,
