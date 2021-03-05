@@ -3,7 +3,70 @@
   "Name": "RQA S08E06",
   "Version": "0.0.0.1",
   "Codes": [
-
+    {
+      "CodeID": "code-368aec3c",
+      "CodeType": "Normal",
+      "DisplayText": "training and seminars",
+      "NumericValue": 1,
+      "StringValue": "training_and_seminars",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-5079d51f",
+      "CodeType": "Normal",
+      "DisplayText": "financial support from government",
+      "NumericValue": 2,
+      "StringValue": "financial_support_from_government",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-f8e3827c",
+      "CodeType": "Normal",
+      "DisplayText": "support from investors/organisations",
+      "NumericValue": 3,
+      "StringValue": "support_from_investors_or_organisations",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-2a64c08f",
+      "CodeType": "Normal",
+      "DisplayText": "sufficient loans from banks",
+      "NumericValue": 4,
+      "StringValue": "sufficient_loans_from_banks",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-bb23af3f",
+      "CodeType": "Normal",
+      "DisplayText": "formation of women business saccos",
+      "NumericValue": 5,
+      "StringValue": "formation_of_women_business_saccos",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-5c81c996",
+      "CodeType": "Normal",
+      "DisplayText": "trust and confidence from the community",
+      "NumericValue": 6,
+      "StringValue": "trust_and_confidence_from_the_community",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-bb385af7",
+      "CodeType": "Normal",
+      "DisplayText": "general support",
+      "NumericValue": 7,
+      "StringValue": "general_support",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-d3e723f7",
+      "CodeType": "Normal",
+      "DisplayText": "other theme",
+      "NumericValue": 8,
+      "StringValue": "other_theme",
+      "VisibleInCoda": true
+    },
     {
       "CodeID": "code-NA-f93d3eb7",
       "CodeType": "Control",
