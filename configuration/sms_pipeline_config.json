@@ -39,7 +39,8 @@
         "csap_s05_demog",
         "csap_s06_demog",
         "csap_s07_demog",
-        "csap_s08_demog"
+        "csap_s08_demog",
+        "csap_s08_evaluation"
       ],
       "TestContactUUIDs": [
         "61e74e0b-1b4a-41fe-9e78-712f2a048f4e",
@@ -204,11 +205,16 @@
     {"SourceKey": "Livelihood (Text) - csap_s08_demog", "PipelineKey": "livelihood_raw"},
     {"SourceKey": "Livelihood (Time) - csap_s08_demog", "PipelineKey": "livelihood_time"},
     {"SourceKey": "Hh_Language (Text) - csap_s08_demog", "PipelineKey": "household_language_raw"},
-    {"SourceKey": "Hh_Language (Time) - csap_s08_demog", "PipelineKey": "household_language_time"}
+    {"SourceKey": "Hh_Language (Time) - csap_s08_demog", "PipelineKey": "household_language_time"},
+    
+    {"SourceKey": "Csap_S08_Have_Voice (Text) - csap_s08_evaluation", "PipelineKey":  "s08_have_voice_raw"},
+    {"SourceKey": "Csap_S08_Have_Voice (Time) - csap_s08_evaluation", "PipelineKey":  "s08_have_voice_time"},
+    {"SourceKey": "Csap_S08_Suggestions (Text) - csap_s08_evaluation", "PipelineKey":  "s08_suggestions_raw"},
+    {"SourceKey": "Csap_S08_Suggestions (Time) - csap_s08_evaluation", "PipelineKey":  "s08_suggestions_time"}
   ],
   "ProjectStartDate": "2020-11-01T00:00:00+03:00",
   "ProjectEndDate": "2100-01-01T00:00+03:00",
-  "FilterTestMessages": true,
+  "FilterTestMessages": false,
   "MoveWSMessages": true,
   "AutomatedAnalysis": {
     "GenerateRegionThemeDistributionMaps": true,

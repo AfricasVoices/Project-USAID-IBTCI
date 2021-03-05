@@ -1,71 +1,43 @@
 {
-  "SchemeID": "Scheme-b2eb715d",
-  "Name": "RQA S08E06",
+  "SchemeID": "Scheme-f9e998fa",
+  "Name": "S08 Have Voice",
   "Version": "0.0.0.1",
   "Codes": [
     {
-      "CodeID": "code-368aec3c",
+      "CodeID": "code-7be6e5d1",
       "CodeType": "Normal",
-      "DisplayText": "training and seminars",
+      "DisplayText": "yes",
       "NumericValue": 1,
-      "StringValue": "training_and_seminars",
-      "VisibleInCoda": true
+      "StringValue": "yes",
+      "Shortcut": "y",
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "yes"
+      ]
     },
     {
-      "CodeID": "code-5079d51f",
+      "CodeID": "code-8bf6a963",
       "CodeType": "Normal",
-      "DisplayText": "financial support from government",
+      "DisplayText": "no",
+      "Shortcut": "n",
       "NumericValue": 2,
-      "StringValue": "financial_support_from_government",
-      "VisibleInCoda": true
+      "StringValue": "no",
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "no"
+      ]
     },
     {
-      "CodeID": "code-f8e3827c",
+      "CodeID": "code-b7113b5d",
       "CodeType": "Normal",
-      "DisplayText": "support from investors/organisations",
+      "DisplayText": "ambivalent",
+      "Shortcut": "a",
       "NumericValue": 3,
-      "StringValue": "support_from_investors_or_organisations",
-      "VisibleInCoda": true
-    },
-    {
-      "CodeID": "code-2a64c08f",
-      "CodeType": "Normal",
-      "DisplayText": "sufficient loans from banks",
-      "NumericValue": 4,
-      "StringValue": "sufficient_loans_from_banks",
-      "VisibleInCoda": true
-    },
-    {
-      "CodeID": "code-bb23af3f",
-      "CodeType": "Normal",
-      "DisplayText": "formation of women business saccos",
-      "NumericValue": 5,
-      "StringValue": "formation_of_women_business_saccos",
-      "VisibleInCoda": true
-    },
-    {
-      "CodeID": "code-5c81c996",
-      "CodeType": "Normal",
-      "DisplayText": "trust and confidence from the community",
-      "NumericValue": 6,
-      "StringValue": "trust_and_confidence_from_the_community",
-      "VisibleInCoda": true
-    },
-    {
-      "CodeID": "code-bb385af7",
-      "CodeType": "Normal",
-      "DisplayText": "general support",
-      "NumericValue": 7,
-      "StringValue": "general_support",
-      "VisibleInCoda": true
-    },
-    {
-      "CodeID": "code-d3e723f7",
-      "CodeType": "Normal",
-      "DisplayText": "other theme",
-      "NumericValue": 8,
-      "StringValue": "other_theme",
-      "VisibleInCoda": true
+      "StringValue": "ambivalent",
+      "VisibleInCoda": true,
+      "MatchValues": [
+        "ambivalent"
+      ]
     },
     {
       "CodeID": "code-NA-f93d3eb7",
@@ -209,6 +181,24 @@
       "DisplayText": "meta: exclusion complaint",
       "NumericValue": -100070,
       "StringValue": "exclusion_complaint",
+      "VisibleInCoda": true
+    },
+    {
+      "DisplayText": "meta: gratitude",
+      "VisibleInCoda": true,
+      "NumericValue": -100100,
+      "CodeID": "code-GR-e6de1b7e",
+      "CodeType": "Meta",
+      "MetaCode": "gratitude",
+      "StringValue": "gratitude"
+    },
+    {
+      "NumericValue": -100130,
+      "CodeID": "code-CR-8e99616b",
+      "CodeType": "Meta",
+      "MetaCode": "chasing_reply",
+      "StringValue": "chasing_reply",
+      "DisplayText": "meta: chasing reply",
       "VisibleInCoda": true
     },
     {

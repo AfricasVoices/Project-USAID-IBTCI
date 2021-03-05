@@ -32,6 +32,9 @@ class CodeSchemes(object):
     LIVELIHOOD = _open_scheme("livelihood.json")
     HOUSEHOLD_LANGUAGE = _open_scheme("household_language.json")
 
+    S08_HAVE_VOICE = _open_scheme("s08_have_voice.json")
+    S08_SUGGESTIONS = _open_scheme("s08_suggestions.json")
+
     ENGAGEMENT_TYPE = _open_scheme("engagement_type.json")
 
     WS_CORRECT_DATASET = _open_scheme("ws_correct_dataset.json")
