@@ -1,6 +1,10 @@
+from functools import partial
+
 from core_data_modules.cleaners import somali, swahili, Codes
+from core_data_modules.cleaners.cleaning_utils import CleaningUtils
+from core_data_modules.data_models.code_scheme import CodeTypes
 from core_data_modules.traced_data.util.fold_traced_data import FoldStrategies
-from core_data_modules.util import SHAUtils
+from core_data_modules.util import SHAUtils, TimeUtils
 from dateutil.parser import isoparse
 from social_media_tools.facebook import facebook_utils
 
@@ -362,6 +366,20 @@ def get_follow_up_coding_plans(pipeline_name):
         ]
 
 
+def fold_engagement_type(code_scheme, x, y):
+    if x is None or code_scheme.get_code_with_code_id(x["CodeID"]).control_code == "NA":
+        return y
+    if y is None or code_scheme.get_code_with_code_id(y["CodeID"]).control_code == "NA":
+        return x
+    if x["CodeID"] == y["CodeID"]:
+        return x
+    else:
+        assert code_scheme.get_code_with_code_id(x["CodeID"]).code_type == CodeTypes.NORMAL
+        assert code_scheme.get_code_with_code_id(y["CodeID"]).code_type == CodeTypes.NORMAL
+        return CleaningUtils.make_label_from_cleaner_code(
+            code_scheme, code_scheme.get_code_with_match_value("multiple"), TimeUtils.utc_now_as_iso_string()).to_dict()
+
+
 def get_engagement_coding_plans(pipeline_name):
     if pipeline_name == "USAID-IBTCI-Facebook":
         return []
@@ -377,8 +395,7 @@ def get_engagement_coding_plans(pipeline_name):
                                cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e01"),
                                coded_field="rqa_s08e01_engagement_type_coded",
                                analysis_file_key="rqa_s08e01_engagement_type",
-                               fold_strategy=None,
-                               include_in_individuals_file=False,
+                               fold_strategy=partial(fold_engagement_type, CodeSchemes.ENGAGEMENT_TYPE),
                                include_in_theme_distribution=False
                            )
                        ],
@@ -393,8 +410,7 @@ def get_engagement_coding_plans(pipeline_name):
                                cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e02"),
                                coded_field="rqa_s08e02_engagement_type_coded",
                                analysis_file_key="rqa_s08e02_engagement_type",
-                               fold_strategy=None,
-                               include_in_individuals_file=False,
+                               fold_strategy=partial(fold_engagement_type, CodeSchemes.ENGAGEMENT_TYPE),
                                include_in_theme_distribution=False
                            )
                        ],
@@ -409,8 +425,7 @@ def get_engagement_coding_plans(pipeline_name):
                                cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e03"),
                                coded_field="rqa_s08e03_engagement_type_coded",
                                analysis_file_key="rqa_s08e03_engagement_type",
-                               fold_strategy=None,
-                               include_in_individuals_file=False,
+                               fold_strategy=partial(fold_engagement_type, CodeSchemes.ENGAGEMENT_TYPE),
                                include_in_theme_distribution=False
                            )
                        ],
@@ -425,8 +440,7 @@ def get_engagement_coding_plans(pipeline_name):
                                cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e03_break"),
                                coded_field="rqa_s08e03_break_engagement_type_coded",
                                analysis_file_key="rqa_s08e03_break_engagement_type",
-                               fold_strategy=None,
-                               include_in_individuals_file=False,
+                               fold_strategy=partial(fold_engagement_type, CodeSchemes.ENGAGEMENT_TYPE),
                                include_in_theme_distribution=False
                            )
                        ],
@@ -441,8 +455,7 @@ def get_engagement_coding_plans(pipeline_name):
                                cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e04"),
                                coded_field="rqa_s08e04_engagement_type_coded",
                                analysis_file_key="rqa_s08e04_engagement_type",
-                               fold_strategy=None,
-                               include_in_individuals_file=False,
+                               fold_strategy=partial(fold_engagement_type, CodeSchemes.ENGAGEMENT_TYPE),
                                include_in_theme_distribution=False
                            )
                        ],
@@ -457,8 +470,7 @@ def get_engagement_coding_plans(pipeline_name):
                                cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e05"),
                                coded_field="rqa_s08e05_engagement_type_coded",
                                analysis_file_key="rqa_s08e05_engagement_type",
-                               fold_strategy=None,
-                               include_in_individuals_file=False,
+                               fold_strategy=partial(fold_engagement_type, CodeSchemes.ENGAGEMENT_TYPE),
                                include_in_theme_distribution=False
                            )
                        ],
@@ -473,8 +485,7 @@ def get_engagement_coding_plans(pipeline_name):
                                cleaner=lambda sent_on: clean_engagement_type(isoparse(sent_on), "rqa_s08e06"),
                                coded_field="rqa_s08e06_engagement_type_coded",
                                analysis_file_key="rqa_s08e06_engagement_type",
-                               fold_strategy=None,
-                               include_in_individuals_file=False,
+                               fold_strategy=partial(fold_engagement_type, CodeSchemes.ENGAGEMENT_TYPE),
                                include_in_theme_distribution=False
                            )
                        ],

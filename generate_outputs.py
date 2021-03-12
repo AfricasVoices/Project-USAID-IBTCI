@@ -74,6 +74,8 @@ if __name__ == "__main__":
     log.info("Loading the raw data...")
     data = LoadData.load_raw_data(user, raw_data_dir, pipeline_configuration)
 
+    data = [td for td in data if td["avf_phone_id"].startswith("avf-phone-uuid-0")]
+
     log.info("Translating source Keys...")
     data = TranslateSourceKeys.translate_source_keys(user, data, pipeline_configuration)
 
