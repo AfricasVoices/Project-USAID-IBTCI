@@ -3,7 +3,54 @@
   "Name": "S08 Suggestions",
   "Version": "0.0.0.1",
   "Codes": [
-
+    {
+      "CodeID": "code-a34ebb3a",
+      "CodeType": "Normal",
+      "DisplayText": "community awareness",
+      "NumericValue": 1,
+      "StringValue": "community_awareness",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-772b98ce",
+      "CodeType": "Normal",
+      "DisplayText": "improve radio stations",
+      "NumericValue": 2,
+      "StringValue": "improve_radio_stations",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-850b6cc7",
+      "CodeType": "Normal",
+      "DisplayText": "consistent/continued shows",
+      "NumericValue": 3,
+      "StringValue": "consistent_or_continued_shows",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-d3a1fc8f",
+      "CodeType": "Normal",
+      "DisplayText": "diversification of programmes",
+      "NumericValue": 4,
+      "StringValue": "diversification_of_programmes",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-5267b63a",
+      "CodeType": "Normal",
+      "DisplayText": "honesty from radio broadcasts",
+      "NumericValue": 5,
+      "StringValue": "honesty_from_radio_broadcasts",
+      "VisibleInCoda": true
+    },
+    {
+      "CodeID": "code-55397c48",
+      "CodeType": "Normal",
+      "DisplayText": "other theme",
+      "NumericValue": 6,
+      "StringValue": "other_theme",
+      "VisibleInCoda": true
+    },
     {
       "CodeID": "code-NA-f93d3eb7",
       "CodeType": "Control",

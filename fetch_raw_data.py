@@ -201,8 +201,9 @@ def fetch_from_recovery_csv(user, google_cloud_credentials_file_path, raw_data_d
 def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, metrics_dir, data_sources):
     IOUtils.ensure_dirs_exist(metrics_dir)
 
-    headers = ["Page ID", "Dataset", "Post ID", "Post Type", "Post Impressions", "Unique Post Impressions",
-               "Post Engaged Users", "Total Comments", "Visible (analysed) Comments", "Reactions"]
+    headers = ["Page ID", "Dataset", "Post URL", "Post Created Time", "Post Text", "Post Type", "Post Impressions",
+               "Unique Post Impressions", "Post Engaged Users", "Total Comments", "Visible (analysed) Comments",
+               "Reactions"]
     facebook_metrics = []  # of dict with keys in `headers`
     for source in data_sources:
         if not isinstance(source, FacebookSource):
@@ -217,7 +218,8 @@ def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, metric
 
         for dataset in source.datasets:
             for post_id in get_facebook_post_ids(facebook, source.page_id, dataset.post_ids, dataset.search):
-                post = facebook.get_post(post_id, fields=["attachments", "comments.filter(stream).limit(0).summary(true)"])
+                post = facebook.get_post(post_id, fields=["attachments", "message", "created_time",
+                                                          "comments.filter(stream).limit(0).summary(true)"])
 
                 comments = facebook.get_all_comments_on_post(post_id)
 
@@ -230,7 +232,9 @@ def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, metric
                 facebook_metrics.append({
                     "Page ID": source.page_id,
                     "Dataset": dataset.name,
-                    "Post ID": post_id,
+                    "Post URL": f"facebook.com/{post_id}",
+                    "Post Created Time": post["created_time"],
+                    "Post Text": post["message"],
                     "Post Type": facebook_utils.clean_post_type(post),
                     "Post Impressions": post_metrics["post_impressions"],
                     "Unique Post Impressions": post_metrics["post_impressions_unique"],
@@ -245,6 +249,8 @@ def fetch_facebook_engagement_metrics(google_cloud_credentials_file_path, metric
     if len(facebook_metrics) == 0:
         # No Facebook posts detected, so don't write a metrics file.
         return
+    
+    facebook_metrics.sort(key=lambda m: (m["Page ID"], m["Dataset"], m["Post Created Time"]))
 
     with open(f"{metrics_dir}/facebook_metrics.csv", "w") as f:
         writer = csv.DictWriter(f, fieldnames=headers, lineterminator="\n")
