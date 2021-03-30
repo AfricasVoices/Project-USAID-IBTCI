@@ -51,6 +51,10 @@ class CodeSchemes(object):
     FACEBOOK_S08E04 = _open_scheme("facebook_s08e04.json")
     FACEBOOK_S08E05 = _open_scheme("facebook_s08e05.json")
     FACEBOOK_S08E06 = _open_scheme("facebook_s08e06.json")
+    FACEBOOK_S08E06_BREAK_W01 = _open_scheme("facebook_s08e06_break_w01.json")
+    FACEBOOK_S08E06_BREAK_W02 = _open_scheme("facebook_s08e06_break_w03.json")
+    FACEBOOK_S08E06_BREAK_W03 = _open_scheme("facebook_s08e06_break_w03.json")
+
 
     FACEBOOK_COMMENT_REPLY_TO = _open_scheme("facebook_comment_reply_to.json")
     FACEBOOK_POST_TYPE = _open_scheme("facebook_post_type.json")

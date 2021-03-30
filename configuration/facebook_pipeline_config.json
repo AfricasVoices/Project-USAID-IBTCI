@@ -89,6 +89,15 @@
         }},
         {"Name": "facebook_s08e06", "Search": {
           "Match": "#Hage", "StartDate": "2021-03-01T00:00+03:00", "EndDate": "2021-03-07T24:00+03:00"
+        }},
+        {"Name": "facebook_s08e06_break_w01", "Search": {
+          "Match": "#Hage", "StartDate": "2021-03-15T00:00+03:00", "EndDate": "2021-03-21T24:00+03:00"
+        }},
+        {"Name": "facebook_s08e06_break_w02", "Search": {
+          "Match": "#Hage", "StartDate": "2021-03-21T00:00+03:00", "EndDate": "2021-03-28T24:00+03:00"
+        }},
+        {"Name": "facebook_s08e06_break_w03", "Search": {
+          "Match": "#Hage", "StartDate": "2021-03-28T00:00+03:00", "EndDate": "2021-04-04T24:00+03:00"
         }}
       ]
     },
@@ -147,6 +156,15 @@
         },
         {"Name": "facebook_s08e06", "Search": {
           "Match": "#Hage", "StartDate": "2021-03-01T00:00+03:00", "EndDate": "2021-03-07T24:00+03:00"
+        }},
+        {"Name": "facebook_s08e06_break_w01", "Search": {
+          "Match": "#Hage", "StartDate": "2021-03-15T00:00+03:00", "EndDate": "2021-03-21T24:00+03:00"
+        }},
+        {"Name": "facebook_s08e06_break_w02", "Search": {
+          "Match": "#Hage", "StartDate": "2021-03-21T00:00+03:00", "EndDate": "2021-03-28T24:00+03:00"
+        }},
+        {"Name": "facebook_s08e06_break_w03", "Search": {
+          "Match": "#Hage", "StartDate": "2021-03-28T00:00+03:00", "EndDate": "2021-04-04T24:00+03:00"
         }}
       ]
     },
@@ -271,7 +289,25 @@
     {"SourceKey": "facebook_s08e06.id", "PipelineKey": "facebook_s08e06_comment_id"},
     {"SourceKey": "facebook_s08e06.created_time", "PipelineKey": "sent_on"},
     {"SourceKey": "facebook_s08e06.parent", "PipelineKey": "facebook_s08e06_comment_reply_to_raw"},
-    {"SourceKey": "facebook_s08e06.post", "PipelineKey": "facebook_s08e06_post_raw"}
+    {"SourceKey": "facebook_s08e06.post", "PipelineKey": "facebook_s08e06_post_raw"},
+
+    {"SourceKey": "facebook_s08e06_break_w01.message", "PipelineKey": "facebook_s08e06_break_w01_raw"},
+    {"SourceKey": "facebook_s08e06_break_w01.id", "PipelineKey": "facebook_s08e06_break_w01_comment_id"},
+    {"SourceKey": "facebook_s08e06_break_w01.created_time", "PipelineKey": "sent_on"},
+    {"SourceKey": "facebook_s08e06_break_w01.parent", "PipelineKey": "facebook_s08e06_break_w01_comment_reply_to_raw"},
+    {"SourceKey": "facebook_s08e06_break_w01.post", "PipelineKey": "facebook_s08e06_break_w01_post_raw"},
+
+    {"SourceKey": "facebook_s08e06_break_w02.message", "PipelineKey": "facebook_s08e06_break_w02_raw"},
+    {"SourceKey": "facebook_s08e06_break_w02.id", "PipelineKey": "facebook_s08e06_break_w02_comment_id"},
+    {"SourceKey": "facebook_s08e06_break_w02.created_time", "PipelineKey": "sent_on"},
+    {"SourceKey": "facebook_s08e06_break_w02.parent", "PipelineKey": "facebook_s08e06_break_w02_comment_reply_to_raw"},
+    {"SourceKey": "facebook_s08e06_break_w02.post", "PipelineKey": "facebook_s08e06_break_w02_post_raw"},
+
+    {"SourceKey": "facebook_s08e06_break_w03.message", "PipelineKey": "facebook_s08e06_break_w03_raw"},
+    {"SourceKey": "facebook_s08e06_break_w03.id", "PipelineKey": "facebook_s08e06_break_w03_comment_id"},
+    {"SourceKey": "facebook_s08e06_break_w03.created_time", "PipelineKey": "sent_on"},
+    {"SourceKey": "facebook_s08e06_break_w03.parent", "PipelineKey": "facebook_s08e06_break_w03_comment_reply_to_raw"},
+    {"SourceKey": "facebook_s08e06_break_w03.post", "PipelineKey": "facebook_s08e06_break_w03_post_raw"}
   ],
   "ProjectStartDate": "2000-01-01T00:00:00+03:00",
   "ProjectEndDate": "2100-01-01T00:00:00+03:00",
