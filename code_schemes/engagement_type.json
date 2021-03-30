@@ -48,6 +48,17 @@
       ]
     },
     {
+      "CodeID": "code-2cd1b282",
+      "CodeType": "Normal",
+      "DisplayText": "multiple",
+      "NumericValue": 5,
+      "StringValue" : "multiple",
+      "VisibleInCoda": true,
+      "MatchValues" : [
+        "multiple"
+      ]
+    },
+    {
       "CodeID": "code-NA-f93d3eb7",
       "CodeType": "Control",
       "ControlCode": "NA",
