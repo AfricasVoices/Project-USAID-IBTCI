@@ -29,6 +29,7 @@ RUN pipenv sync
 ADD code_schemes/*.json /app/code_schemes/
 ADD configuration/ /app/configuration/
 ADD src /app/src
+ADD log_pipeline_event.py /app
 ADD fetch_raw_data.py /app
 ADD generate_outputs.py /app
 ADD upload_analysis_files.py /app
