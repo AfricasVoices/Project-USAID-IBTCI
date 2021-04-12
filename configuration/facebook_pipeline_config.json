@@ -349,7 +349,13 @@
     {"SourceKey": "facebook_s08e06_break_w06.id", "PipelineKey": "facebook_s08e06_break_w06_comment_id"},
     {"SourceKey": "facebook_s08e06_break_w06.created_time", "PipelineKey": "sent_on"},
     {"SourceKey": "facebook_s08e06_break_w06.parent", "PipelineKey": "facebook_s08e06_break_w06_comment_reply_to_raw"},
-    {"SourceKey": "facebook_s08e06_break_w06.post", "PipelineKey": "facebook_s08e06_break_w06_post_raw"}
+    {"SourceKey": "facebook_s08e06_break_w06.post", "PipelineKey": "facebook_s08e06_break_w06_post_raw"},
+    
+    {"SourceKey": "facebook_s08e06_break_w07.message", "PipelineKey": "facebook_s08e06_break_w07_raw"},
+    {"SourceKey": "facebook_s08e06_break_w07.id", "PipelineKey": "facebook_s08e06_break_w07_comment_id"},
+    {"SourceKey": "facebook_s08e06_break_w07.created_time", "PipelineKey": "sent_on"},
+    {"SourceKey": "facebook_s08e06_break_w07.parent", "PipelineKey": "facebook_s08e06_break_w07_comment_reply_to_raw"},
+    {"SourceKey": "facebook_s08e06_break_w07.post", "PipelineKey": "facebook_s08e06_break_w07_post_raw"}
   ],
   "ProjectStartDate": "2000-01-01T00:00:00+03:00",
   "ProjectEndDate": "2100-01-01T00:00:00+03:00",
