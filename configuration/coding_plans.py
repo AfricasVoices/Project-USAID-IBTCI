@@ -163,6 +163,10 @@ def get_rqa_coding_plans(pipeline_name):
             _make_facebook_coding_plan("s08e06_break_w01", CodeSchemes.FACEBOOK_S08E06_BREAK_W01),
             _make_facebook_coding_plan("s08e06_break_w02", CodeSchemes.FACEBOOK_S08E06_BREAK_W02),
             _make_facebook_coding_plan("s08e06_break_w03", CodeSchemes.FACEBOOK_S08E06_BREAK_W03),
+            _make_facebook_coding_plan("s08e06_break_w04", CodeSchemes.FACEBOOK_S08E06_BREAK_W04),
+            _make_facebook_coding_plan("s08e06_break_w05", CodeSchemes.FACEBOOK_S08E06_BREAK_W05),
+            _make_facebook_coding_plan("s08e06_break_w06", CodeSchemes.FACEBOOK_S08E06_BREAK_W06),
+            _make_facebook_coding_plan("s08e06_break_w07", CodeSchemes.FACEBOOK_S08E06_BREAK_W07),
         ]
     else:
         assert pipeline_name == "USAID-IBTCI-SMS"
