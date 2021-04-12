@@ -217,7 +217,7 @@
      "UuidPrefix": "avf-facebook-uuid-"
   },
   "OperationsDashboard": {
-    "FirebaseCredentialsFileURL": "gs://avf-credentials/avf-dashboards-test-firebase-credentials.json"
+    "FirebaseCredentialsFileURL": "gs://avf-credentials/avf-dashboards-firebase-adminsdk-gvecb-ef772e79b6.json"
   },
   "SourceKeyRemappings": [
     {"SourceKey": "avf_facebook_id", "PipelineKey": "uid"},
