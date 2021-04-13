@@ -175,7 +175,10 @@
      "FirebaseCredentialsFileURL": "gs://avf-credentials/avf-id-infrastructure-firebase-adminsdk-6xps8-b9173f2bfd.json",
      "TableName": "USAID_IBTCI_facebook_avf_facebook_id",
      "UuidPrefix": "avf-facebook-uuid-"
-   },
+  },
+  "OperationsDashboard": {
+    "FirebaseCredentialsFileURL": "gs://avf-credentials/avf-dashboards-firebase-adminsdk-gvecb-ef772e79b6.json"
+  },
   "SourceKeyRemappings": [
     {"SourceKey": "avf_facebook_id", "PipelineKey": "uid"},
 

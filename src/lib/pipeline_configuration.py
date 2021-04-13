@@ -18,7 +18,7 @@ class PipelineConfiguration(object):
     ENGAGEMENT_CODING_PLANS = []
     WS_CORRECT_DATASET_SCHEME = None
 
-    def __init__(self, pipeline_name, raw_data_sources, uuid_table, timestamp_remappings,
+    def __init__(self, pipeline_name, raw_data_sources, uuid_table, operations_dashboard, timestamp_remappings,
                  source_key_remappings, project_start_date, project_end_date, filter_test_messages, move_ws_messages,
                  memory_profile_upload_bucket, data_archive_upload_bucket, bucket_dir_path,
                  automated_analysis, drive_upload=None):
@@ -29,6 +29,8 @@ class PipelineConfiguration(object):
         :type raw_data_sources: list of RawDataSource
         :param uuid_table: Configuration for the Firestore source id <-> avf uuid table.
         :type uuid_table: UuidTable
+        :param operations_dashboard: Configuration for the avf operations dashboard.
+        :type operations_dashboard: OperationsDashboard
         :param source_key_remappings: List of source_key -> pipeline_key remappings.
         :type source_key_remappings: list of SourceKeyRemapping
         :param project_start_date: When data collection started - all activation messages received before this date
@@ -59,6 +61,7 @@ class PipelineConfiguration(object):
         self.pipeline_name = pipeline_name
         self.raw_data_sources = raw_data_sources
         self.uuid_table = uuid_table
+        self.operations_dashboard = operations_dashboard
         self.timestamp_remappings = timestamp_remappings
         self.source_key_remappings = source_key_remappings
         self.project_start_date = project_start_date
@@ -103,6 +106,9 @@ class PipelineConfiguration(object):
         uuid_table = UuidTable.from_configuration_dict(
             configuration_dict["UuidTable"])
 
+        operations_dashboard = OperationsDashboard.from_configuration_dict(
+            configuration_dict["OperationsDashboard"])
+
         timestamp_remappings = []
         for remapping_dict in configuration_dict.get("TimestampRemappings", []):
             timestamp_remappings.append(TimestampRemapping.from_configuration_dict(remapping_dict))
@@ -127,7 +133,7 @@ class PipelineConfiguration(object):
         data_archive_upload_bucket = configuration_dict["DataArchiveUploadBucket"]
         bucket_dir_path = configuration_dict["BucketDirPath"]
 
-        return cls(pipeline_name, raw_data_sources, uuid_table, timestamp_remappings,
+        return cls(pipeline_name, raw_data_sources, uuid_table, operations_dashboard, timestamp_remappings,
                    source_key_remappings, project_start_date, project_end_date, filter_test_messages,
                    move_ws_messages, memory_profile_upload_bucket, data_archive_upload_bucket, bucket_dir_path,
                    automated_analysis, drive_upload_paths)
@@ -146,6 +152,9 @@ class PipelineConfiguration(object):
 
         assert isinstance(self.uuid_table, UuidTable)
         self.uuid_table.validate()
+
+        assert isinstance(self.operations_dashboard, OperationsDashboard)
+        self.operations_dashboard.validate()
 
         validators.validate_list(self.source_key_remappings, "source_key_remappings")
         for i, remapping in enumerate(self.source_key_remappings):
@@ -585,6 +594,27 @@ class AutomatedAnalysis(object):
             for tl in self.traffic_labels:
                 assert isinstance(tl, TrafficLabel)
                 tl.validate()
+
+
+class OperationsDashboard(object):
+    def __init__(self, firebase_credentials_file_url):
+        """
+        :param firebase_credentials_file_url: GS URL to the private credentials file for the Firebase account where
+                                                 the Operations Dashboard data is stored.
+        :type firebase_credentials_file_url: str
+        """
+        self.firebase_credentials_file_url = firebase_credentials_file_url
+
+        self.validate()
+
+    @classmethod
+    def from_configuration_dict(cls, configuration_dict):
+        firebase_credentials_file_url = configuration_dict["FirebaseCredentialsFileURL"]
+
+        return cls(firebase_credentials_file_url)
+
+    def validate(self):
+        validators.validate_url(self.firebase_credentials_file_url, "firebase_credentials_file_url", scheme="gs")
 
 
 class TrafficLabel(object):

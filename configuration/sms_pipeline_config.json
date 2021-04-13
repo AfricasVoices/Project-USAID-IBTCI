@@ -62,6 +62,9 @@
     "TableName": "ADSS",
     "UuidPrefix": "avf-phone-uuid-"
   },
+  "OperationsDashboard": {
+    "FirebaseCredentialsFileURL": "gs://avf-credentials/avf-dashboards-firebase-adminsdk-gvecb-ef772e79b6.json"
+  },
   "SourceKeyRemappings": [
     {"SourceKey": "avf_phone_id", "PipelineKey": "uid"},
 
