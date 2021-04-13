@@ -3,46 +3,6 @@
   "RawDataSources": [
     {
       "SourceType": "Facebook",
-      "PageID": "dhaayow655",
-      "TokenFileURL": "gs://avf-credentials/dhaayow655-facebook-token.txt",
-      "Datasets": [
-        {"Name": "facebook_s08e01", "PostIDs": [
-          "342722832782775_1496920597362987",
-          "342722832782775_1499022967152750",
-          "342722832782775_1500052827049764"
-        ]},
-        {"Name": "facebook_s08e02", "PostIDs": [
-          "342722832782775_1503659086689138",
-          "342722832782775_1505659819822398",
-          "342722832782775_1506611219727258",
-          "342722832782775_1508439062877807"
-        ]},
-        {"Name": "facebook_s08e03", "Search": {
-          "Match": "#BarnaamijkaHage", "StartDate": "2020-11-16T00:00+03:00", "EndDate": "2020-11-22T24:00+03:00"
-        }},
-        {"Name": "facebook_s08e03_break_w01", "PostIDs": [
-          "342722832782775_1536801340041579",
-          "342722832782775_1534482843606762"
-        ]},
-        {"Name": "facebook_s08e03_break_w02", "Search": {
-          "Match": "#Hage", "StartDate": "2020-12-21T00:00+03:00", "EndDate": "2020-12-27T24:00+03:00"
-        }},
-        {"Name": "facebook_s08e03_break_w03", "Search": {
-          "Match": "#Hage", "StartDate": "2020-12-28T00:00+03:00", "EndDate": "2021-01-03T24:00+03:00"
-        }},
-        {"Name": "facebook_s08e03_break_w04", "Search": {
-          "Match": "#Hage", "StartDate": "2021-01-04T00:00+03:00", "EndDate": "2021-01-10T24:00+03:00"
-        }},
-        {"Name": "facebook_s08e03_break_w05", "Search": {
-          "Match": "#Hage", "StartDate": "2021-01-11T00:00+03:00", "EndDate": "2021-01-17T24:00+03:00"
-        }},
-        {"Name": "facebook_s08e03_break_w06", "Search": {
-          "Match": "#Hage", "StartDate": "2021-01-18T00:00+03:00", "EndDate": "2021-01-24T24:00+03:00"
-        }}
-      ]
-    },
-    {
-      "SourceType": "Facebook",
       "PageID": "AbdirizakHAtosh",
       "TokenFileURL": "gs://avf-credentials/AbdirizakHAtosh-facebook-token.txt",
       "Datasets": [
