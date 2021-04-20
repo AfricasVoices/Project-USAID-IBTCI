@@ -352,9 +352,9 @@ def main(user, google_cloud_credentials_file_path, pipeline_configuration_file_p
         pipeline_configuration.uuid_table.firebase_credentials_file_url
     ))
 
-    uuid_table = FirestoreUuidTable(
-        pipeline_configuration.uuid_table.table_name,
+    uuid_table = FirestoreUuidTable.init_from_credentials(
         firestore_uuid_table_credentials,
+        pipeline_configuration.uuid_table.table_name,
         pipeline_configuration.uuid_table.uuid_prefix
     )
     log.info("Initialised the Firestore UUID table")
